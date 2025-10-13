@@ -1,0 +1,103 @@
+{
+  "siteMeta": {
+    "siteName": "quizy"
+  },
+  "home": {
+    "homePage": "home page",
+    "about": {
+      "title": "Why quizy?",
+      "subtitle": "Gamified quizzes that make learning stick",
+      "cta": "Get Started",
+      "points": [
+        "Create engaging quizzes in minutes",
+        "Support for multiple languages including Arabic",
+        "Beautiful animations and delightful UX",
+        "Track progress and celebrate wins"
+      ]
+    },
+    "aiFeature": {
+      "title": "Your AI study assistant",
+      "subtitle": "Explanations, summaries, and study guidance — not auto-generated quizzes",
+      "cta": "Start now",
+      "features": [
+        {
+          "title": "Step-by-step explanations",
+          "desc": "Understand concepts with clear walkthroughs"
+        },
+        {
+          "title": "Study guidance",
+          "desc": "Personalized direction on what to review next"
+        },
+        {
+          "title": "Solve questions",
+          "desc": "Get help solving tricky questions with hints"
+        }
+      ]
+    }
+  },
+  "footer": {
+    "tagline": "Playful quizzes for learning that sticks",
+    "rights": "All rights reserved",
+    "builtWithLove": "Built with love",
+    "links": {
+      "product": "Product",
+      "pricing": "Pricing",
+      "features": "Features",
+      "support": "Support",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "error": {
+    "errorPage": "error page",
+    "description": "something went wrong",
+    "tryAgain": "try again",
+    "goHome": "go home"
+  },
+  "auth": {
+    "signUp": {
+      "title": "Sign Up",
+      "subtitle": "Sign up to your account to continue your learning journey",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "agreeToTerms": "I agree to the terms and conditions",
+      "signUpButton": "Sign Up",
+      "orContinueWith": "Or continue with",
+      "signUpWithGoogle": "Sign up with Google",
+      "haveAccount": "Already have an account?",
+      "goToSignIn": "Sign in",
+
+      "errors": {
+        "allFieldsRequired": "Please fill in all fields.",
+        "invalidEmail": "Please enter a valid email address.",
+        "invalidPhone": "Please enter a valid phone number.",
+        "passwordMismatch": "The password and confirm password must match.",
+        "agreeToTerms": "Please agree to the terms and conditions.",
+        "signUpSuccess": "Sign up successful! (Demo)",
+        "passwordLength": "Password must be at least 6 characters long."
+      }
+    },
+    "signIn": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account to continue your learning journey",
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signInButton": "Sign In",
+      "orContinueWith": "Or continue with",
+      "signInWithGoogle": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "goToSignUp": "Create an account",
+      "errors": {
+        "phonePasswordRequired": "Please enter both phone number and password.",
+        "invalidPhone": "Please enter a valid phone number.",
+        "signInSuccess": "Sign in successful! (Demo)"
+      }
+    }
+  }
+}
