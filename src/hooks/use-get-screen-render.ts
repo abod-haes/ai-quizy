@@ -25,14 +25,14 @@ export function useFakeApi({
       const data = [...fakeOrders];
 
       // apply sorting (just on client)
-      if (sorting && sorting.length > 0) {
-        const { id, desc } = sorting[0];
-        data.sort((a, b) => {
-          if (a[id] < b[id]) return desc ? 1 : -1;
-          if (a[id] > b[id]) return desc ? -1 : 1;
-          return 0;
-        });
-      }
+      // if (sorting && sorting.length > 0) {
+      //   const { id, desc } = sorting[0];
+      //   data.sort((a, b) => {
+      //     if (a[id] < b[id]) return desc ? 1 : -1;
+      //     if (a[id] > b[id]) return desc ? -1 : 1;
+      //     return 0;
+      //   });
+      // }
 
       // pagination
       const start = pageIndex * pageSize;
