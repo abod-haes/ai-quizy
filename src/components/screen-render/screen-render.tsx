@@ -25,6 +25,12 @@ export default function ScreenRenderer({ schema }: { schema: ScreenSchema }) {
       )}
 
       {schema.components.map((c: ComponentSchema) => {
+        // If a custom component is provided, use it instead of the registry
+        if (c.component) {
+          const CustomComponent = c.component;
+          return <CustomComponent key={c.id} {...c.props} />;
+        }
+
         const Renderer = registry[c.type];
         if (!Renderer) return <div key={c.id}>Unknown component: {c.type}</div>;
         return <Renderer key={c.id} schema={c} />;

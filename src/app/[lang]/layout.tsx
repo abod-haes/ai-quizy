@@ -47,7 +47,7 @@ export default async function RootLayout({
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (
-    <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
+    <html lang={lang} dir={getDirection(lang)}>
       <body className={`${fontClass} antialiased`}>
         <ReactQueryProvider>
           <TranslationsProvider translations={translations}>

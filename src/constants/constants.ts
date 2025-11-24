@@ -19,14 +19,6 @@ export type SidebarItem = {
   children?: SidebarItem[];
 };
 
-// لمستخدمين;
-// المعلمين;
-// المكتبات;
-// المواد;
-// الدروس;
-// الوحدات;
-// الكويزات;
-
 export const data = {
   user: {
     name: "Latifa",
@@ -107,7 +99,7 @@ export const data = {
       url: "#",
       icon: Users,
       items: [
-        { title: "Students", url: "#" },
+        { title: "Students", url: "/dashboard/students" },
         { title: "Teachers", url: "#" },
         { title: "Administration", url: "#" },
       ],

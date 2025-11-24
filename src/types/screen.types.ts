@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
+
 export type ScreenSchema = {
   id?: string;
   title?: string;
@@ -13,6 +15,8 @@ export type ComponentSchema = {
   props?: Record<string, any>;
   dataSource?: DataSourceSchema;
   children?: ComponentSchema[];
+  // Support for React components in props
+  component?: React.ComponentType<any>;
 };
 
 export type DataSourceSchema = {
@@ -22,3 +26,10 @@ export type DataSourceSchema = {
   pagination?: { type: "offset" | "cursor"; pageSize?: number };
   serverSide?: boolean;
 };
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+}

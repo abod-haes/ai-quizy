@@ -95,7 +95,7 @@ const SignInForm = () => {
 
           {error && (
             <div
-              className={`rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-500 ${isRTL ? "text-right" : "text-left"}`}
+              className={`rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-500 ${isRTL ? "text-start" : "text-start"}`}
             >
               {error}
             </div>

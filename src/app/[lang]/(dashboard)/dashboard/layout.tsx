@@ -6,7 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "../components/sidebar"; 
+import { AppSidebar } from "@/components/section/dashboard/sidebar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (

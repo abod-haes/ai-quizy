@@ -146,7 +146,7 @@ const SignUpForm = () => {
           />
 
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-left text-sm text-red-500">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-left text-xs text-red-500">
               {error}
             </div>
           )}

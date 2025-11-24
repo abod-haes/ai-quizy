@@ -1,6 +1,7 @@
 export const routesName = {
   home: "/",
   aiAssistant: "/ai-assistant",
+  quizzes: "/quizzes",
   signup: "/sign-up",
   signin: "/sign-in",
   about: "/about",
@@ -14,8 +15,8 @@ export const NavLinkHeader: { label: string; href: TRouteName }[] = [
     href: routesName.home,
   },
   {
-    label: "مساعد ذكي",
-    href: routesName.aiAssistant,
+    label: "الاختبارات",
+    href: routesName.quizzes,
   },
   {
     label: "تحميل التطبيق",

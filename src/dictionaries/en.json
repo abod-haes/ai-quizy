@@ -35,6 +35,183 @@
       ]
     }
   },
+  "about": {
+    "hero": {
+      "title": "About Quizzy",
+      "subtitle": "Empowering learners through innovative quiz technology and AI-driven study assistance",
+      "description": "We believe that learning should be engaging, accessible, and personalized. Our platform combines gamified quizzes with intelligent AI assistance to create a comprehensive learning experience.",
+      "features": [
+        {
+          "title": "Focused Learning",
+          "description": "Targeted quizzes that adapt to your learning pace and style"
+        },
+        {
+          "title": "AI-Powered",
+          "description": "Intelligent assistance that helps you understand and retain knowledge"
+        },
+        {
+          "title": "Global Reach",
+          "description": "Supporting learners worldwide in multiple languages"
+        }
+      ]
+    },
+    "mission": {
+      "title": "Our Mission",
+      "subtitle": "Making learning accessible, engaging, and effective for everyone",
+      "values": [
+        {
+          "title": "Innovation",
+          "description": "Continuously pushing the boundaries of educational technology"
+        },
+        {
+          "title": "Accessibility",
+          "description": "Ensuring learning opportunities for people of all backgrounds"
+        },
+        {
+          "title": "Engagement",
+          "description": "Making learning fun and interactive through gamification"
+        },
+        {
+          "title": "Personalization",
+          "description": "Tailoring experiences to individual learning needs"
+        }
+      ]
+    },
+    "timeline": {
+      "title": "Our Journey",
+      "subtitle": "From a simple idea to a global platform serving thousands of learners worldwide",
+      "items": [
+        {
+          "title": "Company Founded",
+          "description": "Started our journey with a simple idea: to revolutionize how people learn through gamified quizzes. Founded with a vision to build the ultimate learning platform for modern education.",
+          "date": "2024-01-15",
+          "category": "Foundation",
+          "status": "completed"
+        },
+        {
+          "title": "MVP Launch & First Users",
+          "description": "Successfully launched our minimum viable product after 6 months of development. Onboarded our first 1,000 users and achieved product-market fit with 95% user satisfaction.",
+          "date": "2024-03-20",
+          "category": "Product",
+          "status": "completed"
+        },
+        {
+          "title": "AI Assistant Integration",
+          "description": "Integrated advanced AI technology to provide intelligent study assistance, step-by-step explanations, and personalized learning guidance for our users.",
+          "date": "2024-06-10",
+          "category": "Innovation",
+          "status": "completed"
+        },
+        {
+          "title": "Global Expansion",
+          "description": "Expanded our platform to support 25+ languages including Arabic, reaching learners across 50+ countries with localized content and culturally relevant quizzes.",
+          "date": "2024-09-15",
+          "category": "Growth",
+          "status": "completed"
+        },
+        {
+          "title": "Advanced Analytics Launch",
+          "description": "Launched comprehensive learning analytics and progress tracking features to help educators and learners understand performance patterns and optimize study strategies.",
+          "date": "2024-12-01",
+          "category": "Product",
+          "status": "current"
+        },
+        {
+          "title": "Enterprise Solutions",
+          "description": "Developing enterprise-grade solutions for educational institutions with advanced security, SSO integration, and administrative dashboards for managing large-scale learning programs.",
+          "date": "2025-03-01",
+          "category": "Enterprise",
+          "status": "upcoming"
+        },
+        {
+          "title": "Mobile App Launch",
+          "description": "Launching native mobile applications for iOS and Android with offline capabilities, push notifications, and seamless synchronization across all devices.",
+          "date": "2025-06-01",
+          "category": "Mobile",
+          "status": "upcoming"
+        },
+        {
+          "title": "Global Learning Network",
+          "description": "Building partnerships with educational institutions worldwide to create a comprehensive learning ecosystem that connects learners, educators, and content creators globally.",
+          "date": "2025-10-01",
+          "category": "Partnership",
+          "status": "upcoming"
+        }
+      ]
+    },
+    "stats": {
+      "title": "Our Impact",
+      "subtitle": "Numbers that speak to our commitment to education",
+      "achievements": [
+        {
+          "number": "50K+",
+          "label": "Active Learners",
+          "description": "Students actively using our platform"
+        },
+        {
+          "number": "1M+",
+          "label": "Quizzes Created",
+          "description": "Educational content generated"
+        },
+        {
+          "number": "95%",
+          "label": "Success Rate",
+          "description": "Students reporting improved learning"
+        },
+        {
+          "number": "25",
+          "label": "Languages",
+          "description": "Supported languages worldwide"
+        }
+      ]
+    },
+    "testimonials": {
+      "badge": "Testimonials",
+      "title": "Transformative Student Experiences",
+      "items": [
+        {
+          "quote": "Quizzy has transformed how I study. The gamified approach makes learning fun and engaging!",
+          "name": "Sarah Ahmed",
+          "username": "@sarahahmed"
+        },
+        {
+          "quote": "The AI assistant is incredible. It explains complex concepts in simple terms that I can actually understand.",
+          "name": "Mohammed Al-Rashid",
+          "username": "@mohammed_r"
+        },
+        {
+          "quote": "As a teacher, I love how Quizzy helps my students track their progress and identify areas for improvement.",
+          "name": "Dr. Fatima Hassan",
+          "username": "@drfatima"
+        },
+        {
+          "quote": "The multi-language support is amazing. I can study in Arabic and English seamlessly.",
+          "name": "Ahmed Omar",
+          "username": "@ahmedomar"
+        },
+        {
+          "quote": "Quizzy's analytics helped me understand my learning patterns and optimize my study schedule.",
+          "name": "Nour El-Din",
+          "username": "@noureldin"
+        },
+        {
+          "quote": "The community features are fantastic. I can share quizzes with classmates and learn together.",
+          "name": "Layla Mahmoud",
+          "username": "@laylamahmoud"
+        }
+      ]
+    },
+    "social": {
+      "badge": "Connect With Us",
+      "title": "Follow Our Journey",
+      "description": "Stay updated with our latest updates, tips, and community stories. Join our growing community of learners!",
+      "facebook": "https://facebook.com/quizzy",
+      "twitter": "https://twitter.com/quizzy",
+      "instagram": "https://instagram.com/quizzy",
+      "linkedin": "https://linkedin.com/company/quizzy",
+      "youtube": "https://youtube.com/@quizzy"
+    }
+  },
   "footer": {
     "tagline": "Playful quizzes for learning that sticks",
     "rights": "All rights reserved",
@@ -97,6 +274,88 @@
         "phonePasswordRequired": "Please enter both phone number and password.",
         "invalidPhone": "Please enter a valid phone number.",
         "signInSuccess": "Sign in successful! (Demo)"
+      }
+    }
+  },
+  "download": {
+    "hero": {
+      "badge": "Available Now",
+      "title": "Download Quizzy App",
+      "subtitle": "Learn Anywhere, Anytime",
+      "description": "Take your learning journey with you. Access quizzes, lessons, and AI assistance on the go with our beautiful mobile app.",
+      "appStore": {
+        "label": "Download on the",
+        "name": "App Store"
+      },
+      "googlePlay": {
+        "label": "Get it on",
+        "name": "Google Play"
+      },
+      "stats": {
+        "downloads": "Downloads",
+        "rating": "Rating",
+        "users": "Users"
+      }
+    },
+    "showcase": {
+      "title": "See Quizzy in Action",
+      "subtitle": "Explore the beautiful interface and powerful features that make learning enjoyable",
+      "screenshots": [
+        {
+          "title": "Interactive Quizzes",
+          "description": "Engage with dynamic quiz questions"
+        },
+        {
+          "title": "AI Assistant",
+          "description": "Get instant help with AI-powered assistance"
+        },
+        {
+          "title": "Progress Tracking",
+          "description": "Monitor your learning journey"
+        },
+        {
+          "title": "Offline Mode",
+          "description": "Learn even without internet connection"
+        },
+        {
+          "title": "Personalized Dashboard",
+          "description": "Customize your learning experience with personalized insights"
+        }
+      ]
+    },
+    "features": {
+      "title": "Why Choose Quizzy App?",
+      "subtitle": "Experience learning like never before with our feature-rich mobile application",
+      "items": [
+        {
+          "title": "Easy Download",
+          "description": "Get started in seconds with a simple one-tap download"
+        },
+        {
+          "title": "Offline Mode",
+          "description": "Access your quizzes and lessons even without internet"
+        },
+        {
+          "title": "Lightning Fast",
+          "description": "Optimized performance for smooth and responsive experience"
+        },
+        {
+          "title": "Secure & Private",
+          "description": "Your data is encrypted and protected with enterprise security"
+        },
+        {
+          "title": "Cross-Platform",
+          "description": "Available on iOS and Android with seamless sync"
+        },
+        {
+          "title": "AI-Powered",
+          "description": "Intelligent features that adapt to your learning style"
+        }
+      ],
+      "cta": {
+        "title": "Ready to Start Learning?",
+        "subtitle": "Download Quizzy now and take your education to the next level",
+        "button": "Download Now"
       }
     }
   }

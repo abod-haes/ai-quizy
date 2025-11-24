@@ -34,6 +34,10 @@
   --color-card: var(--card);
   --color-border-primary: var(--border-primary);
   --color-border-secondary: var(--border-secondary);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
 
   /* ===== BREAK POINTS ===== */
   --breakpoint-break524: 524px;
@@ -80,7 +84,7 @@
   --text-9xl--line-height: 1.1;
 
   /* Tweaks to utility line-height tokens */
-  --leading-tight: 2.0;
+  --leading-tight: 2;
   --leading-relaxed: 2.8;
 }
 
@@ -117,6 +121,10 @@
   --dash-section-padding-y: 2rem;
   --border-primary: #543acc;
   --border-secondary: #c4b7f5;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
 }
 
 .dark {
@@ -149,6 +157,14 @@
   --sidebar-ring: var(--primary);
   --border-primary: #543acc;
   --border-secondary: #c4b7f5;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+}
+
+.dark {
+  --muted-foreground: #9a9a9a;
 }
 
 @layer base {
@@ -159,7 +175,12 @@
     @apply bg-background text-foreground transition-colors duration-300;
   }
   /* Make headings extra spacious */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     line-height: 2.2;
   }
 }
@@ -169,7 +190,9 @@
 }
 
 @utility shadow-header {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10), 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.1),
+    0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 @utility shadow-secondary {
@@ -181,7 +204,7 @@
 /* Custom scrollbar for horizontal product rows */
 .custom-scrollbar {
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: hsl(var(--primary)/0.35) transparent;
+  scrollbar-color: hsl(var(--primary) / 0.35) transparent;
 }
 .custom-scrollbar::-webkit-scrollbar {
   height: 8px; /* Horizontal scrollbar height */
@@ -190,20 +213,20 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary)/0.35);
+  background: hsl(var(--primary) / 0.35);
   border-radius: 9999px;
 }
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary)/0.55);
+  background: hsl(var(--primary) / 0.55);
 }
 
 /* Hide number input spinners */
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
