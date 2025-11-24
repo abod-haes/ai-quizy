@@ -16,14 +16,12 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/providers/TranslationsProvider";
 
-const iconMap = [
-  Download,
-  Wifi,
-  Zap,
-  Shield,
-  Smartphone,
-  Sparkles,
-];
+const iconMap = [Download, Wifi, Zap, Shield, Smartphone, Sparkles];
+
+interface FeatureItem {
+  title: string;
+  description: string;
+}
 
 function DownloadFeaturesSection() {
   const t = useTranslation();
@@ -32,12 +30,13 @@ function DownloadFeaturesSection() {
   const controls = useRevealedControls(sectionRef, { amount: 0.25 });
   const fadeInUp = createFadeInUp(0.6, 20);
 
-  const features = featuresSection?.items?.map((item: any, index: number) => ({
-    ...item,
-    icon: iconMap[index] || Download,
-    color: index % 2 === 0 ? "text-primary" : "text-secondary",
-    bgColor: index % 2 === 0 ? "bg-primary/10" : "bg-secondary/10",
-  })) || [];
+  const features =
+    featuresSection?.items?.map((item: FeatureItem, index: number) => ({
+      ...item,
+      icon: iconMap[index] || Download,
+      color: index % 2 === 0 ? "text-primary" : "text-secondary",
+      bgColor: index % 2 === 0 ? "bg-primary/10" : "bg-secondary/10",
+    })) || [];
 
   if (!featuresSection) return null;
 
@@ -54,10 +53,7 @@ function DownloadFeaturesSection() {
           animate={controls}
           className="mx-auto max-w-6xl"
         >
-          <motion.div
-            variants={fadeInUp}
-            className="mb-12 text-center"
-          >
+          <motion.div variants={fadeInUp} className="mb-12 text-center">
             <h2 className="from-foreground to-foreground/70 mb-4 bg-gradient-to-b bg-clip-text text-3xl font-bold text-transparent sm:text-4xl">
               {featuresSection.title}
             </h2>
@@ -76,7 +72,7 @@ function DownloadFeaturesSection() {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="border-border/60 bg-card/50 group hover:bg-card/80 relative overflow-hidden rounded-2xl border p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  className="border-border/60 bg-card/50 group hover:bg-card/80 relative overflow-hidden rounded-2xl border p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   {/* Background gradient */}
                   <div className="from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -123,10 +119,7 @@ function DownloadFeaturesSection() {
           </motion.div>
 
           {/* Bottom CTA */}
-          <motion.div
-            variants={fadeInUp}
-            className="mt-16 text-center"
-          >
+          <motion.div variants={fadeInUp} className="mt-16 text-center">
             <motion.div
               className="border-border/60 bg-card/50 mx-auto max-w-2xl rounded-2xl border p-8 backdrop-blur-sm"
               whileHover={{ scale: 1.02 }}
@@ -158,4 +151,3 @@ function DownloadFeaturesSection() {
 }
 
 export default DownloadFeaturesSection;
-
