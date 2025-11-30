@@ -28,7 +28,7 @@ function FooterSection() {
       ref={ref}
       className="border-border/60 bg-background/70 relative mt-16 border-t backdrop-blur-md"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_400px_at_50%_120%,hsl(var(--primary)/0.08),transparent_60%)]" />
+      <div className="bg-card pointer-events-none absolute inset-0" />
       <div className="relative container py-10">
         <motion.div
           initial="hidden"

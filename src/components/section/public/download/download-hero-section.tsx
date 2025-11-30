@@ -114,17 +114,11 @@ function DownloadHeroSection() {
             className="flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
             <motion.div variants={fadeInUp}>
-              <IOSButton
-                label={download.appStore.label}
-                name={download.appStore.name}
-              />
+              <IOSButton />
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <AndroidButton
-                label={download.googlePlay.label}
-                name={download.googlePlay.name}
-              />
+              <AndroidButton />
             </motion.div>
           </motion.div>
 

@@ -1,35 +1,16 @@
-export interface ApiResponse<T> {
-  data: T;
-  pagination?: PaginationMeta;
-  message: string;
-  statusCode: number;
-  timestamp: string;
+export type ApiResponse<T> = T;
+export interface PaginationResponse<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
 }
-
 export interface ApiError {
-  message: string;
-  statusCode: number;
-  timestamp: string;
-  path: string;
-  method: string;
-  error: {
-    message: string;
-    error: string;
-    statusCode: number;
+  type: string;
+  title: string;
+  status: number;
+  traceId: string;
+  errors: {
+    [key: string]: string[];
   };
-}
-
-export interface PaginationMeta {
-  limit: number;
-  currentPage: number;
-  total: number;
-  totalPages: number;
-  nextPage: number | null;
-  prevPage: number | null;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
-
-export interface PaginatedResponse<T> extends ApiResponse<T> {
-  pagination: PaginationMeta;
 }

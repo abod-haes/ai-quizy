@@ -1,7 +1,6 @@
 import { ApiResponse, ApiError } from "@/types/common.type";
 import { deleteCookie, getAuthHeader, myCookies } from "@/utils/cookies";
-// import { getLocalizedRoute } from "@/utils/translations/language-utils";
-// import { Lang } from "@/utils/dictionary-utils";
+import { toast } from "sonner";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,22 +45,30 @@ export class ApiService {
 
       if (!response.ok) {
         const error = data as ApiError;
-        if (!authEndpoints.includes(endpoint) && response.status === 401) {
+        const errorMessage = error.title;
+        console.log("errorr");
+        if (
+          (!authEndpoints.includes(endpoint) && response.status === 401) ||
+          response.status === 403
+        ) {
           // Handle unauthorized access
           if (typeof document !== "undefined") {
             await deleteCookie(myCookies.auth);
             // helperNavigateTo(getLocalizedRoute(lang, "/login"));
+            toast.error(
+              lang === "en"
+                ? "You've been logged out. Please sign in again."
+                : "تم تسجيل خروجك. يرجى تسجيل الدخول مرة أخرى.",
+            );
           }
-          // toast.error(
-          //   error.error?.message ||
-          //     error.message ||
-          //     (lang === "en"
-          //       ? "You've been logged out. Please sign in again."
-          //       : "تم تسجيل خروجك. يرجى تسجيل الدخول مرة أخرى.")
-          // );
+        } else {
+          // Show error toast for other errors (only on client side)
+          if (typeof document !== "undefined") {
+            toast.error(errorMessage);
+          }
         }
 
-        throw { ...(error || {}), message: error?.message || "Request failed" };
+        throw { ...(error || {}), message: errorMessage };
       }
 
       return data as ApiResponse<T>;

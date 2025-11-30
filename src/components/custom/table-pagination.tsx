@@ -202,7 +202,7 @@ export function TablePagination({
                       handlePageClick(page);
                     }}
                     isActive={page === currentPage}
-                    className="cursor-pointer"
+                    className="h-8! w-8! cursor-pointer"
                     href="#"
                   >
                     {page}

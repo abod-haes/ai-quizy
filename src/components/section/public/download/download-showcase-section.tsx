@@ -162,8 +162,8 @@ function DownloadShowcaseSection() {
             {/* Navigation buttons */}
             <motion.button
               onClick={isRTL ? nextSlide : prevSlide}
-              className={`border-border/60 bg-card/50 hover:bg-card/80 text-primary absolute top-1/2 -translate-y-1/2 rounded-full border p-2 backdrop-blur-sm ${
-                isRTL ? "right-4" : "left-4"
+              className={`border-border/60 bg-card/50 hover:bg-card/80 text-primary absolute top-1/2 -translate-y-1/2 rounded-full border p-1 backdrop-blur-sm sm:p-2 ${
+                isRTL ? "right-2" : "left-2"
               }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -178,8 +178,8 @@ function DownloadShowcaseSection() {
             </motion.button>
             <motion.button
               onClick={isRTL ? prevSlide : nextSlide}
-              className={`border-border/60 bg-card/50 hover:bg-card/80 text-primary absolute top-1/2 -translate-y-1/2 rounded-full border p-2 backdrop-blur-sm ${
-                isRTL ? "left-4" : "right-4"
+              className={`border-border/60 bg-card/50 hover:bg-card/80 text-primary absolute top-1/2 -translate-y-1/2 rounded-full border p-1 backdrop-blur-sm sm:p-2 ${
+                isRTL ? "left-2" : "right-2"
               }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

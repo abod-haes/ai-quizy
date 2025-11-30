@@ -125,34 +125,45 @@
   --success-foreground: #ffffff;
   --warning: #f59e0b;
   --warning-foreground: #ffffff;
+  --header-border-gradient: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary) 10%, transparent),
+    transparent 50%,
+    color-mix(in srgb, var(--primary) 5%, transparent)
+  );
+  --header-box-shadow: 
+    0 10px 40px -10px color-mix(in srgb, var(--foreground) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--border) 20%, transparent);
+  --header-button-shine: color-mix(in srgb, var(--primary-foreground) 20%, transparent);
+  --footer-gradient: radial-gradient(900px 400px at 50% 120%, hsl(var(--primary)/0.08), transparent 60%);
 }
 
 .dark {
   --background: #181a20;
   --background-secondary: #1f222b;
-  --foreground: #fcfcfc;
-  --card: #2a2a2a;
-  --card-foreground: #fcfcfc;
+  --foreground: #ffffff;
+  --card: #181a20;
+  --card-foreground: #ffffff;
   --popover: #2a2a2a;
-  --popover-foreground: #fcfcfc;
+  --popover-foreground: #ffffff;
   --primary: #6949ff;
-  --primary-foreground: #343434;
+  --primary-foreground: #ffffff;
   --secondary: #f0edff;
-  --secondary-foreground: #fcfcfc;
-  --muted: #444444;
-  --muted-foreground: #9a9a9a;
+  --secondary-foreground: #ffffff;
+  --muted: #2a2a2a;
+  --muted-foreground: #d4d4d4;
   --accent: #444444;
-  --accent-foreground: #fcfcfc;
+  --accent-foreground: #ffffff;
   --destructive: #f87171;
   --border: #ffffff1a;
   --input: #ffffff26;
   --ring: var(--primary);
   --sidebar: #2a2a2a;
-  --sidebar-foreground: #fcfcfc;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: #fcfcfc;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #444444;
-  --sidebar-accent-foreground: #fcfcfc;
+  --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #ffffff1a;
   --sidebar-ring: var(--primary);
   --border-primary: #543acc;
@@ -161,27 +172,77 @@
   --success-foreground: #ffffff;
   --warning: #d97706;
   --warning-foreground: #ffffff;
-}
-
-.dark {
-  --muted-foreground: #9a9a9a;
+  --header-border-gradient: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary) 10%, transparent),
+    transparent 50%,
+    color-mix(in srgb, var(--primary) 5%, transparent)
+  );
+  --header-box-shadow: 
+    0 10px 40px -10px color-mix(in srgb, var(--foreground) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--border) 20%, transparent);
+  --header-button-shine: color-mix(in srgb, var(--primary-foreground) 20%, transparent);
 }
 
 @layer base {
+  html {
+    /* Responsive base font size - scales from 14px (mobile) to 16px (desktop) */
+    font-size: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent text size adjustment on iOS */
+    -webkit-text-size-adjust: 100%;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    /* Base line height for better readability */
+    line-height: 1.6;
+    /* Ensure proper font rendering */
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
   }
-  /* Make headings extra spacious */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: 2.2;
+
+
+
+  /* Better spacing for small screens */
+  @media (max-width: 640px) {
+    html {
+      font-size: 13px;
+    }
+  }
+
+  /* Medium screens */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  /* Large screens (laptops and smaller desktops) */
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  /* Extra large screens (large desktops) */
+  @media (min-width: 1441px) and (max-width: 1499px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  /* Ultra large screens */
+  @media (min-width: 1500px) {
+    html {
+      font-size: 16px;
+    }
   }
 }
 
@@ -199,6 +260,19 @@
   box-shadow:
     0 10px 28px color-mix(in srgb, var(--color-secondary) 28%, transparent),
     0 3px 12px color-mix(in srgb, var(--color-secondary) 18%, transparent);
+}
+
+@utility header-button-shine {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--header-button-shine),
+    transparent
+  );
+}
+
+@utility bg-header-border-gradient {
+  background: var(--header-border-gradient);
 }
 
 /* Custom scrollbar for horizontal product rows */
@@ -229,4 +303,5 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+  direction: ltr !important;
 }

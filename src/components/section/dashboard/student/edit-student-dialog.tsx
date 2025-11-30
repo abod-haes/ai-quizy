@@ -79,6 +79,13 @@ export function EditStudentDialog({
           },
         },
         {
+          key: "password",
+          type: "password",
+          label: "Password",
+          placeholder: "Enter new password (leave empty to keep current)",
+          required: false,
+        },
+        {
           key: "phoneNumber",
           type: "text",
           label: "Phone Number",
@@ -105,10 +112,19 @@ export function EditStudentDialog({
       ...formDefinition,
       submitButtonText: "Save Changes",
       isLoading,
-      fields: formDefinition.fields.map((field) => ({
-        ...field,
-        default: student[field.key as keyof Student] || "",
-      })),
+      fields: formDefinition.fields.map((field) => {
+        // Don't set default value for password field (leave empty for optional update)
+        if (field.key === "password") {
+          return {
+            ...field,
+            default: "",
+          };
+        }
+        return {
+          ...field,
+          default: student[field.key as keyof Student] || "",
+        };
+      }),
     };
   }, [formDefinition, student, isLoading]);
 
@@ -116,9 +132,14 @@ export function EditStudentDialog({
     if (!student) return;
 
     try {
+      // Remove password from data if it's empty (don't update password)
+      const submitData = { ...data };
+      if (!submitData.password || String(submitData.password).trim() === "") {
+        delete submitData.password;
+      }
+
       await onSubmit({
-        id: student.id,
-        ...data,
+        ...submitData,
       } as Student);
       onOpenChange(false);
     } catch (error) {

@@ -1,12 +1,15 @@
-import * as React from "react"
+"use client";
+
+import * as React from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreHorizontalIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { useCurrentLang } from "@/hooks/useCurrentLang";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -17,30 +20,34 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
     />
-  )
+  );
 }
 
 function PaginationContent({
   className,
   ...props
 }: React.ComponentProps<"ul">) {
+  const lang = useCurrentLang();
+  const isRTL = lang === "ar";
+
   return (
     <ul
       data-slot="pagination-content"
+      dir={isRTL ? "rtl" : "ltr"}
       className={cn("flex flex-row items-center gap-1", className)}
       {...props}
     />
-  )
+  );
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />
+  return <li data-slot="pagination-item" {...props} />;
 }
 
 type PaginationLinkProps = {
-  isActive?: boolean
+  isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+  React.ComponentProps<"a">;
 
 function PaginationLink({
   className,
@@ -58,45 +65,61 @@ function PaginationLink({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const lang = useCurrentLang();
+  const isRTL = lang === "ar";
+  const ChevronIcon = isRTL ? ChevronRightIcon : ChevronLeftIcon;
+
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={isRTL ? "الانتقال إلى الصفحة السابقة" : "Go to previous page"}
       size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn(
+        "gap-1 px-2.5",
+        isRTL ? "sm:pr-2.5" : "sm:pl-2.5",
+        className,
+      )}
       {...props}
     >
-      <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <ChevronIcon />
+      <span className="hidden sm:block">{isRTL ? "السابق" : "Previous"}</span>
     </PaginationLink>
-  )
+  );
 }
 
 function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const lang = useCurrentLang();
+  const isRTL = lang === "ar";
+  const ChevronIcon = isRTL ? ChevronLeftIcon : ChevronRightIcon;
+
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={isRTL ? "الانتقال إلى الصفحة التالية" : "Go to next page"}
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn(
+        "gap-1 px-2.5",
+        isRTL ? "sm:pl-2.5" : "sm:pr-2.5",
+        className,
+      )}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
-      <ChevronRightIcon />
+      <span className="hidden sm:block">{isRTL ? "التالي" : "Next"}</span>
+      <ChevronIcon />
     </PaginationLink>
-  )
+  );
 }
 
 function PaginationEllipsis({
@@ -113,7 +136,98 @@ function PaginationEllipsis({
       <MoreHorizontalIcon className="size-4" />
       <span className="sr-only">More pages</span>
     </span>
-  )
+  );
+}
+
+// Complete Pagination Component with logic
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}
+
+function PaginationComponent({
+  currentPage,
+  totalPages,
+  onPageChange,
+  className,
+}: PaginationProps) {
+  const lang = useCurrentLang();
+  const isRTL = lang === "ar";
+
+  if (totalPages <= 1) return null;
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      onPageChange(newPage);
+    }
+  };
+
+  return (
+    <Pagination className={className} dir={isRTL ? "rtl" : "ltr"}>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(currentPage - 1);
+            }}
+            className={cn(
+              currentPage === 1 && "pointer-events-none opacity-50",
+            )}
+          />
+        </PaginationItem>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+          if (
+            pageNum === 1 ||
+            pageNum === totalPages ||
+            (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+          ) {
+            return (
+              <PaginationItem key={pageNum}>
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(pageNum);
+                  }}
+                  isActive={pageNum === currentPage}
+                >
+                  {pageNum}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          } else if (
+            pageNum === currentPage - 2 ||
+            pageNum === currentPage + 2
+          ) {
+            return (
+              <PaginationItem key={pageNum}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            );
+          }
+          return null;
+        })}
+
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(currentPage + 1);
+            }}
+            className={cn(
+              currentPage === totalPages && "pointer-events-none opacity-50",
+            )}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
 }
 
 export {
@@ -124,4 +238,5 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
-}
+  PaginationComponent,
+};

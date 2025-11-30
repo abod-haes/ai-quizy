@@ -37,7 +37,7 @@ const StudentsPage = () => {
   const deleteStudent = useDeleteStudent(selectedStudent?.id || "");
 
   const students: Student[] = Array.isArray(data?.items)
-    ? (data.items as unknown as Student[])
+    ? ((data?.items || []) as unknown as Student[])
     : [];
 
   const totalCount = data?.totalCount || 0;

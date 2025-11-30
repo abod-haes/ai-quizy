@@ -1,22 +1,33 @@
-export const authPaths = ["login", "register", "reset-password"];
-export const privatePaths = [];
-
-// sidebar-data.ts
+import { dashboardRoutesName } from "@/utils/constant";
+import type { TRouteName } from "@/utils/constant";
 import {
   BookOpen,
-  Library,
   GraduationCap,
   Folder,
   FileQuestion,
   Users,
   ClipboardList,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-export type SidebarItem = {
+export const authPaths = ["login", "register", "reset-password"];
+export const privatePaths = [];
+
+export type NavMainItem = {
   title: string;
-  icon?: React.ElementType;
-  href?: string;
-  children?: SidebarItem[];
+  url?: TRouteName;
+  icon?: LucideIcon;
+  isActive?: boolean;
+  items?: {
+    title: string;
+    url: TRouteName | string;
+  }[];
+};
+
+export type ProjectItem = {
+  name: string;
+  url: TRouteName | string;
+  icon: LucideIcon;
 };
 
 export const data = {
@@ -44,64 +55,37 @@ export const data = {
 
   navMain: [
     {
-      title: "Libraries",
-      url: "#",
-      icon: Library,
-      isActive: true,
-      items: [
-        { title: "References", url: "#" },
-        { title: "E-Books", url: "#" },
-        { title: "Research Papers", url: "#" },
-      ],
-    },
-    {
       title: "Subjects",
-      url: "#",
       icon: BookOpen,
       items: [
-        { title: "Mathematics", url: "#" },
-        { title: "Physics", url: "#" },
-        { title: "Chemistry", url: "#" },
-        { title: "Computer Science", url: "#" },
+        { title: "Mathematics", url: dashboardRoutesName.lessons },
+        { title: "Physics", url: dashboardRoutesName.lessons },
+        { title: "Chemistry", url: dashboardRoutesName.lessons },
+        { title: "Computer Science", url: dashboardRoutesName.lessons },
       ],
     },
     {
       title: "Lessons",
-      url: "#",
+      url: dashboardRoutesName.lessons,
       icon: GraduationCap,
-      items: [
-        { title: "Complex Numbers", url: "#" },
-        { title: "Newton’s Laws", url: "#" },
-        { title: "Object-Oriented Programming", url: "#" },
-      ],
     },
     {
       title: "Units",
-      url: "#",
+      url: dashboardRoutesName.units,
       icon: Folder,
-      items: [
-        { title: "Fundamentals", url: "#" },
-        { title: "Advanced Concepts", url: "#" },
-      ],
     },
     {
       title: "Quizzes",
-      url: "#",
+      url: dashboardRoutesName.quizzes,
       icon: FileQuestion,
-      items: [
-        { title: "Algebra Basics", url: "#" },
-        { title: "Motion & Forces", url: "#" },
-        { title: "Data Structures", url: "#" },
-      ],
     },
     {
       title: "Users",
-      url: "#",
       icon: Users,
       items: [
-        { title: "Students", url: "/dashboard/students" },
-        { title: "Teachers", url: "#" },
-        { title: "Administration", url: "#" },
+        { title: "Students", url: dashboardRoutesName.students },
+        { title: "Teachers", url: dashboardRoutesName.teachers },
+        { title: "Administration", url: dashboardRoutesName.administration },
       ],
     },
   ],
@@ -110,17 +94,17 @@ export const data = {
   projects: [
     {
       name: "Artificial Intelligence Course",
-      url: "#",
+      url: dashboardRoutesName.lessons,
       icon: ClipboardList,
     },
     {
       name: "Engineering Program",
-      url: "#",
+      url: dashboardRoutesName.lessons,
       icon: GraduationCap,
     },
     {
       name: "Web Development Bootcamp",
-      url: "#",
+      url: dashboardRoutesName.lessons,
       icon: BookOpen,
     },
   ],

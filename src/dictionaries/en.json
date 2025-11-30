@@ -243,6 +243,7 @@
       "confirmPassword": "Confirm Password",
       "agreeToTerms": "I agree to the terms and conditions",
       "signUpButton": "Sign Up",
+      "signingUp": "Signing up...",
       "orContinueWith": "Or continue with",
       "signUpWithGoogle": "Sign up with Google",
       "haveAccount": "Already have an account?",
@@ -255,6 +256,7 @@
         "passwordMismatch": "The password and confirm password must match.",
         "agreeToTerms": "Please agree to the terms and conditions.",
         "signUpSuccess": "Sign up successful! (Demo)",
+        "signUpFailed": "Sign up failed. Please try again.",
         "passwordLength": "Password must be at least 6 characters long."
       }
     },
@@ -266,6 +268,7 @@
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot password?",
       "signInButton": "Sign In",
+      "signingIn": "Signing in...",
       "orContinueWith": "Or continue with",
       "signInWithGoogle": "Sign in with Google",
       "noAccount": "Don't have an account?",
@@ -274,6 +277,21 @@
         "phonePasswordRequired": "Please enter both phone number and password.",
         "invalidPhone": "Please enter a valid phone number.",
         "signInSuccess": "Sign in successful! (Demo)"
+      }
+    },
+    "verification": {
+      "title": "Verify Code",
+      "subtitle": "Enter the 6-digit verification code we sent to you",
+      "verifyButton": "Verify",
+      "verifying": "Verifying...",
+      "didntReceiveCode": "Didn't receive the code?",
+      "resendCode": "Resend",
+      "backToSignIn": "Back to",
+      "signInLink": "Sign In",
+      "errors": {
+        "invalidCode": "Please enter a valid 6-digit code.",
+        "missingPhoneNumber": "Phone number is missing.",
+        "verificationFailed": "Verification failed. Please try again."
       }
     }
   },
@@ -357,6 +375,90 @@
         "subtitle": "Download Quizzy now and take your education to the next level",
         "button": "Download Now"
       }
+    }
+  },
+  "quizzes": {
+    "title": "Quizzes",
+    "description": "Browse and start available quizzes",
+    "filters": {
+      "title": "Filter Search",
+      "subject": "Subject",
+      "teacher": "Teacher",
+      "selectSubject": "Select Subject",
+      "selectTeacher": "Select Teacher",
+      "applyFilter": "Apply Filter",
+      "clearFilters": "Clear Filters",
+      "all": "All"
+    },
+    "results": {
+      "noQuizzesFound": "No quizzes found",
+      "loadingError": "Failed to load quizzes. Please try again."
+    },
+    "card": {
+      "quiz": "Quiz",
+      "minutes": "minutes",
+      "noTimeLimit": "No time limit",
+      "timeSpent": "Time spent",
+      "percentage": "Percentage",
+      "questionsCount": "Number of questions",
+      "viewResults": "View Results",
+      "startQuiz": "Start Quiz",
+      "loginRequired": {
+        "title": "Login Required",
+        "description": "You need to be logged in to start this quiz. Please login to continue.",
+        "goToLogin": "Go to Login",
+        "cancel": "Cancel"
+      }
+    },
+    "detail": {
+      "title": "Quiz Details",
+      "teacher": "Teacher",
+      "timeLimit": "Time Limit",
+      "noTimeLimit": "No time limit",
+      "minutes": "minutes",
+      "questions": "Questions",
+      "question": "Question",
+      "hint": "Hint",
+      "description": "Description",
+      "selectAnswer": "Select an answer",
+      "submitQuiz": "Submit Quiz",
+      "submitting": "Submitting...",
+      "loading": "Loading quiz...",
+      "error": "Failed to load quiz. Please try again.",
+      "noQuestions": "No questions available for this quiz.",
+      "next": "Next",
+      "previous": "Previous",
+      "of": "of",
+      "questionProgress": "Question {current} of {total}",
+      "correct": "Correct!",
+      "incorrect": "Incorrect!",
+      "pleaseLogin": "Please login to access this quiz",
+      "redirectingToLogin": "Redirecting to login..."
+    }
+  },
+  "header": {
+    "navigation": {
+      "home": "Home",
+      "quizzes": "Quizzes",
+      "download": "Download App",
+      "about": "About"
+    },
+    "theme": {
+      "lightMode": "Light Mode",
+      "darkMode": "Dark Mode",
+      "toggleTheme": "Toggle theme"
+    },
+    "auth": {
+      "login": "Sign In"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "myQuizzes": "My Quizzes",
+      "logout": "Logout"
+    },
+    "menu": {
+      "openMenu": "Open menu",
+      "navigationMenu": "Navigation Menu"
     }
   }
 }

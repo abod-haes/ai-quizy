@@ -1,74 +1,154 @@
 "use client";
 
-import { Lock, Mail, Phone, User } from "lucide-react";
+import { Lock, Mail, Phone, User, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "../../../ui/button";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { getDirection } from "@/utils/translations/language-utils";
 import { Input } from "@/components/ui/input";
+import { useRegister } from "@/hooks/api/auth.query";
+import { setCookie } from "@/utils/cookies";
+import { myCookies } from "@/utils/cookies";
+import { routesName } from "@/utils/constant";
+import { useLocalizedHref } from "@/hooks/useLocalizedHref";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { AxiosError } from "axios";
+import { ApiError } from "@/types/common.type";
+import { roleType } from "@/utils/enum/common.enum";
 
 const SignUpForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [error, setError] = useState("");
-
   const lang = useCurrentLang();
+  const router = useRouter();
+  const getLocalizedHref = useLocalizedHref();
   const { auth } = useTranslation();
   const translations = auth.signUp;
   const direction = getDirection(lang);
   const isRTL = direction === "rtl";
 
-  const validateEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const registerMutation = useRegister();
 
-  const validatePhoneNumber = (phone: string) => {
-    const cleanPhone = phone.replace(/\D/g, "");
-    return cleanPhone.length >= 10 && cleanPhone.length <= 15;
-  };
+  // Zod schema with custom validation messages
+  const signUpSchema = z
+    .object({
+      firstName: z.string().min(1, translations.errors.allFieldsRequired),
+      lastName: z.string().min(1, translations.errors.allFieldsRequired),
+      email: z
+        .string()
+        .min(1, translations.errors.allFieldsRequired)
+        .email(translations.errors.invalidEmail),
+      phoneNumber: z
+        .string()
+        .min(1, translations.errors.allFieldsRequired)
+        .refine(
+          (phone) => {
+            const cleanPhone = phone.replace(/\D/g, "");
+            return cleanPhone.length >= 9 && cleanPhone.length <= 9;
+          },
+          { message: translations.errors.invalidPhone },
+        ),
+      password: z
+        .string()
+        .min(1, translations.errors.allFieldsRequired)
+        .min(6, translations.errors.passwordLength),
+      confirmPassword: z.string().min(1, translations.errors.allFieldsRequired),
+      agreeToTerms: z.boolean().refine((val) => val === true, {
+        message: translations.errors.agreeToTerms,
+      }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: translations.errors.passwordMismatch,
+      path: ["confirmPassword"],
+    });
 
-  const handleSignUp = () => {
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !phoneNumber ||
-      !password ||
-      !confirmPassword
-    ) {
-      setError(translations.errors.allFieldsRequired);
-      return;
+  type SignUpFormValues = z.infer<typeof signUpSchema>;
+
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      agreeToTerms: false,
+    },
+  });
+
+  const onSubmit = async (data: SignUpFormValues) => {
+    try {
+      const response = await registerMutation.mutateAsync({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+        role: Number(roleType.STUDENT),
+      });
+
+      // Save token to cookie
+      if (response.token) {
+        setCookie(myCookies.auth, response.token, true);
+      }
+
+      // Redirect based on verification requirement
+      if (response.requiresVerification) {
+        // Redirect to verification page with phone number
+        const verifyUrl = new URL(
+          getLocalizedHref(routesName.verify),
+          window.location.origin,
+        );
+        if (response.phoneNumber) {
+          verifyUrl.searchParams.set("phoneNumber", response.phoneNumber);
+        }
+        if (response.email) {
+          verifyUrl.searchParams.set("email", response.email);
+        }
+        router.push(verifyUrl.pathname + verifyUrl.search);
+      } else {
+        // Redirect to home or dashboard
+        router.push(getLocalizedHref(routesName.home));
+      }
+    } catch (err: unknown) {
+      // Handle error - form will show field errors automatically
+      if (err instanceof AxiosError) {
+        const errorData = err.response?.data as ApiError | undefined;
+
+        if (errorData) {
+          // Extract error message from the new error structure
+          let errorMessage = errorData.title || "An unexpected error occurred";
+
+          // Handle validation errors (new format with errors object)
+          if (errorData.errors && Object.keys(errorData.errors).length > 0) {
+            // Get first error message from the first field
+            const firstField = Object.keys(errorData.errors)[0];
+            const firstError = errorData.errors[firstField]?.[0];
+            if (firstError) {
+              errorMessage = firstError;
+            }
+          }
+
+          form.setError("root", { message: errorMessage });
+        } else {
+          form.setError("root", { message: "An unexpected error occurred" });
+        }
+      } else {
+        form.setError("root", { message: "An unexpected error occurred" });
+      }
     }
-    if (!validateEmail(email)) {
-      setError(translations.errors.invalidEmail);
-      return;
-    }
-    if (!validatePhoneNumber(phoneNumber)) {
-      setError(translations.errors.invalidPhone);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError(translations.errors.passwordMismatch);
-      return;
-    }
-    if (password.length < 6) {
-      setError(translations.errors.passwordLength);
-      return;
-    }
-    if (!agreeToTerms) {
-      setError(translations.errors.agreeToTerms);
-      return;
-    }
-    setError("");
-    alert(translations.errors.signUpSuccess);
   };
 
   return (
@@ -99,73 +179,160 @@ const SignUpForm = () => {
         <p className="mb-8 max-w-sm text-center text-sm leading-relaxed text-slate-500">
           {translations.subtitle}
         </p>
-        <div className="relative z-10 mb-4 flex w-full flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              placeholder={translations.firstName}
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              startIcon={<User className="h-5 w-5" />}
-            />
-            <Input
-              placeholder={translations.lastName}
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              startIcon={<User className="h-5 w-5" />}
-            />
-          </div>
-          <Input
-            placeholder={translations.email}
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            startIcon={<Mail className="h-5 w-5" />}
-          />
-          <Input
-            placeholder={translations.phoneNumber}
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            startIcon={<Phone className="h-5 w-5" />}
-          />
-          <Input
-            placeholder={translations.password}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            startIcon={<Lock className="h-5 w-5" />}
-          />
-          <Input
-            placeholder={translations.confirmPassword}
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            startIcon={<Lock className="h-5 w-5" />}
-          />
-
-          {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-left text-xs text-red-500">
-              {error}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="relative z-10 mb-4 flex w-full flex-col gap-4"
+          >
+            <div className="grid grid-cols-2 gap-3">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={translations.firstName}
+                        type="text"
+                        startIcon={<User className="h-5 w-5" />}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={translations.lastName}
+                        type="text"
+                        startIcon={<User className="h-5 w-5" />}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          )}
-
-          <div className="flex w-full items-center gap-2">
-            <input
-              type="checkbox"
-              checked={agreeToTerms}
-              onChange={(e) => setAgreeToTerms(e.target.checked)}
-              className="text-primary focus:ring-primary/20 h-4 w-4 rounded border-slate-300 focus:ring-2 focus:ring-offset-0"
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder={translations.email}
+                      type="email"
+                      startIcon={<Mail className="h-5 w-5" />}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <label className="cursor-pointer text-sm text-slate-600">
-              {translations.agreeToTerms}
-            </label>
-          </div>
-        </div>
-        <Button onClick={handleSignUp} className="w-full">
-          {translations.signUpButton}
-        </Button>
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder={translations.phoneNumber}
+                      type="tel"
+                      startIcon={<Phone className="h-5 w-5" />}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder={translations.password}
+                      type="password"
+                      startIcon={<Lock className="h-5 w-5" />}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder={translations.confirmPassword}
+                      type="password"
+                      startIcon={<Lock className="h-5 w-5" />}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.formState.errors.root && (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-left text-xs text-red-500">
+                {form.formState.errors.root.message}
+              </div>
+            )}
+
+            <FormField
+              control={form.control}
+              name="agreeToTerms"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex w-full items-center gap-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="text-primary focus:ring-primary/20 h-4 w-4 rounded border-slate-300 focus:ring-2 focus:ring-offset-0"
+                      />
+                    </FormControl>
+                    <label className="cursor-pointer text-sm text-slate-600">
+                      {translations.agreeToTerms}
+                    </label>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={registerMutation.isPending}
+            >
+              {registerMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {translations.signingUp}
+                </>
+              ) : (
+                translations.signUpButton
+              )}
+            </Button>
+          </form>
+        </Form>
 
         <div className="relative z-10 my-4 flex w-full items-center">
           <div className="flex-grow border-t border-slate-200"></div>

@@ -8,9 +8,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <main>
+    <main className="bg-background flex min-h-screen flex-col justify-between">
       <ConditionalHeader />
-      {children}
+      <div className="flex flex-1 flex-col">{children}</div>
       <ConditionalFooter />
     </main>
   );

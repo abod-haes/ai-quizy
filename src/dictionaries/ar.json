@@ -243,6 +243,7 @@
       "confirmPassword": "تأكيد كلمة المرور",
       "agreeToTerms": "أوافق على الشروط والأحكام",
       "signUpButton": "تسجيل الحساب",
+      "signingUp": "جاري التسجيل...",
       "orContinueWith": "أو المتابعة باستخدام",
       "signUpWithGoogle": "تسجيل الحساب بجوجل",
       "haveAccount": "لديك حساب بالفعل؟",
@@ -254,6 +255,7 @@
         "passwordMismatch": "كلمة المرور وتأكيد كلمة المرور يجب أن يكونا متطابقين.",
         "agreeToTerms": "يرجى الموافقة على الشروط والأحكام.",
         "signUpSuccess": "تم تسجيل الحساب بنجاح! (تجريبي)",
+        "signUpFailed": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
         "passwordLength": "يجب أن يكون كلمة المرور على الأقل 6 أحرف."
       }
     },
@@ -265,6 +267,7 @@
       "rememberMe": "تذكرني",
       "forgotPassword": "نسيت كلمة المرور؟",
       "signInButton": "تسجيل الدخول",
+      "signingIn": "جاري تسجيل الدخول...",
       "orContinueWith": "أو المتابعة باستخدام",
       "signInWithGoogle": "تسجيل الدخول بجوجل",
       "noAccount": "لا تملك حسابًا؟",
@@ -273,6 +276,21 @@
         "phonePasswordRequired": "يرجى إدخال رقم الهاتف وكلمة المرور.",
         "invalidPhone": "يرجى إدخال رقم هاتف صحيح.",
         "signInSuccess": "تم تسجيل الدخول بنجاح! (تجريبي)"
+      }
+    },
+    "verification": {
+      "title": "تحقق من الكود",
+      "subtitle": "أدخل رمز التحقق المكون من 6 أرقام الذي أرسلناه إليك",
+      "verifyButton": "تحقق",
+      "verifying": "جاري التحقق...",
+      "didntReceiveCode": "لم تستلم الكود؟",
+      "resendCode": "إعادة إرسال",
+      "backToSignIn": "العودة إلى",
+      "signInLink": "تسجيل الدخول",
+      "errors": {
+        "invalidCode": "يرجى إدخال رمز التحقق المكون من 6 أرقام.",
+        "missingPhoneNumber": "رقم الهاتف مفقود.",
+        "verificationFailed": "فشل التحقق. يرجى المحاولة مرة أخرى."
       }
     }
   },
@@ -356,6 +374,90 @@
         "subtitle": "حمّل كويزي الآن وارتق بتعليمك إلى المستوى التالي",
         "button": "حمّل الآن"
       }
+    }
+  },
+  "quizzes": {
+    "title": "الاختبارات",
+    "description": "استعرض وابدأ الاختبارات المتاحة",
+    "filters": {
+      "title": "تصفية البحث",
+      "subject": "المادة",
+      "teacher": "المعلم",
+      "selectSubject": "اختر المادة",
+      "selectTeacher": "اختر المعلم",
+      "applyFilter": "تطبيق الفلتر",
+      "clearFilters": "مسح الفلاتر",
+      "all": "الكل"
+    },
+    "results": {
+      "noQuizzesFound": "لم يتم العثور على اختبارات",
+      "loadingError": "فشل تحميل الاختبارات. يرجى المحاولة مرة أخرى."
+    },
+    "card": {
+      "quiz": "اختبار",
+      "minutes": "دقيقة",
+      "noTimeLimit": "بدون حد زمني",
+      "timeSpent": "الوقت المستغرق",
+      "percentage": "النسبة المئوية",
+      "questionsCount": "عدد الأسئلة",
+      "viewResults": "عرض النتائج",
+      "startQuiz": "بدء الاختبار",
+      "loginRequired": {
+        "title": "تسجيل الدخول مطلوب",
+        "description": "يجب تسجيل الدخول لبدء هذا الاختبار. يرجى تسجيل الدخول للمتابعة.",
+        "goToLogin": "الذهاب لتسجيل الدخول",
+        "cancel": "إلغاء"
+      }
+    },
+    "detail": {
+      "title": "تفاصيل الاختبار",
+      "teacher": "المعلم",
+      "timeLimit": "الحد الزمني",
+      "noTimeLimit": "بدون حد زمني",
+      "minutes": "دقيقة",
+      "questions": "الأسئلة",
+      "question": "سؤال",
+      "hint": "تلميح",
+      "description": "الوصف",
+      "selectAnswer": "اختر إجابة",
+      "submitQuiz": "إرسال الاختبار",
+      "submitting": "جاري الإرسال...",
+      "loading": "جاري تحميل الاختبار...",
+      "error": "فشل تحميل الاختبار. يرجى المحاولة مرة أخرى.",
+      "noQuestions": "لا توجد أسئلة متاحة لهذا الاختبار.",
+      "next": "التالي",
+      "previous": "السابق",
+      "of": "من",
+      "questionProgress": "السؤال {current} من {total}",
+      "correct": "صحيح!",
+      "incorrect": "خطأ!",
+      "pleaseLogin": "يرجى تسجيل الدخول للوصول إلى هذا الاختبار",
+      "redirectingToLogin": "جاري التوجيه إلى صفحة تسجيل الدخول..."
+    }
+  },
+  "header": {
+    "navigation": {
+      "home": "رئيسية",
+      "quizzes": "الاختبارات",
+      "download": "تحميل التطبيق",
+      "about": "من نحن"
+    },
+    "theme": {
+      "lightMode": "الوضع الفاتح",
+      "darkMode": "الوضع الداكن",
+      "toggleTheme": "تبديل المظهر"
+    },
+    "auth": {
+      "login": "تسجيل دخول"
+    },
+    "userMenu": {
+      "profile": "الملف الشخصي",
+      "myQuizzes": "اختباراتي",
+      "logout": "تسجيل الخروج"
+    },
+    "menu": {
+      "openMenu": "فتح القائمة",
+      "navigationMenu": "قائمة التنقل"
     }
   }
 }

@@ -15,6 +15,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useTranslation } from "@/providers/TranslationsProvider";
+import { Button } from "@/components/ui/button";
+import { routesName } from "@/utils/constant";
 
 const iconMap = [Download, Wifi, Zap, Shield, Smartphone, Sparkles];
 
@@ -132,15 +134,10 @@ function DownloadFeaturesSection() {
                 {featuresSection.cta.subtitle}
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <motion.a
-                  href="#"
-                  className="border-border/60 bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-12 items-center gap-3 rounded-full border px-6 font-semibold shadow-lg transition-all hover:shadow-xl"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <Button variant="default" size="lg" href={routesName.download}>
                   <Download className="size-5" />
                   {featuresSection.cta.button}
-                </motion.a>
+                </Button>
               </div>
             </motion.div>
           </motion.div>

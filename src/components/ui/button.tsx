@@ -40,7 +40,7 @@ type ButtonProps = VariantProps<typeof buttonVariants> & {
   asChild?: boolean;
   disabled?: boolean;
   href?: string;
-} & React.HtmlHTMLAttributes<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function Button({
   className,

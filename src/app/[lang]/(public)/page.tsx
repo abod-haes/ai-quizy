@@ -7,97 +7,74 @@ import AIFeatureSection from "@/components/section/public/home/ai-feature-sectio
 export default function Page() {
   const products = [
     {
-      title: "Moonbeam",
-      link: "https://gomoonbeam.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+      title: "Quizzy Feature 1",
+      link: "#",
+      thumbnail: "/images/home/1.jpg",
     },
     {
-      title: "Cursor",
-      link: "https://cursor.so",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+      title: "Quizzy Feature 2",
+      link: "#",
+      thumbnail: "/images/home/2.jpg",
     },
     {
-      title: "Rogue",
-      link: "https://userogue.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/rogue.png",
-    },
-
-    {
-      title: "Editorially",
-      link: "https://editorially.org",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+      title: "Quizzy Feature 3",
+      link: "#",
+      thumbnail: "/images/home/3.jpg",
     },
     {
-      title: "Editrix AI",
-      link: "https://editrix.ai",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+      title: "Quizzy Feature 4",
+      link: "#",
+      thumbnail: "/images/home/4.jpg",
     },
     {
-      title: "Pixel Perfect",
-      link: "https://app.pixelperfect.quest",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
-    },
-
-    {
-      title: "Algochurn",
-      link: "https://algochurn.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+      title: "Quizzy Feature 5",
+      link: "#",
+      thumbnail: "/images/home/5.jpg",
     },
     {
-      title: "Aceternity UI",
-      link: "https://ui.aceternity.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+      title: "Quizzy Feature 6",
+      link: "#",
+      thumbnail: "/images/home/6.jpg",
     },
     {
-      title: "Tailwind Master Kit",
-      link: "https://tailwindmasterkit.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+      title: "Quizzy Feature 7",
+      link: "#",
+      thumbnail: "/images/home/7.jpg",
     },
     {
-      title: "SmartBridge",
-      link: "https://smartbridgetech.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+      title: "Quizzy Feature 8",
+      link: "#",
+      thumbnail: "/images/home/11.jpg",
     },
     {
-      title: "Renderwork Studio",
-      link: "https://renderwork.studio",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
-    },
-
-    {
-      title: "Creme Digital",
-      link: "https://cremedigital.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+      title: "Quizzy Feature 9",
+      link: "#",
+      thumbnail: "/images/home/22.jpg",
     },
     {
-      title: "Golden Bells Academy",
-      link: "https://goldenbellsacademy.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+      title: "Quizzy Feature 10",
+      link: "#",
+      thumbnail: "/images/home/33.jpg",
     },
     {
-      title: "Invoker Labs",
-      link: "https://invoker.lol",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+      title: "Quizzy Feature 11",
+      link: "#",
+      thumbnail: "/images/home/44.jpg",
     },
     {
-      title: "E Free Invoice",
-      link: "https://efreeinvoice.com",
-      thumbnail:
-        "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+      title: "Quizzy Feature 12",
+      link: "#",
+      thumbnail: "/images/home/55.jpg",
+    },
+    {
+      title: "Quizzy Feature 13",
+      link: "#",
+      thumbnail: "/images/home/66.jpg",
+    },
+    {
+      title: "Quizzy Feature 14",
+      link: "#",
+      thumbnail: "/images/home/77.jpg",
     },
   ];
   return (

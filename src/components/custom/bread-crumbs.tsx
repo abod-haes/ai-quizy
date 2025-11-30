@@ -42,40 +42,14 @@ export type BreadcrumbItemType = {
   icon?: React.ReactNode;
 };
 
-type BreadcrumbsProps = {
-  /**
-   * Custom breadcrumb items. If not provided, will auto-generate from pathname
-   */
-  items?: BreadcrumbItemType[];
-  /**
-   * Custom home label. Default: "Home"
-   */
-  homeLabel?: string;
-  /**
-   * Show home icon. Default: true
-   */
-  showHomeIcon?: boolean;
-  /**
-   * Maximum items to show before ellipsis on mobile. Default: 2
-   */
-  maxMobileItems?: number;
-  /**
-   * Maximum items to show before ellipsis on desktop. Default: 5
-   */
-  maxDesktopItems?: number;
-  /**
-   * Custom separator. Default: ChevronRight/ChevronLeft based on direction
-   */
-  separator?: React.ReactNode;
-  /**
-   * Custom className
-   */
-  className?: string;
-  /**
-   * Route label mapping for auto-generation
-   * Maps route segments to display labels
-   * Example: { "students": "Students", "dashboard": "Dashboard" }
-   */
+type BreadcrumbsProps = { 
+  items?: BreadcrumbItemType[]; 
+  homeLabel?: string; 
+  showHomeIcon?: boolean; 
+  maxMobileItems?: number; 
+  maxDesktopItems?: number; 
+  separator?: React.ReactNode; 
+  className?: string; 
   routeLabels?: Record<string, string>;
 };
 

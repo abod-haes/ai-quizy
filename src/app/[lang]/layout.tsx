@@ -12,6 +12,7 @@ import {
   i18n,
   Lang,
 } from "@/utils/translations/dictionary-utils";
+import { AuthProvider } from "@/providers/authProvider";
 
 interface RootLayoutProps {
   params: Promise<{ lang: string }>;
@@ -31,6 +32,13 @@ export async function generateMetadata({
       template: `%s - ${dict.siteName}`,
       absolute: dict.siteName,
     },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon.ico", type: "image/x-icon" },
+      ],
+      apple: [{ url: "/favicon.ico", sizes: "180x180", type: "image/x-icon" }],
+    },
   };
 }
 
@@ -47,8 +55,8 @@ export default async function RootLayout({
   const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (
-    <html lang={lang} dir={getDirection(lang)}>
-      <body className={`${fontClass} antialiased`}>
+    <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
+      <body className={`${fontClass} antialiased`} suppressHydrationWarning>
         <ReactQueryProvider>
           <TranslationsProvider translations={translations}>
             <ThemeProvider>
@@ -63,7 +71,7 @@ export default async function RootLayout({
                   className: `antialiased ${fontClass}`,
                 }}
               />
-              {children}
+              <AuthProvider>{children}</AuthProvider>
             </ThemeProvider>
           </TranslationsProvider>
         </ReactQueryProvider>

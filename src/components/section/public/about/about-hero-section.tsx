@@ -147,29 +147,29 @@ function AboutHeroSection() {
             const bgClass = bgClasses[index] || bgClasses[0];
 
             return (
-              <motion.div
+          <motion.div
                 key={index}
-                variants={fadeInUp}
+            variants={fadeInUp}
                 className={`group border-border/60 bg-card/50 hover:bg-card/80 ${shadowClass} relative overflow-hidden rounded-2xl border p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${colSpanClass}`}
-              >
+          >
                 <div
                   className={`${gradientClass} absolute inset-0 bg-gradient-to-br via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
                 />
-                <div className="relative">
+            <div className="relative">
                   <div className="text-primary mb-6 flex items-center justify-center">
                     <Icon className="size-10" />
-                  </div>
+            </div>
                   <h3 className="mb-3 text-xl font-semibold">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
-                  </p>
-                </div>
+              </p>
+            </div>
                 <div
                   className={`${bgClass} absolute -right-1 -bottom-1 h-20 w-20 rounded-full blur-xl transition-all duration-500 group-hover:scale-150`}
                 />
-              </motion.div>
+          </motion.div>
             );
           })}
         </motion.div>

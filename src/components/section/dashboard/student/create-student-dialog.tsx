@@ -77,6 +77,21 @@ export function CreateStudentDialog({
           },
         },
         {
+          key: "password",
+          type: "password",
+          label: "Password",
+          placeholder: "Enter password",
+          required: true,
+          validation: {
+            minLength: 8,
+            messages: {
+              required: "Password is required",
+              minLength: "Password must be at least 8 characters", 
+              pattern: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+            },
+          },
+        },
+        {
           key: "phoneNumber",
           type: "text",
           label: "Phone Number",

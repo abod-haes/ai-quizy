@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userService } from "@/services/user.services/user.service";
 import type { UserInput } from "@/services/user.services/user.type";
 import { queryKeys, type PartialQueryParams } from "@/utils/query-keys";
+import { readCookieFromDocument } from "@/utils/cookies";
+import { myCookies } from "@/utils/cookies";
 
 const queryKey = queryKeys.user;
 
@@ -16,6 +18,15 @@ export function useUserById(id: string) {
   return useQuery({
     queryKey: queryKey.detail(id),
     queryFn: () => userService.getUserById(id),
+  });
+}
+
+export function useCurrentUser() {
+  return useQuery({
+    queryKey: queryKey.currentUser(),
+    queryFn: () => userService.getCurrentUser(),
+    enabled: !!readCookieFromDocument(myCookies.auth),
+    staleTime: 0,
   });
 }
 
@@ -41,7 +52,6 @@ export function useUpdateUser(id: string) {
       queryClient.invalidateQueries({
         queryKey: queryKey.getList(),
       });
-       
     },
   });
 }

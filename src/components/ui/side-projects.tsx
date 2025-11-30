@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react";
+import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -26,38 +20,46 @@ import {
 } from "@/components/ui/sidebar";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
+import { useLocalizedHref } from "@/hooks/useLocalizedHref";
+import type { ProjectItem } from "@/constants/constants";
+import type { TRouteName } from "@/utils/constant";
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-}) {
+export function NavProjects({ projects }: { projects: ProjectItem[] }) {
   const { isMobile } = useSidebar();
   const lang = useCurrentLang();
   const direction = getDirection(lang);
   const isRTL = direction === "rtl";
+  const getLocalizedHref = useLocalizedHref();
+
+  const getHref = (url: TRouteName | string): string => {
+    if (typeof url === "string") {
+      if (url.startsWith("/")) {
+        // Type guard: if it starts with "/", it's likely a TRouteName
+        return getLocalizedHref(url as TRouteName);
+      }
+      return url;
+    }
+    // If url is a function (part of TRouteName), return fallback
+    return "#";
+  };
 
   return (
     <SidebarGroup
       className="group-data-[collapsible=icon]:hidden"
       dir={direction}
     >
-      <SidebarGroupLabel className="text-xs sm:text-sm ltr:text-left rtl:text-right">
+      <SidebarGroupLabel className="text-xs font-medium sm:text-sm ltr:text-left rtl:text-right">
         Projects
       </SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton
-              className={`hover:bg-primary/10 group-hover/collapsible:bg-primary/20 group-hover/collapsible:text-primary group-data-[state=open]/collapsible:bg-primary/20 group-data-[state=open]/collapsible:text-primary flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors duration-200 ltr:text-left rtl:flex-row-reverse rtl:text-right`}
+              className="hover:bg-primary/10 hover:text-primary flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors duration-200 ltr:text-left rtl:flex-row-reverse rtl:text-right"
               asChild
             >
               <a
-                href={item.url}
+                href={getHref(item.url)}
                 className="flex items-center gap-2 rtl:flex-row-reverse"
               >
                 <item.icon className="h-4 w-4 shrink-0" />

@@ -55,7 +55,7 @@ export interface ActionMenuItem<
   label: string;
   icon?: React.ReactNode;
   onClick: (row: T) => void;
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive" | "Edit";
   separator?: boolean;
 }
 
@@ -183,11 +183,13 @@ export function DataTableWithPagination<
       label: "View",
       icon: <MoreHorizontal className="h-4 w-4" />,
       onClick: () => {},
+      variant: "default",
     },
     {
       label: "Edit",
       icon: <MoreHorizontal className="h-4 w-4" />,
       onClick: () => {},
+      variant: "Edit",
     },
     {
       label: "Delete",
@@ -369,17 +371,26 @@ export function DataTableWithPagination<
                                     <DropdownMenuSeparator />
                                   )}
                                   <DropdownMenuItem
+                                    variant={
+                                      item.variant === "destructive"
+                                        ? "destructive"
+                                        : undefined
+                                    }
                                     className={cn(
-                                      item.variant === "destructive" &&
-                                        "text-destructive",
+                                      "cursor-pointer",
                                       isRTL && "rtl:flex-row-reverse",
+                                      item.variant === "Edit" &&
+                                        "text-primary hover:text-primary/90 hover:bg-primary/10 focus:bg-primary/10 focus:text-primary",
+                                      item.variant === "default" &&
+                                        "text-green-600! hover:bg-green-50! hover:text-green-700! focus:bg-green-50! focus:text-green-700!",
                                     )}
                                     onClick={() => item.onClick(row)}
                                   >
                                     {item.icon && (
                                       <span
                                         className={cn(
-                                          "mr-2",
+                                          item.variant === "destructive" &&
+                                            "mr-2",
                                           isRTL && "rtl:mr-0 rtl:ml-2",
                                         )}
                                       >

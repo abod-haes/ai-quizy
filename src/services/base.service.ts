@@ -20,9 +20,18 @@ interface ApiResponse<T = unknown> {
 
 const extractErrorMessage = (error: AxiosError<ApiError>): string => {
   const data = error.response?.data;
-  return (
-    data?.error?.message || data?.message || "An unexpected error occurred"
-  );
+  if (!data) return "An unexpected error occurred";
+
+  // Handle validation errors (new format)
+  if (data.errors && Object.keys(data.errors).length > 0) {
+    // Get first error message from the first field
+    const firstField = Object.keys(data.errors)[0];
+    const firstError = data.errors[firstField]?.[0];
+    if (firstError) return firstError;
+  }
+
+  // Fallback to title or default message
+  return data.title || "An unexpected error occurred";
 };
 
 const extractSuccessMessage = (
@@ -45,7 +54,7 @@ const handleUnauthorized = async (): Promise<void> => {
 
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+    baseURL: process.env.NEXT_PUBLIC_API_URL + "/api",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -55,7 +64,7 @@ const createAxiosInstance = (): AxiosInstance => {
 
   instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-    //   config.headers["Accept-Language"] = getCurrentLanguage();
+      //   config.headers["Accept-Language"] = getCurrentLanguage();
 
       try {
         const authHeader = await getAuthHeader();
