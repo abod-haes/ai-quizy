@@ -23,7 +23,7 @@ export function HeaderLogo({ logoScale, mounted, isDark }: HeaderLogoProps) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <Link href={getLocalizedHref(routesName.home)} aria-label="quizy home">
+      <Link href={getLocalizedHref(routesName.home.href)} aria-label="quizy home">
         <motion.div
           className="relative flex items-center gap-2"
           style={{ scale: logoScale }}

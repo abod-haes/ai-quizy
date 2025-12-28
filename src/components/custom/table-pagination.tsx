@@ -20,6 +20,7 @@ import {
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/providers/TranslationsProvider";
 
 export interface TablePaginationProps {
   currentPage: number;
@@ -46,7 +47,8 @@ export function TablePagination({
 }: TablePaginationProps) {
   const lang = useCurrentLang();
   const direction = getDirection(lang);
-  const isRTL = direction === "rtl";
+  const t = useTranslation();
+  const pagination = t.dashboard?.common?.pagination;
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const startItem = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
@@ -108,45 +110,32 @@ export function TablePagination({
     <div
       className={cn(
         "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
+
         className,
       )}
-      dir={direction}
     >
       {showPageInfo && (
-        <div
-          className={cn(
-            "text-muted-foreground text-sm",
-            isRTL && "rtl:text-right",
-          )}
-        >
-          Showing{" "}
-          <span className="text-foreground font-medium">{startItem}</span> to{" "}
-          <span className="text-foreground font-medium">{endItem}</span> of{" "}
+        <div className={cn("text-muted-foreground text-sm")}>
+          {pagination?.showing || "Showing"}{" "}
+          <span className="text-foreground font-medium">{startItem}</span>{" "}
+          {pagination?.to || "to"}{" "}
+          <span className="text-foreground font-medium">{endItem}</span>{" "}
+          {pagination?.of || "of"}{" "}
           <span className="text-foreground font-medium">{totalCount}</span>{" "}
-          results
+          {pagination?.results || "results"}
         </div>
       )}
 
       <div
-        className={cn(
-          "flex flex-col gap-4 sm:flex-row sm:items-center",
-          isRTL && "rtl:flex-row-reverse",
-        )}
+        className={cn("flex flex-col gap-4 sm:flex-row sm:items-center")}
+        dir={direction}
       >
         {showPageSizeSelector && (
-          <div
-            className={cn(
-              "flex items-center gap-2",
-              isRTL && "rtl:flex-row-reverse",
-            )}
-          >
+          <div className={cn("flex items-center gap-2")}>
             <label
-              className={cn(
-                "text-muted-foreground text-sm whitespace-nowrap",
-                isRTL && "rtl:text-right",
-              )}
+              className={cn("text-muted-foreground text-sm whitespace-nowrap")}
             >
-              Per page:
+              {pagination?.perPage || "Per page"}:
             </label>
             <Select
               value={pageSize.toString()}
@@ -167,9 +156,7 @@ export function TablePagination({
         )}
 
         <Pagination className="w-auto">
-          <PaginationContent
-            className={cn("flex-wrap gap-1", isRTL && "rtl:flex-row-reverse")}
-          >
+          <PaginationContent className={cn("flex-wrap gap-1")}>
             <PaginationItem>
               <PaginationPrevious
                 onClick={(e) => {

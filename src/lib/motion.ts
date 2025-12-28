@@ -1,6 +1,6 @@
 "use client";
-import { useAnimation, useInView, type Variants } from "framer-motion";
-import { useEffect, type RefObject } from "react";
+import { useAnimation, useInView, type Variants, type Transition } from "framer-motion";
+import { useEffect, useMemo, type RefObject } from "react";
 
 export function createFadeInUp(duration = 0.6, y = 20): Variants {
   return {
@@ -48,4 +48,37 @@ export function useRevealedControls(
   }, [inView, controls]);
 
   return controls;
+}
+
+/**
+ * Hook for carousel/slider transitions
+ * Provides consistent spring animation configuration
+ */
+export function useCarouselTransition(options?: {
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
+}): Transition {
+  return useMemo(
+    () => ({
+      type: "spring",
+      stiffness: options?.stiffness ?? 70,
+      damping: options?.damping ?? 20,
+      mass: options?.mass ?? 1,
+    }),
+    [options?.stiffness, options?.damping, options?.mass],
+  );
+}
+
+/**
+ * Hook for smooth fade transitions
+ */
+export function useFadeTransition(duration = 0.4): Transition {
+  return useMemo(
+    () => ({
+      duration,
+      ease: "easeInOut",
+    }),
+    [duration],
+  );
 }

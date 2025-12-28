@@ -53,7 +53,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
   };
 
   const handleGoToLogin = () => {
-    const loginUrl = getLocalizedHref(routesName.signin);
+    const loginUrl = getLocalizedHref(routesName.signin.href);
     router.push(loginUrl);
   };
 
@@ -63,7 +63,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group hover:shadow-primary/5 relative h-full transition-all duration-300 hover:shadow-lg">
+      <Card className="group hover:shadow-primary/5 relative h-fit transition-all duration-300 hover:shadow-lg">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
@@ -133,7 +133,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
             </div>
           )}
 
-          {quiz.linkedQuiz && quiz.linkedQuiz.length > 0 && (
+          {quiz.questionsCount && (
             <div className="text-muted-foreground border-t pt-2 text-sm">
               <span>
                 {quizzesDict.card.questionsCount}: {quiz.questionsCount}
@@ -146,7 +146,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
           {quiz.isSolved ? (
             <Link
               href={getLocalizedHref(
-                routesName.quizzesDetails(quiz.id) as TRouteName,
+                routesName.quizResults(quiz.id) as TRouteName,
               )}
               className="w-full"
             >

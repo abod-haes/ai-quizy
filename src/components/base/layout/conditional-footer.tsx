@@ -8,7 +8,7 @@ export function ConditionalFooter() {
   const pathname = usePathname();
 
   // Hide footer on AI assistant page
-  const hideFooter = pathname.includes(routesName.aiAssistant);
+  const hideFooter = pathname.includes(routesName.aiAssistant.href);
 
   if (hideFooter) {
     return null;

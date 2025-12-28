@@ -22,16 +22,24 @@ const extractErrorMessage = (error: AxiosError<ApiError>): string => {
   const data = error.response?.data;
   if (!data) return "An unexpected error occurred";
 
-  // Handle validation errors (new format)
-  if (data.errors && Object.keys(data.errors).length > 0) {
-    // Get first error message from the first field
-    const firstField = Object.keys(data.errors)[0];
-    const firstError = data.errors[firstField]?.[0];
-    if (firstError) return firstError;
+  // Build error message with title and detail only
+  const parts: string[] = [];
+  
+  if (data.title) {
+    parts.push(data.title);
+  }
+  
+  if (data.detail) {
+    parts.push(data.detail);
   }
 
-  // Fallback to title or default message
-  return data.title || "An unexpected error occurred";
+  // If we have both title and detail, join them
+  if (parts.length > 0) {
+    return parts.join(" - ");
+  }
+
+  // Fallback to default message
+  return "An unexpected error occurred";
 };
 
 const extractSuccessMessage = (
@@ -43,6 +51,7 @@ const extractSuccessMessage = (
 const handleUnauthorized = async (): Promise<void> => {
   if (typeof document !== "undefined") {
     await deleteCookie(myCookies.auth);
+    await deleteCookie(myCookies.user);
     window.location.href = "/sign-in";
   }
 };

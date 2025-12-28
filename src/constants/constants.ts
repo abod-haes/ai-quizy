@@ -6,7 +6,7 @@ import {
   Folder,
   FileQuestion,
   Users,
-  ClipboardList,
+  School,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -20,7 +20,7 @@ export type NavMainItem = {
   isActive?: boolean;
   items?: {
     title: string;
-    url: TRouteName | string;
+    url: TRouteName;
   }[];
 };
 
@@ -55,57 +55,46 @@ export const data = {
 
   navMain: [
     {
+      title: "Classes",
+      url: dashboardRoutesName.classes.href,
+      icon: School,
+    },
+    {
       title: "Subjects",
+      url: dashboardRoutesName.subjects.href,
       icon: BookOpen,
-      items: [
-        { title: "Mathematics", url: dashboardRoutesName.lessons },
-        { title: "Physics", url: dashboardRoutesName.lessons },
-        { title: "Chemistry", url: dashboardRoutesName.lessons },
-        { title: "Computer Science", url: dashboardRoutesName.lessons },
-      ],
     },
     {
       title: "Lessons",
-      url: dashboardRoutesName.lessons,
+      url: dashboardRoutesName.lessons.href,
       icon: GraduationCap,
     },
     {
       title: "Units",
-      url: dashboardRoutesName.units,
+      url: dashboardRoutesName.units.href,
       icon: Folder,
     },
+    // {
+    //   title: "Questions",
+    //   url: dashboardRoutesName.questions.href,
+    //   icon: FileQuestion,
+    // },
     {
       title: "Quizzes",
-      url: dashboardRoutesName.quizzes,
+      url: dashboardRoutesName.quizzes.href,
       icon: FileQuestion,
     },
     {
       title: "Users",
       icon: Users,
       items: [
-        { title: "Students", url: dashboardRoutesName.students },
-        { title: "Teachers", url: dashboardRoutesName.teachers },
-        { title: "Administration", url: dashboardRoutesName.administration },
+        { title: "Students", url: dashboardRoutesName.students.href },
+        { title: "Teachers", url: dashboardRoutesName.teachers.href },
+        {
+          title: "Administration",
+          url: dashboardRoutesName.administration.href,
+        },
       ],
-    },
-  ],
-
-  // Study programs or training projects
-  projects: [
-    {
-      name: "Artificial Intelligence Course",
-      url: dashboardRoutesName.lessons,
-      icon: ClipboardList,
-    },
-    {
-      name: "Engineering Program",
-      url: dashboardRoutesName.lessons,
-      icon: GraduationCap,
-    },
-    {
-      name: "Web Development Bootcamp",
-      url: dashboardRoutesName.lessons,
-      icon: BookOpen,
     },
   ],
 };

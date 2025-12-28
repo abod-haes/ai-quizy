@@ -1,27 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuizById } from "@/hooks/api/quizes.query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import {
-  Loader2,
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { useQuizById, useSubmitQuizResults } from "@/hooks/api/quizes.query";
+import { Card, CardContent } from "@/components/ui/card";
+import { AlertCircle } from "lucide-react";
+import { PageLoading } from "@/components/custom/loading";
 import { useTranslation } from "@/providers/TranslationsProvider";
-import ApiError from "@/components/custom/api-error";
-import { HtmlContent } from "@/components/custom/html-content";
-import { useAuthStore } from "@/store/auth.store";
+import ApiErrorComponent from "@/components/custom/api-error";
+import { useAuthStore, useUser } from "@/store/auth.store";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { routesName } from "@/utils/constant";
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { ApiError } from "@/types/common.type";
+import {
+  QuizProgressBar,
+  QuizQuestionCard,
+  QuizFeedbackMessage,
+  QuizAnswerOptions,
+  QuizNavigationButtons,
+  QuizResults,
+} from "@/components/section/quizzes/quiz-detail";
+import { useQuizTimeTracking } from "@/hooks/use-quiz-time-tracking";
 
 export default function QuizDetailPage() {
   const params = useParams();
@@ -30,7 +31,9 @@ export default function QuizDetailPage() {
   const { quizzes: quizzesDict } = useTranslation();
   const { data: quiz, isLoading, error, refetch } = useQuizById(quizId);
   const isAuth = useAuthStore((state) => state.isAuth());
+  const user = useUser();
   const getLocalizedHref = useLocalizedHref();
+  const submitQuizResults = useSubmitQuizResults(quizId);
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, number>
   >({});
@@ -38,18 +41,35 @@ export default function QuizDetailPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [quizResults, setQuizResults] = useState<{
+    correctAnswers: number;
+    incorrectAnswers: number;
+  } | null>(null);
 
-  const handleAnswerChange = (questionId: string, answerIndex: number) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [questionId]: answerIndex,
-    }));
-  };
+  // Memoize questions to prevent unnecessary re-renders
+  const questionsMemo = useMemo(() => quiz?.questions, [quiz?.questions]);
+
+  const { currentTimeSpent, finalizeCurrentQuestion, getTimeSpent } =
+    useQuizTimeTracking({
+      questions: questionsMemo,
+      currentQuestionIndex,
+    });
+
+  const handleAnswerChange = useCallback(
+    (questionId: string, answerIndex: number) => {
+      setSelectedAnswers((prev) => ({
+        ...prev,
+        [questionId]: answerIndex,
+      }));
+    },
+    [],
+  );
 
   // Check authentication on mount
   useEffect(() => {
     if (!isLoading && !isAuth) {
-      const loginUrl = getLocalizedHref(routesName.signin);
+      const loginUrl = getLocalizedHref(routesName.signin.href);
       router.push(loginUrl);
     }
   }, [isAuth, isLoading, router, getLocalizedHref]);
@@ -69,16 +89,11 @@ export default function QuizDetailPage() {
       setIsCorrect(correct);
       setShowFeedback(true);
 
-      // Clear selection after showing feedback
+      // Clear feedback after showing it, but keep the answer
       setTimeout(() => {
         setShowFeedback(false);
-        setSelectedAnswers((prev) => {
-          const newAnswers = { ...prev };
-          delete newAnswers[currentQuestion.id];
-          return newAnswers;
-        });
 
-        // Move to next question
+        // Move to next question (keep all answers - don't delete them)
         if (
           quiz.questions &&
           currentQuestionIndex < quiz.questions.length - 1
@@ -98,7 +113,10 @@ export default function QuizDetailPage() {
   };
 
   const handleSubmit = async () => {
-    if (!quiz) return;
+    if (!quiz || !user?.id) {
+      toast.error(quizzesDict.detail.submitError);
+      return;
+    }
 
     // Check if all questions are answered
     const unansweredQuestions = quiz.questions?.filter(
@@ -106,49 +124,131 @@ export default function QuizDetailPage() {
     );
 
     if (unansweredQuestions && unansweredQuestions.length > 0) {
-      // You can add a toast notification here
+      toast.error(quizzesDict.detail.pleaseAnswerAll);
       return;
     }
 
+    // Finalize time tracking for current question
+    if (!quiz.questions) {
+      toast.error(quizzesDict.detail.submitError);
+      return;
+    }
+
+    const currentQuestion = quiz.questions[currentQuestionIndex];
+    if (currentQuestion) {
+      finalizeCurrentQuestion(currentQuestion.id);
+    }
+
     setIsSubmitting(true);
-    // TODO: Implement submit logic
-    // await submitQuizAnswers(quizId, selectedAnswers);
-    setTimeout(() => {
+
+    try {
+      // Prepare questions array for submission
+      const questions = quiz.questions.map((question) => {
+        const answerIndex = selectedAnswers[question.id];
+        if (answerIndex === undefined) {
+          throw new Error(`Answer not found for question ${question.id}`);
+        }
+
+        const selectedAnswer = question.answers[answerIndex];
+        // Use answerId from API (preferred), then id, otherwise generate a temporary ID
+        const answerId =
+          selectedAnswer.answerId ||
+          selectedAnswer.id ||
+          `${question.id}-${answerIndex}`;
+
+        if (!answerId) {
+          throw new Error(
+            `Answer ID not found for question ${question.id} at index ${answerIndex}`,
+          );
+        }
+
+        return {
+          questionId: question.id,
+          answerId: answerId,
+          timeSpentSeconds: getTimeSpent(question.id),
+        };
+      });
+
+      await submitQuizResults.mutateAsync({
+        studentId: user.id,
+        questions,
+      });
+
+      // Calculate results
+      let correctCount = 0;
+      let incorrectCount = 0;
+
+      quiz.questions.forEach((question) => {
+        const answerIndex = selectedAnswers[question.id];
+        if (answerIndex !== undefined) {
+          const selectedAnswer = question.answers[answerIndex];
+          if (selectedAnswer.isCorrect) {
+            correctCount++;
+          } else {
+            incorrectCount++;
+          }
+        }
+      });
+
+      setQuizResults({
+        correctAnswers: correctCount,
+        incorrectAnswers: incorrectCount,
+      });
+      setShowResults(true);
+
+      toast.success(quizzesDict.detail.submitSuccess);
+    } catch (err: unknown) {
+      // Handle error with title and detail
+      if (err instanceof AxiosError) {
+        const errorData = err.response?.data as ApiError | undefined;
+
+        if (errorData) {
+          // Build error message with title and detail only
+          const errorParts: string[] = [];
+
+          if (errorData.title) {
+            errorParts.push(errorData.title);
+          }
+
+          if (errorData.detail) {
+            errorParts.push(errorData.detail);
+          }
+
+          // If we have both title and detail, join them
+          const errorMessage =
+            errorParts.length > 0
+              ? errorParts.join(" - ")
+              : errorData.title || quizzesDict.detail.submitError;
+
+          toast.error(errorMessage);
+        } else {
+          toast.error(quizzesDict.detail.submitError);
+        }
+      } else {
+        toast.error(quizzesDict.detail.submitError);
+      }
+    } finally {
       setIsSubmitting(false);
-      // Handle success/error
-    }, 1000);
+    }
   };
 
   // Show loading or redirect message if not authenticated
   if (!isAuth) {
-    return (
-      <div className="container mx-auto flex items-center justify-center px-4 py-20">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="text-primary size-8 animate-spin" />
-          <p className="text-muted-foreground">
-            {quizzesDict.detail.redirectingToLogin}
-          </p>
-        </div>
-      </div>
-    );
+    return <PageLoading message={quizzesDict.detail.redirectingToLogin} />;
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto flex items-center justify-center px-4 py-20">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="text-primary size-8 animate-spin" />
-          <p className="text-muted-foreground">{quizzesDict.detail.loading}</p>
-        </div>
-      </div>
-    );
+    return <PageLoading message={quizzesDict.detail.loading} />;
   }
 
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <ApiError
-          errorMessage={quizzesDict.detail.error}
+        <ApiErrorComponent
+          errorMessage={
+            (error as AxiosError<ApiError>)?.response?.data?.title ||
+            quizzesDict.detail.error
+          }
           refetchFunction={() => refetch()}
         />
       </div>
@@ -180,6 +280,21 @@ export default function QuizDetailPage() {
     );
   }
 
+  // Show results if submitted
+  if (showResults && quizResults) {
+    return (
+      <QuizResults
+        totalQuestions={quiz.questions.length}
+        correctAnswers={quizResults.correctAnswers}
+        incorrectAnswers={quizResults.incorrectAnswers}
+        onGoToHome={() =>
+          router.push(getLocalizedHref(routesName.quizzes.href))
+        }
+        translations={quizzesDict.detail.results}
+      />
+    );
+  }
+
   const currentQuestion = quiz.questions[currentQuestionIndex];
   const isFirstQuestion = currentQuestionIndex === 0;
   const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
@@ -189,161 +304,63 @@ export default function QuizDetailPage() {
     (q) => selectedAnswers[q.id] !== undefined,
   );
 
+  const questionsCountText = quizzesDict.detail.questionsCount.replace(
+    "{count}",
+    String(quiz.questions.length),
+  );
+
   return (
     <div className="container mx-auto space-y-6 px-4 py-8">
-      {/* Progress Bar */}
-      <div className="w-full">
-        <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
-          <div
-            className="bg-primary h-full transition-all duration-300"
-            style={{
-              width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%`,
-            }}
-          />
-        </div>
-      </div>
+      <QuizProgressBar
+        currentIndex={currentQuestionIndex}
+        totalQuestions={quiz.questions.length}
+        showCount={true}
+        questionsCountText={questionsCountText}
+      />
 
-      {/* Current Question */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
-            {quizzesDict.detail.question} {currentQuestionIndex + 1}:
-          </CardTitle>
-          <div className="mt-2">
-            <HtmlContent html={currentQuestion.title} className="text-base" />
-          </div>
-          {currentQuestion.description && (
-            <div className="bg-muted mt-4 rounded-md p-3">
-              <p className="text-muted-foreground mb-2 text-sm font-semibold">
-                {quizzesDict.detail.description}:
-              </p>
-              <HtmlContent
-                html={currentQuestion.description}
-                className="text-muted-foreground text-sm"
-              />
-            </div>
-          )}
-          {currentQuestion.hint && (
-            <div className="bg-muted mt-2 rounded-md p-3">
-              <p className="text-muted-foreground mb-2 text-sm font-semibold">
-                <strong>{quizzesDict.detail.hint}:</strong>
-              </p>
-              <HtmlContent
-                html={currentQuestion.hint}
-                className="text-muted-foreground text-sm"
-              />
-            </div>
-          )}
-        </CardHeader>
+        <QuizQuestionCard
+          question={currentQuestion}
+          questionNumber={currentQuestionIndex + 1}
+          questionLabel={quizzesDict.detail.question}
+          descriptionLabel={quizzesDict.detail.description}
+          timeSpentSeconds={currentTimeSpent}
+        />
         <CardContent>
-          {/* Feedback Message */}
           {showFeedback && (
-            <div
-              className={cn(
-                "mb-4 flex items-center gap-2 rounded-md p-4",
-                isCorrect
-                  ? "bg-success/10 text-success border-success/20 border"
-                  : "bg-destructive/10 text-destructive border-destructive/20 border",
-              )}
-            >
-              {isCorrect ? (
-                <CheckCircle2 className="size-5" />
-              ) : (
-                <XCircle className="size-5" />
-              )}
-              <span className="font-semibold">
-                {isCorrect
-                  ? quizzesDict.detail.correct
-                  : quizzesDict.detail.incorrect}
-              </span>
-            </div>
+            <QuizFeedbackMessage
+              isCorrect={isCorrect}
+              correctText={quizzesDict.detail.correct}
+              incorrectText={quizzesDict.detail.incorrect}
+            />
           )}
 
-          <RadioGroup
-            value={selectedAnswers[currentQuestion.id]?.toString() ?? undefined}
-            onValueChange={(value) =>
-              handleAnswerChange(currentQuestion.id, parseInt(value, 10))
+          <QuizAnswerOptions
+            question={currentQuestion}
+            selectedAnswerIndex={selectedAnswers[currentQuestion.id]}
+            showFeedback={showFeedback}
+            onAnswerChange={(answerIndex: number) =>
+              handleAnswerChange(currentQuestion.id, answerIndex)
             }
-            disabled={showFeedback}
-          >
-            <div className="space-y-3">
-              {currentQuestion.answers.map((answer, answerIndex) => (
-                <div
-                  key={answerIndex}
-                  className={cn(
-                    "hover:bg-accent flex items-center space-x-2 rounded-md border p-3 transition-colors",
-                    showFeedback &&
-                      selectedAnswers[currentQuestion.id] === answerIndex &&
-                      (answer.isCorrect
-                        ? "bg-success/10 border-success"
-                        : "bg-destructive/10 border-destructive"),
-                    showFeedback &&
-                      answer.isCorrect &&
-                      "bg-success/10 border-success",
-                  )}
-                >
-                  <RadioGroupItem
-                    value={answerIndex.toString()}
-                    id={`${currentQuestion.id}-${answerIndex}`}
-                    disabled={showFeedback}
-                  />
-                  <Label
-                    htmlFor={`${currentQuestion.id}-${answerIndex}`}
-                    className="flex-1 cursor-pointer text-sm font-normal"
-                  >
-                    <HtmlContent html={answer.title} />
-                  </Label>
-                  {showFeedback && answer.isCorrect && (
-                    <CheckCircle2 className="text-success size-5" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </RadioGroup>
+          />
         </CardContent>
       </Card>
 
-      {/* Navigation Buttons */}
-      <div className="flex items-center justify-between gap-4">
-        <Button
-          onClick={handlePrevious}
-          disabled={isFirstQuestion}
-          variant="outline"
-          size="lg"
-          className="min-w-[120px]"
-        >
-          <ChevronLeft className="mr-2 size-4" />
-          {quizzesDict.detail.previous}
-        </Button>
-
-        {isLastQuestion ? (
-          <Button
-            onClick={handleSubmit}
-            disabled={!allQuestionsAnswered || isSubmitting}
-            size="lg"
-            className="min-w-[200px]"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
-                {quizzesDict.detail.submitting}
-              </>
-            ) : (
-              quizzesDict.detail.submitQuiz
-            )}
-          </Button>
-        ) : (
-          <Button
-            onClick={handleNext}
-            disabled={!isCurrentQuestionAnswered || showFeedback}
-            size="lg"
-            className="min-w-[120px]"
-          >
-            {quizzesDict.detail.next}
-            <ChevronRight className="ml-2 size-4" />
-          </Button>
-        )}
-      </div>
+      <QuizNavigationButtons
+        isFirstQuestion={isFirstQuestion}
+        isLastQuestion={isLastQuestion}
+        isCurrentQuestionAnswered={isCurrentQuestionAnswered}
+        allQuestionsAnswered={allQuestionsAnswered}
+        isSubmitting={isSubmitting}
+        showFeedback={showFeedback}
+        previousText={quizzesDict.detail.previous}
+        nextText={quizzesDict.detail.next}
+        submitQuizText={quizzesDict.detail.submitQuiz}
+        submittingText={quizzesDict.detail.submitting}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }

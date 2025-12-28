@@ -22,7 +22,7 @@ export function HeaderLoginButton({
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
   const { header } = useTranslation();
-  const isAuth = useAuthStore.getState().isAuth();
+  const isAuth = useAuthStore().isAuth();
 
   // Show user menu if authenticated
   if (isAuth) {
@@ -35,7 +35,7 @@ export function HeaderLoginButton({
         <Button
           variant="default"
           size="lg"
-          onClick={() => router.push(getLocalizedHref(routesName.signin))}
+          onClick={() => router.push(getLocalizedHref(routesName.signin.href))}
           className="w-full font-semibold"
         >
           {header.auth.login}
@@ -52,7 +52,7 @@ export function HeaderLoginButton({
       <Button
         variant="default"
         size="sm"
-        onClick={() => router.push(getLocalizedHref(routesName.signin))}
+        onClick={() => router.push(getLocalizedHref(routesName.signin.href))}
         className="relative overflow-hidden"
       >
         <motion.div

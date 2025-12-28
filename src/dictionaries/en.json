@@ -2,8 +2,24 @@
   "siteMeta": {
     "siteName": "quizy"
   },
+  "common": {
+    "home": "Home",
+    "aiAssistant": "AI Assistant",
+    "quizzes": "Quizzes",
+    "signup": "Sign Up",
+    "signin": "Sign In",
+    "verify": "Verify",
+    "about": "About",
+    "profile": "Profile",
+    "download": "Download"
+  },
   "home": {
     "homePage": "home page",
+    "hero": {
+      "title": "Test your knowledge and learn in fun ways with Quizy",
+      "description": "Create your quizzes easily, share them with your friends, and track your progress moment by moment. Quizy is designed to give you a smooth and modern Arabic experience in learning through play.",
+      "downloadButton": "Download App"
+    },
     "about": {
       "title": "Why quizy?",
       "subtitle": "Gamified quizzes that make learning stick",
@@ -37,7 +53,7 @@
   },
   "about": {
     "hero": {
-      "title": "About Quizzy",
+      "title": "About quizy",
       "subtitle": "Empowering learners through innovative quiz technology and AI-driven study assistance",
       "description": "We believe that learning should be engaging, accessible, and personalized. Our platform combines gamified quizzes with intelligent AI assistance to create a comprehensive learning experience.",
       "features": [
@@ -170,7 +186,7 @@
       "title": "Transformative Student Experiences",
       "items": [
         {
-          "quote": "Quizzy has transformed how I study. The gamified approach makes learning fun and engaging!",
+          "quote": "quizy has transformed how I study. The gamified approach makes learning fun and engaging!",
           "name": "Sarah Ahmed",
           "username": "@sarahahmed"
         },
@@ -180,7 +196,7 @@
           "username": "@mohammed_r"
         },
         {
-          "quote": "As a teacher, I love how Quizzy helps my students track their progress and identify areas for improvement.",
+          "quote": "As a teacher, I love how quizy helps my students track their progress and identify areas for improvement.",
           "name": "Dr. Fatima Hassan",
           "username": "@drfatima"
         },
@@ -190,7 +206,7 @@
           "username": "@ahmedomar"
         },
         {
-          "quote": "Quizzy's analytics helped me understand my learning patterns and optimize my study schedule.",
+          "quote": "quizy's analytics helped me understand my learning patterns and optimize my study schedule.",
           "name": "Nour El-Din",
           "username": "@noureldin"
         },
@@ -205,11 +221,11 @@
       "badge": "Connect With Us",
       "title": "Follow Our Journey",
       "description": "Stay updated with our latest updates, tips, and community stories. Join our growing community of learners!",
-      "facebook": "https://facebook.com/quizzy",
-      "twitter": "https://twitter.com/quizzy",
-      "instagram": "https://instagram.com/quizzy",
-      "linkedin": "https://linkedin.com/company/quizzy",
-      "youtube": "https://youtube.com/@quizzy"
+      "facebook": "https://facebook.com/quizy",
+      "twitter": "https://twitter.com/quizy",
+      "instagram": "https://instagram.com/quizy",
+      "linkedin": "https://linkedin.com/company/quizy",
+      "youtube": "https://youtube.com/@quizy"
     }
   },
   "footer": {
@@ -255,7 +271,7 @@
         "invalidPhone": "Please enter a valid phone number.",
         "passwordMismatch": "The password and confirm password must match.",
         "agreeToTerms": "Please agree to the terms and conditions.",
-        "signUpSuccess": "Sign up successful! (Demo)",
+        "signUpSuccess": "Sign up successful!",
         "signUpFailed": "Sign up failed. Please try again.",
         "passwordLength": "Password must be at least 6 characters long."
       }
@@ -276,7 +292,8 @@
       "errors": {
         "phonePasswordRequired": "Please enter both phone number and password.",
         "invalidPhone": "Please enter a valid phone number.",
-        "signInSuccess": "Sign in successful! (Demo)"
+        "allFieldsRequired": "Please fill in all fields.",
+        "signInSuccess": "Sign in successful!"
       }
     },
     "verification": {
@@ -298,7 +315,7 @@
   "download": {
     "hero": {
       "badge": "Available Now",
-      "title": "Download Quizzy App",
+      "title": "Download quizy App",
       "subtitle": "Learn Anywhere, Anytime",
       "description": "Take your learning journey with you. Access quizzes, lessons, and AI assistance on the go with our beautiful mobile app.",
       "appStore": {
@@ -316,7 +333,7 @@
       }
     },
     "showcase": {
-      "title": "See Quizzy in Action",
+      "title": "See quizy in Action",
       "subtitle": "Explore the beautiful interface and powerful features that make learning enjoyable",
       "screenshots": [
         {
@@ -342,7 +359,7 @@
       ]
     },
     "features": {
-      "title": "Why Choose Quizzy App?",
+      "title": "Why Choose quizy App?",
       "subtitle": "Experience learning like never before with our feature-rich mobile application",
       "items": [
         {
@@ -372,7 +389,7 @@
       ],
       "cta": {
         "title": "Ready to Start Learning?",
-        "subtitle": "Download Quizzy now and take your education to the next level",
+        "subtitle": "Download quizy now and take your education to the next level",
         "button": "Download Now"
       }
     }
@@ -433,7 +450,29 @@
       "correct": "Correct!",
       "incorrect": "Incorrect!",
       "pleaseLogin": "Please login to access this quiz",
-      "redirectingToLogin": "Redirecting to login..."
+      "redirectingToLogin": "Redirecting to login...",
+      "pleaseAnswerAll": "Please answer all questions before submitting.",
+      "submitSuccess": "Quiz submitted successfully!",
+      "submitError": "Failed to submit quiz. Please try again.",
+      "results": {
+        "title": "Quiz Results",
+        "totalQuestions": "Total Questions",
+        "correctAnswers": "Correct Answers",
+        "incorrectAnswers": "Incorrect Answers",
+        "score": "Score",
+        "percentage": "Percentage",
+        "goToHome": "Go to Home",
+        "backToQuiz": "Back to Quiz",
+        "replayQuiz": "Replay Quiz",
+        "loading": "Loading results...",
+        "error": "Failed to load results. Please try again.",
+        "timeSpent": "Time Spent",
+        "yourAnswer": "Your Answer",
+        "correctAnswer": "Correct Answer",
+        "question": "Question",
+        "timeSpentOnQuestion": "Time: {seconds}s"
+      },
+      "questionsCount": "Questions: {count}"
     }
   },
   "header": {
@@ -452,13 +491,260 @@
       "login": "Sign In"
     },
     "userMenu": {
+      "home": "Home",
       "profile": "Profile",
       "myQuizzes": "My Quizzes",
-      "logout": "Logout"
+      "dashboard": "Dashboard",
+      "logout": "Log out"
     },
     "menu": {
       "openMenu": "Open menu",
       "navigationMenu": "Navigation Menu"
     }
+  },
+  "sidebar": {
+    "dashboardAccess": "Dashboard Access",
+    "classes": "Classes",
+    "subjects": "Subjects",
+    "lessons": "Lessons",
+    "units": "Units",
+    "questions": "Questions",
+    "quizzes": "Quizzes",
+    "users": "Users",
+    "mathematics": "Mathematics",
+    "physics": "Physics",
+    "chemistry": "Chemistry",
+    "computerScience": "Computer Science",
+    "students": "Students",
+    "teachers": "Teachers",
+    "administration": "Administration",
+    "projects": "Projects",
+    "more": "More"
+  },
+  "qrActivation": {
+    "openDialog": "Open subscription activation dialog",
+    "title": "Activate Subscription",
+    "description": "You can activate by uploading a QR image or entering a code manually.",
+    "codeLabel": "Enter code",
+    "uploadLabel": "Or upload QR image",
+    "cancel": "Cancel",
+    "activate": "Activate"
+  },
+  "dashboard": {
+    "dashboard": {
+      "students": "Students",
+      "teachers": "Teachers",
+      "quizzes": "Quizzes",
+      "pointsOfSale": "Points of Sale",
+      "distribution": "Distribution",
+      "comparison": "Comparison",
+      "topStudents": "Top Students",
+      "correctAnswers": "Correct Answers",
+      "overview": "Overview"
+    },
+    "common": {
+      "descriptionEntity": "Manage and view all {entity} in the system",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "addEntity": "Add {entity}",
+      "idLabel": "{entity} ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "description": "Description",
+      "areYouSureDelete": "Are you sure you want to delete",
+      "thisActionCannotBeUndone": "This action cannot be undone.",
+      "cancel": "Cancel",
+      "password": "Password",
+      "countryCode": "Country Code",
+      "url": "URL",
+      "enterFirstName": "Enter first name",
+      "enterLastName": "Enter last name",
+      "enterEmail": "Enter email address",
+      "enterPassword": "Enter password",
+      "enterPhoneNumber": "Enter phone number",
+      "enterDescription": "Enter description (optional)",
+      "enterUrl": "Enter URL (optional)",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "enterNewPassword": "Enter new password (leave empty to keep current)",
+      "pagination": {
+        "showing": "Showing",
+        "to": "to",
+        "of": "of",
+        "results": "results",
+        "perPage": "Per page",
+        "previous": "Previous",
+        "next": "Next",
+        "previousAriaLabel": "Go to previous page",
+        "nextAriaLabel": "Go to next page",
+        "morePages": "More pages"
+      }
+    },
+    "students": {
+      "title": "Students",
+      "emptyMessage": "No students found",
+      "deleteTitle": "Delete Student",
+      "detailsTitle": "Student Details"
+    },
+    "teachers": {
+      "title": "Teachers",
+      "emptyMessage": "No teachers found",
+      "deleteTitle": "Delete Teacher",
+      "numberOfQuizzes": "Number of Quizzes"
+    },
+    "units": {
+      "title": "Units",
+      "emptyMessage": "No units found",
+      "deleteTitle": "Delete Unit",
+      "subject": "Subject",
+      "createTitle": "Create New Unit",
+      "createDescription": "Fill in the information below to create a new unit.",
+      "createButton": "Create Unit",
+      "editTitle": "Edit Unit",
+      "editDescription": "Update the unit information below.",
+      "editButton": "Save Changes",
+      "name": "Name",
+      "namePlaceholder": "Enter unit name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter description",
+      "subjectPlaceholder": "Select subject",
+      "loadingUnitData": "Loading unit data...",
+      "nameRequired": "Name is required",
+      "subjectRequired": "Subject is required"
+    },
+    "lessons": {
+      "title": "Lessons",
+      "emptyMessage": "No lessons found",
+      "deleteTitle": "Delete Lesson",
+      "unit": "Unit",
+      "createTitle": "Create New Lesson",
+      "createDescription": "Fill in the information below to create a new lesson.",
+      "createButton": "Create Lesson",
+      "editTitle": "Edit Lesson",
+      "editDescription": "Update the lesson information below.",
+      "editButton": "Save Changes",
+      "name": "Name",
+      "namePlaceholder": "Enter lesson name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter description",
+      "unitPlaceholder": "Select unit",
+      "loadingLessonData": "Loading lesson data...",
+      "nameRequired": "Name is required",
+      "unitRequired": "Unit is required",
+      "switchToJson": "Switch to JSON",
+      "switchToForm": "Switch to Form",
+      "jsonPlaceholder": "Enter JSON data",
+      "invalidJson": "Invalid JSON format",
+      "sendAsList": "Send as List",
+      "sendAsSingle": "Send as Single"
+    },
+    "subjects": {
+      "title": "Subjects",
+      "emptyMessage": "No subjects found",
+      "deleteTitle": "Delete Subject",
+      "createTitle": "Create New Subject",
+      "createDescription": "Fill in the information below to create a new subject.",
+      "createButton": "Create Subject",
+      "editTitle": "Edit Subject",
+      "editDescription": "Update the information below to edit the subject.",
+      "editButton": "Update Subject",
+      "noSubjectsMessage": "No subjects found",
+      "noSubjectsDescription": "You need to create at least one subject before creating a unit.",
+      "goToSubjects": "Go to Subjects",
+      "classes": "Classes"
+    },
+    "classes": {
+      "title": "Classes",
+      "emptyMessage": "No classes found",
+      "createTitle": "Create New Class",
+      "createDescription": "Fill in the information below to create a new class.",
+      "createButton": "Create Class",
+      "subjects": "Subjects"
+    },
+    "questions": {
+      "title": "Questions",
+      "emptyMessage": "No questions found",
+      "deleteTitle": "Delete Question",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Enter question title",
+      "hint": "Hint",
+      "hintPlaceholder": "Enter hint",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter description",
+      "lessons": "Lessons",
+      "answers": "Answers",
+      "answerTitle": "Answer Text",
+      "answerTitlePlaceholder": "Enter answer text",
+      "isCorrect": "Is Correct",
+      "minAnswers": "At least 2 answers are required",
+      "createTitle": "Create New Question",
+      "createDescription": "Fill in the information below to create a new question.",
+      "createButton": "Create Question",
+      "editTitle": "Edit Question",
+      "editDescription": "Update the question information below.",
+      "editButton": "Update Question",
+      "noLessonsMessage": "No lessons found. Please create lessons first."
+    }
+  },
+  "form": {
+    "selectPlaceholder": "Select...",
+    "add": "Add",
+    "remove": "Remove",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "reset": "Reset",
+    "fileUpload": {
+      "dropFilesHere": "Drop files here",
+      "clickToUpload": "Click to upload or drag and drop",
+      "acceptedTypes": "Accepted types:",
+      "anyFileType": "Any file type",
+      "maxSize": "Max size:",
+      "maxFiles": "Max files:",
+      "uploadedFiles": "Uploaded files"
+    },
+    "validation": {
+      "required": "This field is required",
+      "minLength": "Minimum length is {min}",
+      "maxLength": "Maximum length is {max}",
+      "min": "Minimum value is {min}",
+      "max": "Maximum value is {max}",
+      "pattern": "Invalid format",
+      "email": "Invalid email address",
+      "selectOption": "Please select an option",
+      "selectAtLeastOne": "Please select at least one option",
+      "selectDate": "Please select a date",
+      "selectFile": "Please select a file",
+      "maxFileSize": "File size must be less than {size}",
+      "acceptedFileTypes": "Only {types} files are allowed",
+      "maxFiles": "Maximum {max} files allowed"
+    }
+  },
+  "profile": {
+    "title": "Profile Information",
+    "description": "Update your profile information below.",
+    "updateButton": "Update Profile",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile",
+    "passwordTitle": "Change Password",
+    "passwordDescription": "Update your password to keep your account secure.",
+    "oldPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "oldPasswordPlaceholder": "Enter your current password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordPlaceholder": "Confirm your new password",
+    "changePasswordButton": "Change Password",
+    "passwordChangeSuccess": "Password changed successfully",
+    "passwordChangeError": "Failed to change password",
+    "passwordMismatch": "Passwords do not match",
+    "logout": "Log out",
+    "logoutDescription": "Sign out of your account"
   }
 }

@@ -8,7 +8,7 @@ export function useLocalizedHref() {
 
   const getLocalizedHref = (path: TRouteName): string => {
     // Ensure path starts with /
-    const normalizedPath = (path as string).startsWith("/") ? path : `/${path}`;
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
     return `/${lang}${normalizedPath}`;
   };
 

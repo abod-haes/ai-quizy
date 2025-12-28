@@ -150,7 +150,7 @@ export function EditStudentDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn("sm:max-w-[650px]", isRTL && "rtl:text-right")}
+        className={cn("sm:max-w-[650px]", isRTL && "rtl:text-start")}
         dir={direction}
       >
         <DialogHeader className="border-b pb-2">
@@ -163,7 +163,7 @@ export function EditStudentDialog({
         <div
           className={cn(
             "max-h-[70vh] overflow-y-auto",
-            isRTL && "rtl:text-right",
+            isRTL && "rtl:text-start",
           )}
         >
           {student ? (

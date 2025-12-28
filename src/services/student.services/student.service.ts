@@ -5,7 +5,9 @@ import { Student } from "./student.type";
 import { PartialQueryParams } from "@/utils/query-keys";
 
 export const studentService = {
-  async getStudents(params?: PartialQueryParams): Promise<PaginatedResponse<Student[]>> {
+  async getStudents(
+    params?: PartialQueryParams,
+  ): Promise<PaginatedResponse<Student>> {
     const response = await api.get(END_POINTS.STUDENT.GET_STUDENTS(params));
     return response.data;
   },
@@ -29,4 +31,4 @@ export const studentService = {
     const response = await api.get(END_POINTS.STUDENT.GET_STUDENT_BY_ID(id));
     return response.data;
   },
-};  
+};

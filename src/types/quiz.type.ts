@@ -5,6 +5,8 @@ export interface LinkedQuiz {
 }
 
 export interface Answer {
+  id?: string;
+  answerId?: string;
   title: string;
   isCorrect: boolean;
 }
@@ -40,4 +42,29 @@ export interface QuizzesQueryParams {
   TeacherId?: string;
   IsLesson?: boolean;
   studentId?: string;
+}
+
+export interface QuizQuestionResult {
+  questionId: string;
+  answerId: string;
+  timeSpentSeconds: number;
+}
+
+export interface SubmitQuizResultsInput {
+  studentId: string;
+  questions: QuizQuestionResult[];
+}
+
+export interface StudentAnswer {
+  questionId: string;
+  answerId: string;
+  answerTitle: string;
+  isCorrect: boolean;
+  timeSpentSeconds: number;
+}
+
+export interface QuizResultsResponse {
+  quiz: Quiz;
+  studentId: string;
+  answers: StudentAnswer[];
 }

@@ -126,7 +126,7 @@ export function AiChatSidebar({
                   <div
                     onClick={() => onSelectSession(session.id)}
                     className={cn(
-                      "group/session relative w-full cursor-pointer rounded-xl border p-4 text-right transition-all",
+                      "group/session relative w-full cursor-pointer rounded-xl border p-4 text-start transition-all",
                       activeSessionId === session.id
                         ? "border-primary/50 bg-primary/10 shadow-primary/5 shadow-lg"
                         : "border-border/30 bg-background/50 hover:border-primary/30 hover:bg-primary/5",

@@ -18,6 +18,7 @@ import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useActiveLink } from "./useActiveLink";
 import { HeaderThemeToggle } from "./header-theme-toggle";
 import { HeaderLoginButton } from "./header-login-button";
+import { HeaderLangSwitch } from "./header-lang-switch";
 import { useTranslation } from "@/providers/TranslationsProvider";
 
 interface HeaderMobileMenuProps {
@@ -36,10 +37,10 @@ export function HeaderMobileMenu({
   const { header } = useTranslation();
 
   const navLinks = [
-    { href: routesName.home, label: header.navigation.home },
-    { href: routesName.quizzes, label: header.navigation.quizzes },
-    { href: routesName.download, label: header.navigation.download },
-    { href: routesName.about, label: header.navigation.about },
+    { href: routesName.home.href, label: header.navigation.home },
+    { href: routesName.quizzes.href, label: header.navigation.quizzes },
+    { href: routesName.download.href, label: header.navigation.download },
+    { href: routesName.about.href, label: header.navigation.about },
   ];
 
   return (
@@ -96,7 +97,7 @@ export function HeaderMobileMenu({
             {navLinks.map((link) => {
               const isActive = isLinkActive(link.href);
               return (
-                <SheetClose asChild key={link.href as string}>
+                <SheetClose asChild key={link.href}>
                   <motion.div
                     variants={{
                       hidden: { x: -15, opacity: 0 },
@@ -134,7 +135,7 @@ export function HeaderMobileMenu({
             })}
           </motion.nav>
 
-          {/* Theme Toggle and Login Button */}
+          {/* Theme Toggle, Language Switch and Login Button */}
           <motion.div
             className="absolute right-6 bottom-6 left-6 flex flex-col gap-3"
             initial={{ y: 20, opacity: 0 }}
@@ -147,6 +148,9 @@ export function HeaderMobileMenu({
               mounted={mounted}
               variant="mobile"
             />
+            <div className="space-y-2">
+              <HeaderLangSwitch variant="mobile" />
+            </div>
             <HeaderLoginButton variant="mobile" />
           </motion.div>
         </SheetContent>

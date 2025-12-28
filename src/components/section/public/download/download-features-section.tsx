@@ -134,7 +134,7 @@ function DownloadFeaturesSection() {
                 {featuresSection.cta.subtitle}
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button variant="default" size="lg" href={routesName.download}>
+                <Button variant="default" size="lg" href={routesName.download.href}>
                   <Download className="size-5" />
                   {featuresSection.cta.button}
                 </Button>

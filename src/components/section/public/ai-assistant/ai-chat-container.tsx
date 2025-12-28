@@ -160,7 +160,7 @@ export function AiChatContainer() {
         <div className="py flex items-center justify-end gap-2">
           <div className="flex justify-end">
             <Link
-              href={getLocalizedHref(routesName.home)}
+              href={getLocalizedHref(routesName.home.href)}
               aria-label="quizy home"
             >
               <div className="relative flex items-center gap-2">
@@ -290,7 +290,7 @@ export function AiChatContainer() {
                         <Button
                           variant="outline"
                           onClick={() => handlePromptClick(prompt)}
-                          className="border-border/30 bg-background/50 hover:border-primary/30 hover:bg-primary/5 h-auto w-full rounded-xl p-4 text-left backdrop-blur-sm transition-all"
+                          className="border-border/30 bg-background/50 hover:border-primary/30 hover:bg-primary/5 h-auto w-full rounded-xl p-4 text-start backdrop-blur-sm transition-all"
                         >
                           <span className="text-sm font-medium">{prompt}</span>
                         </Button>

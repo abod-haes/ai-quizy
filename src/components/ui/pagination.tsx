@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
+import { useTranslation } from "@/providers/TranslationsProvider";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -78,11 +79,13 @@ function PaginationPrevious({
 }: React.ComponentProps<typeof PaginationLink>) {
   const lang = useCurrentLang();
   const isRTL = lang === "ar";
+  const t = useTranslation();
+  const pagination = t.dashboard?.common?.pagination;
   const ChevronIcon = isRTL ? ChevronRightIcon : ChevronLeftIcon;
 
   return (
     <PaginationLink
-      aria-label={isRTL ? "الانتقال إلى الصفحة السابقة" : "Go to previous page"}
+      aria-label={pagination?.previousAriaLabel}
       size="default"
       className={cn(
         "gap-1 px-2.5",
@@ -91,8 +94,8 @@ function PaginationPrevious({
       )}
       {...props}
     >
-      <ChevronIcon />
-      <span className="hidden sm:block">{isRTL ? "السابق" : "Previous"}</span>
+      <ChevronIcon className="rlt:" />
+      <span className="hidden sm:block">{pagination.previous}</span>
     </PaginationLink>
   );
 }
@@ -103,11 +106,13 @@ function PaginationNext({
 }: React.ComponentProps<typeof PaginationLink>) {
   const lang = useCurrentLang();
   const isRTL = lang === "ar";
+  const { dashboard } = useTranslation();
+  const pagination = dashboard.common.pagination;
   const ChevronIcon = isRTL ? ChevronLeftIcon : ChevronRightIcon;
 
   return (
     <PaginationLink
-      aria-label={isRTL ? "الانتقال إلى الصفحة التالية" : "Go to next page"}
+      aria-label={pagination.nextAriaLabel}
       size="default"
       className={cn(
         "gap-1 px-2.5",
@@ -116,7 +121,7 @@ function PaginationNext({
       )}
       {...props}
     >
-      <span className="hidden sm:block">{isRTL ? "التالي" : "Next"}</span>
+      <span className="hidden sm:block">{pagination.next}</span>
       <ChevronIcon />
     </PaginationLink>
   );
@@ -126,6 +131,8 @@ function PaginationEllipsis({
   className,
   ...props
 }: React.ComponentProps<"span">) {
+  const t = useTranslation();
+  const pagination = t.dashboard?.common?.pagination;
   return (
     <span
       aria-hidden
@@ -134,7 +141,7 @@ function PaginationEllipsis({
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">{pagination?.morePages}</span>
     </span>
   );
 }
@@ -153,9 +160,6 @@ function PaginationComponent({
   onPageChange,
   className,
 }: PaginationProps) {
-  const lang = useCurrentLang();
-  const isRTL = lang === "ar";
-
   if (totalPages <= 1) return null;
 
   const handlePageChange = (newPage: number) => {
@@ -165,7 +169,7 @@ function PaginationComponent({
   };
 
   return (
-    <Pagination className={className} dir={isRTL ? "rtl" : "ltr"}>
+    <Pagination className={className}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

@@ -21,6 +21,9 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { X, Upload, File, Image, FileText, Music, Video } from "lucide-react";
+import { useTranslation } from "@/providers/TranslationsProvider";
+// @ts-expect-error - react-select-country-list doesn't have type definitions
+import countryList from "react-select-country-list";
 
 export type FieldType =
   | "text"
@@ -29,8 +32,10 @@ export type FieldType =
   | "number"
   | "textarea"
   | "select"
+  | "select-country"
   | "radio"
   | "checkbox"
+  | "multiselect"
   | "date"
   | "file"
   | "multi-file"
@@ -85,26 +90,27 @@ export type FormDefinition = {
   isLoading?: boolean;
 };
 
-const buildZodFromFields = (fields: FieldDefinition[]) => {
+const buildZodFromFields = (fields: FieldDefinition[], formDict?: any) => {
   const shape: Record<string, any> = {};
 
   fields.forEach((f) => {
     if (f.type === "group" && f.fields) {
       f.fields.forEach((groupField) => {
-        const groupSchema = buildFieldSchema(groupField);
+        const groupSchema = buildFieldSchema(groupField, formDict);
         shape[groupField.key] = groupSchema;
       });
       return;
     }
 
-    const fieldSchema = buildFieldSchema(f);
+    const fieldSchema = buildFieldSchema(f, formDict);
     shape[f.key] = fieldSchema;
   });
 
   return z.object(shape);
 };
 
-const buildFieldSchema = (f: FieldDefinition) => {
+const buildFieldSchema = (f: FieldDefinition, formDict?: any) => {
+  const validationDict = formDict?.validation || {};
   let schema: any;
   switch (f.type) {
     case "text":
@@ -114,29 +120,43 @@ const buildFieldSchema = (f: FieldDefinition) => {
       schema = z.string();
       if (f.required) {
         const requiredMessage =
-          f.validation?.messages?.required || "This field is required";
+          f.validation?.messages?.required ||
+          validationDict.required ||
+          "This field is required";
         schema = schema.min(1, requiredMessage);
       }
       if (f.validation?.minLength) {
         const minLengthMessage =
           f.validation.messages?.minLength ||
+          validationDict.minLength?.replace(
+            "{min}",
+            String(f.validation.minLength),
+          ) ||
           `Minimum length is ${f.validation.minLength}`;
         schema = schema.min(f.validation.minLength, minLengthMessage);
       }
       if (f.validation?.maxLength) {
         const maxLengthMessage =
           f.validation.messages?.maxLength ||
+          validationDict.maxLength?.replace(
+            "{max}",
+            String(f.validation.maxLength),
+          ) ||
           `Maximum length is ${f.validation.maxLength}`;
         schema = schema.max(f.validation.maxLength, maxLengthMessage);
       }
       if (f.validation?.pattern) {
         const patternMessage =
-          f.validation.messages?.pattern || "Invalid format";
+          f.validation.messages?.pattern ||
+          validationDict.pattern ||
+          "Invalid format";
         schema = schema.regex(new RegExp(f.validation.pattern), patternMessage);
       }
       if (f.type === "email") {
         const emailMessage =
-          f.validation?.messages?.email || "Invalid email address";
+          f.validation?.messages?.email ||
+          validationDict.email ||
+          "Invalid email address";
         schema = schema.email(emailMessage);
       }
       break;
@@ -144,12 +164,16 @@ const buildFieldSchema = (f: FieldDefinition) => {
       let numberSchema = z.number();
       if (f.validation?.min) {
         const minMessage =
-          f.validation.messages?.min || `Minimum value is ${f.validation.min}`;
+          f.validation.messages?.min ||
+          validationDict.min?.replace("{min}", String(f.validation.min)) ||
+          `Minimum value is ${f.validation.min}`;
         numberSchema = numberSchema.min(f.validation.min, minMessage);
       }
       if (f.validation?.max) {
         const maxMessage =
-          f.validation.messages?.max || `Maximum value is ${f.validation.max}`;
+          f.validation.messages?.max ||
+          validationDict.max?.replace("{max}", String(f.validation.max)) ||
+          `Maximum value is ${f.validation.max}`;
         numberSchema = numberSchema.max(f.validation.max, maxMessage);
       }
 
@@ -173,12 +197,29 @@ const buildFieldSchema = (f: FieldDefinition) => {
         schema = schema.optional();
       }
       break;
+    case "multiselect":
+      schema = z.array(z.string()).or(z.array(z.number()));
+      if (f.required) {
+        const requiredMessage =
+          f.validation?.messages?.required ||
+          validationDict.selectAtLeastOne ||
+          "Please select at least one option";
+        schema = schema.refine((val: any) => val && val.length > 0, {
+          message: requiredMessage,
+        });
+      } else {
+        schema = schema.optional();
+      }
+      break;
     case "select":
+    case "select-country":
     case "radio":
       schema = z.union([z.string(), z.number()]);
       if (f.required) {
         const requiredMessage =
-          f.validation?.messages?.required || "Please select an option";
+          f.validation?.messages?.required ||
+          validationDict.selectOption ||
+          "Please select an option";
         schema = schema.refine(
           (val: any) => val !== undefined && val !== null && val !== "",
           { message: requiredMessage },
@@ -191,7 +232,9 @@ const buildFieldSchema = (f: FieldDefinition) => {
       schema = z.string();
       if (f.required) {
         const requiredMessage =
-          f.validation?.messages?.required || "Please select a date";
+          f.validation?.messages?.required ||
+          validationDict.selectDate ||
+          "Please select a date";
         schema = schema.min(1, requiredMessage);
       } else {
         schema = schema.optional();
@@ -201,7 +244,9 @@ const buildFieldSchema = (f: FieldDefinition) => {
       schema = z.any();
       if (f.required) {
         const requiredMessage =
-          f.validation?.messages?.required || "Please select a file";
+          f.validation?.messages?.required ||
+          validationDict.selectFile ||
+          "Please select a file";
         schema = schema.refine(
           (val: any) => val !== undefined && val !== null,
           { message: requiredMessage },
@@ -212,7 +257,9 @@ const buildFieldSchema = (f: FieldDefinition) => {
       break;
     case "multi-file":
       const requiredMessage =
-        f.validation?.messages?.required || "This field is required";
+        f.validation?.messages?.required ||
+        validationDict.required ||
+        "This field is required";
       schema = z.array(z.any()).refine(
         (files: any[]) => {
           if (!files || files.length === 0) return !f.required;
@@ -224,6 +271,10 @@ const buildFieldSchema = (f: FieldDefinition) => {
       if (f.validation?.maxFiles) {
         const maxFilesMessage =
           f.validation.messages?.maxFiles ||
+          validationDict.maxFiles?.replace(
+            "{max}",
+            String(f.validation.maxFiles),
+          ) ||
           `Maximum ${f.validation.maxFiles} files allowed`;
         schema = schema.refine(
           (files: any[]) => !files || files.length <= f.validation!.maxFiles!,
@@ -232,9 +283,11 @@ const buildFieldSchema = (f: FieldDefinition) => {
       }
 
       if (f.validation?.maxFileSize) {
+        const fileSizeMB = Math.round(f.validation!.maxFileSize! / 1024 / 1024);
         const maxFileSizeMessage =
           f.validation.messages?.maxFileSize ||
-          `File size must be less than ${Math.round(f.validation!.maxFileSize! / 1024 / 1024)}MB`;
+          validationDict.maxFileSize?.replace("{size}", `${fileSizeMB}MB`) ||
+          `File size must be less than ${fileSizeMB}MB`;
         schema = schema.refine(
           (files: any[]) =>
             !files ||
@@ -248,9 +301,11 @@ const buildFieldSchema = (f: FieldDefinition) => {
       }
 
       if (f.validation?.acceptedFileTypes) {
+        const typesStr = f.validation.acceptedFileTypes.join(", ");
         const acceptedFileTypesMessage =
           f.validation.messages?.acceptedFileTypes ||
-          `Only ${f.validation.acceptedFileTypes.join(", ")} files are allowed`;
+          validationDict.acceptedFileTypes?.replace("{types}", typesStr) ||
+          `Only ${typesStr} files are allowed`;
         schema = schema.refine(
           (files: any[]) =>
             !files ||
@@ -269,12 +324,14 @@ const buildFieldSchema = (f: FieldDefinition) => {
       if (!f.fields) {
         schema = z.array(z.any());
       } else {
-        const inner = buildZodFromFields(f.fields);
-        schema = z.array(z.object(inner));
+        const inner = buildZodFromFields(f.fields, formDict);
+        schema = z.array(inner);
       }
       if (f.required) {
         const requiredMessage =
-          f.validation?.messages?.required || "This field is required";
+          f.validation?.messages?.required ||
+          validationDict.required ||
+          "This field is required";
         schema = schema.refine((val: any) => val && val.length > 0, {
           message: requiredMessage,
         });
@@ -290,7 +347,7 @@ const buildFieldSchema = (f: FieldDefinition) => {
 };
 
 const ErrorMsg: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
-  <p className="mt-1 text-sm text-red-600">{children}</p>
+  <p className="mt-1 text-xs text-red-600">{children}</p>
 );
 
 const FileUploadComponent: React.FC<{
@@ -298,7 +355,9 @@ const FileUploadComponent: React.FC<{
   value: File[];
   onChange: (files: File[]) => void;
   errors?: any;
-}> = ({ field, value = [], onChange, errors }) => {
+  formDict?: any;
+}> = ({ field, value = [], onChange, errors, formDict }) => {
+  const fileUploadDict = formDict?.fileUpload || {};
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -443,21 +502,27 @@ const FileUploadComponent: React.FC<{
           <div className="space-y-2">
             <p className="text-lg font-medium text-gray-900">
               {isDragOver
-                ? "Drop files here"
-                : "Click to upload or drag and drop"}
+                ? fileUploadDict.dropFilesHere || "Drop files here"
+                : fileUploadDict.clickToUpload ||
+                  "Click to upload or drag and drop"}
             </p>
             <p className="text-sm text-gray-500">
               {field.validation?.acceptedFileTypes
-                ? `Accepted types: ${field.validation.acceptedFileTypes.join(", ")}`
-                : "Any file type"}
+                ? `${fileUploadDict.acceptedTypes || "Accepted types:"} ${field.validation.acceptedFileTypes.join(", ")}`
+                : fileUploadDict.anyFileType || "Any file type"}
               {field.validation?.maxFileSize && (
                 <span>
                   {" "}
-                  • Max size: {formatFileSize(field.validation.maxFileSize)}
+                  • {fileUploadDict.maxSize || "Max size:"}{" "}
+                  {formatFileSize(field.validation.maxFileSize)}
                 </span>
               )}
               {field.validation?.maxFiles && (
-                <span> • Max files: {field.validation.maxFiles}</span>
+                <span>
+                  {" "}
+                  • {fileUploadDict.maxFiles || "Max files:"}{" "}
+                  {field.validation.maxFiles}
+                </span>
               )}
             </p>
           </div>
@@ -467,7 +532,7 @@ const FileUploadComponent: React.FC<{
       {value.length > 0 && (
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-700">
-            Uploaded files ({value.length})
+            {fileUploadDict.uploadedFiles || "Uploaded files"} ({value.length})
           </p>
           <div className="space-y-2">
             {value.map((file, index) => (
@@ -508,7 +573,14 @@ const FileUploadComponent: React.FC<{
   );
 };
 
-function FieldRenderer({ field, control, register, watch, errors }: any) {
+function FieldRenderer({
+  field,
+  control,
+  register,
+  watch,
+  errors,
+  formDict,
+}: any) {
   const visible = useMemo(() => {
     if (!field.visibleIf) return true;
     const v = watch(field.visibleIf.field);
@@ -542,9 +614,11 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
     case "number":
       return (
         <div className="mb-4">
-          <Label className="mb-2" htmlFor={field.key}>
-            {field.label}
-          </Label>
+          {field.label && (
+            <Label className="mb-2" htmlFor={field.key}>
+              {field.label}
+            </Label>
+          )}
           <Input
             id={field.key}
             {...register(field.key)}
@@ -581,6 +655,51 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
     case "select":
       return (
         <div className="mb-4">
+          {field.label && (
+            <Label className="mb-2" htmlFor={field.key}>
+              {field.label}
+            </Label>
+          )}
+          <Controller
+            control={control}
+            name={field.key}
+            render={({ field: ctrlField }) => (
+              <Select
+                value={ctrlField.value}
+                onValueChange={ctrlField.onChange}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue
+                    placeholder={
+                      formDict?.selectPlaceholder ||
+                      field.placeholder ||
+                      "Select..."
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {(asyncOptions || options).map((o, index) => (
+                    <SelectItem
+                      key={`${field.key}-${String(o.value)}-${index}`}
+                      value={String(o.value)}
+                    >
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors?.[field.key] && (
+            <ErrorMsg>{errors[field.key].message}</ErrorMsg>
+          )}
+        </div>
+      );
+
+    case "select-country":
+      const countryOptions = React.useMemo(() => countryList().getData(), []);
+      return (
+        <div className="mb-4">
           <Label className="mb-2" htmlFor={field.key}>
             {field.label}
           </Label>
@@ -593,14 +712,22 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
                 onValueChange={ctrlField.onChange}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue
+                    placeholder={
+                      formDict?.selectPlaceholder ||
+                      field.placeholder ||
+                      "Select country..."
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {(asyncOptions || options).map((o) => (
-                    <SelectItem key={String(o.value)} value={String(o.value)}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
+                  {countryOptions.map(
+                    (country: { value: string; label: string }) => (
+                      <SelectItem key={country.value} value={country.value}>
+                        {country.label}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             )}
@@ -672,21 +799,77 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
         </div>
       );
 
+    case "multiselect":
+      return (
+        <div className="mb-4">
+          <Label className="mb-2 block" htmlFor={field.key}>
+            {field.label}
+          </Label>
+          <Controller
+            control={control}
+            name={field.key}
+            render={({ field: ctrlField }) => {
+              const selectedValues = Array.isArray(ctrlField.value)
+                ? ctrlField.value
+                : [];
+              return (
+                <div className="space-y-2">
+                  {(asyncOptions || options).map((o) => {
+                    const value = String(o.value);
+                    const isChecked = selectedValues.includes(value);
+                    return (
+                      <div key={value} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`${field.key}-${value}`}
+                          checked={isChecked}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              ctrlField.onChange([...selectedValues, value]);
+                            } else {
+                              ctrlField.onChange(
+                                selectedValues.filter((v) => v !== value),
+                              );
+                            }
+                          }}
+                        />
+                        <Label
+                          htmlFor={`${field.key}-${value}`}
+                          className="text-sm font-normal"
+                        >
+                          {o.label}
+                        </Label>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }}
+          />
+          {errors?.[field.key] && (
+            <ErrorMsg>{errors[field.key].message}</ErrorMsg>
+          )}
+        </div>
+      );
+
     case "group":
       return (
-        <fieldset className="mb-4 rounded border p-3">
-          <legend className="mb-2 font-medium">{field.label}</legend>
-          {field.fields?.map((f: FieldDefinition) => (
-            <FieldRenderer
-              key={f.key}
-              field={f}
-              control={control}
-              register={register}
-              watch={watch}
-              errors={errors}
-            />
-          ))}
-        </fieldset>
+        <div className="mb-4">
+          {field.label && <Label className="mb-2 block">{field.label}</Label>}
+          <div className="flex gap-2">
+            {field.fields?.map((f: FieldDefinition) => (
+              <div key={f.key} className="flex-1">
+                <FieldRenderer
+                  field={f}
+                  control={control}
+                  register={register}
+                  watch={watch}
+                  errors={errors}
+                  formDict={formDict}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       );
 
     case "array": {
@@ -709,21 +892,25 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
                     register={register}
                     watch={watch}
                     errors={errors?.[name]?.[i]}
+                    formDict={formDict}
                   />
                 ))}
-                <div className="text-right">
+                <div className="mt-2 flex justify-end">
                   <button
                     type="button"
-                    className="text-sm text-red-600"
+                    className="text-sm text-red-600 hover:text-red-700 hover:underline"
                     onClick={() => remove(i)}
                   >
-                    Remove
+                    {formDict?.remove || "Remove"}
                   </button>
                 </div>
               </div>
             ))}
-            <button
+          </div>
+          <div className="mt-3">
+            <Button
               type="button"
+              variant="outline"
               onClick={() =>
                 append(
                   field.fields?.reduce(
@@ -735,10 +922,9 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
                   ) || {},
                 )
               }
-              className="mt-2 text-sm"
             >
-              Add
-            </button>
+              {formDict?.add || "Add"}
+            </Button>
           </div>
         </div>
       );
@@ -769,6 +955,7 @@ function FieldRenderer({ field, control, register, watch, errors }: any) {
                 value={ctrlField.value || []}
                 onChange={ctrlField.onChange}
                 errors={errors?.[field.key]}
+                formDict={formDict}
               />
             )}
           />
@@ -787,27 +974,48 @@ export default function DynamicForm({
   definition: FormDefinition;
   onSubmit: (data: Record<string, unknown>) => Promise<void> | void;
 }) {
+  const { form: formDict } = useTranslation();
   const zodSchema = useMemo(
-    () => buildZodFromFields(definition.fields),
-    [definition.fields],
+    () => buildZodFromFields(definition.fields, formDict),
+    [definition.fields, formDict],
   );
 
   const defaultValues = useMemo(
     () =>
-      definition.fields.reduce(
-        (acc: Record<string, unknown>, f) => ({
-          ...acc,
-          [f.key]: f.default ?? "",
-        }),
-        {},
-      ),
+      definition.fields.reduce((acc: Record<string, unknown>, f) => {
+        if (f.type === "group" && f.fields) {
+          f.fields.forEach((groupField) => {
+            acc[groupField.key] =
+              groupField.default ?? (groupField.type === "array" ? [] : "");
+          });
+        } else {
+          acc[f.key] = f.default ?? (f.type === "array" ? [] : "");
+        }
+        return acc;
+      }, {}),
     [definition.fields],
   );
 
   const { control, register, handleSubmit, watch, formState, reset } = useForm({
     resolver: zodResolver(zodSchema),
     defaultValues,
+    mode: "onBlur", // Only validate on blur to reduce re-renders while typing
+    reValidateMode: "onBlur", // Re-validate on blur instead of onChange
   });
+
+  // Reset form when defaultValues change (for edit scenarios)
+  const prevDefaultValuesRef = React.useRef(defaultValues);
+  React.useEffect(() => {
+    // Only reset if defaultValues actually changed
+    if (
+      JSON.stringify(prevDefaultValuesRef.current) !==
+      JSON.stringify(defaultValues)
+    ) {
+      prevDefaultValuesRef.current = defaultValues;
+      reset(defaultValues, { keepDefaultValues: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValues]);
 
   const { errors, isSubmitting, isDirty } = formState;
   const isLoading = definition.isLoading ?? isSubmitting;
@@ -838,8 +1046,8 @@ export default function DynamicForm({
         <Button className="flex-1" disabled={isSubmitDisabled} asChild>
           <button type="submit">
             {isLoading
-              ? "Submitting..."
-              : definition.submitButtonText || "Submit"}
+              ? formDict?.submitting || "Submitting..."
+              : definition.submitButtonText || formDict?.submit || "Submit"}
           </button>
         </Button>
         {definition.showResetButton && (
@@ -851,7 +1059,7 @@ export default function DynamicForm({
             asChild
           >
             <button type="button">
-              {definition.resetButtonText || "Reset"}
+              {definition.resetButtonText || formDict?.reset || "Reset"}
             </button>
           </Button>
         )}

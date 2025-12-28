@@ -9,6 +9,19 @@ export interface QueryParams {
 export type PartialQueryParams = Partial<QueryParams>;
 
 export const queryKeys = {
+  subject: {
+    getList: (params?: PartialQueryParams) =>
+      ["subject", "list", params] as const,
+    detail: (id: string) => ["subject", "detail", id] as const,
+    getBriefs: () => ["subject", "briefs"] as const,
+    getBrief: () => ["subject", "brief"] as const,
+  },
+  classes: {
+    getList: (params?: PartialQueryParams) =>
+      ["class", "list", params] as const,
+    detail: (id: string) => ["class", "detail", id] as const,
+    getBrief: () => ["class", "brief"] as const,
+  },
   student: {
     getList: (params?: PartialQueryParams) =>
       ["student", "list", params] as const,
@@ -32,15 +45,27 @@ export const queryKeys = {
     detail: (id: string) => ["teacher", "detail", id] as const,
     getBriefs: () => ["teacher", "briefs"] as const,
   },
-  subject: {
+  unit: {
     getList: (params?: PartialQueryParams) =>
-      ["subject", "list", params] as const,
-    detail: (id: string) => ["subject", "detail", id] as const,
-    getBriefs: () => ["subject", "briefs"] as const,
+      ["unit", "list", params] as const,
+    detail: (id: string) => ["unit", "detail", id] as const,
+  },
+  lesson: {
+    getList: (params?: PartialQueryParams) =>
+      ["lesson", "list", params] as const,
+    detail: (id: string) => ["lesson", "detail", id] as const,
+  },
+  question: {
+    getList: (params?: PartialQueryParams) =>
+      ["question", "list", params] as const,
+    detail: (id: string) => ["question", "detail", id] as const,
   },
   auth: {
     register: () => ["auth", "register"] as const,
     verifyCode: () => ["auth", "verifyCode"] as const,
     login: () => ["auth", "login"] as const,
+  },
+  statistics: {
+    getStatistics: () => ["statistics"] as const,
   },
 } as const;

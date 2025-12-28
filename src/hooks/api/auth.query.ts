@@ -30,6 +30,6 @@ export function useLogin() {
   return useMutation<LoginResponse, Error, LoginRequest>({
     mutationKey: queryKeys.auth.login(),
     mutationFn: (data: LoginRequest) => authService.login(data),
+    onSuccess: () => {},
   });
 }
-

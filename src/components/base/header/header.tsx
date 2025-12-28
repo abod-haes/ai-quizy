@@ -9,6 +9,7 @@ import { HeaderThemeToggle } from "./header-theme-toggle";
 import { HeaderLoginButton } from "./header-login-button";
 import { HeaderDesktopNav } from "./header-desktop-nav";
 import { HeaderMobileMenu } from "./header-mobile-menu";
+import { HeaderLangSwitch } from "./header-lang-switch";
 
 function Header() {
   const { setTheme, resolvedTheme } = useTheme();
@@ -99,7 +100,7 @@ function Header() {
                 setTheme={setTheme}
               />
 
-              {/* Desktop theme toggle and login button */}
+              {/* Desktop theme toggle, language switch and login button */}
               <div className="hidden items-center gap-2 md:flex">
                 <HeaderThemeToggle
                   isDark={isDark}
@@ -107,6 +108,7 @@ function Header() {
                   mounted={mounted}
                   variant="desktop"
                 />
+                <HeaderLangSwitch variant="desktop" />
                 <HeaderLoginButton variant="desktop" />
               </div>
             </motion.div>

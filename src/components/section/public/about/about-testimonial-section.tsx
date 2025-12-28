@@ -5,7 +5,12 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import Image from "next/image";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
-import { createFadeInUp, useRevealedControls } from "@/lib/motion";
+import {
+  createFadeInUp,
+  useRevealedControls,
+  useCarouselTransition,
+  useFadeTransition,
+} from "@/lib/motion";
 
 interface Testimonial {
   id: number;
@@ -92,6 +97,13 @@ function AboutTestimonialSection() {
   // Controls to re-trigger animations whenever the section enters the viewport
   const sectionRef = useRef<HTMLElement | null>(null);
   const textControls = useRevealedControls(sectionRef, { amount: 0.25 });
+
+  // Transition hooks
+  const carouselTransition = useCarouselTransition({
+    stiffness: 70,
+    damping: 20,
+  });
+  const fadeTransition = useFadeTransition(0.4);
 
   // Custom variants
   const fadeInUp = createFadeInUp(0.6, 20);
@@ -255,11 +267,7 @@ function AboutTestimonialSection() {
             <motion.div
               className="flex"
               animate={{ x: `-${currentIndex * (100 / visibleCount)}%` }}
-              transition={{
-                type: "spring",
-                stiffness: 70,
-                damping: 20,
-              }}
+              transition={carouselTransition}
             >
               {testimonials.map((testimonial) => (
                 <motion.div
@@ -273,7 +281,7 @@ function AboutTestimonialSection() {
                   } p-2`}
                   initial={{ opacity: 0.5, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4 }}
+                  transition={fadeTransition}
                   drag="x"
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.2}

@@ -7,72 +7,72 @@ import AIFeatureSection from "@/components/section/public/home/ai-feature-sectio
 export default function Page() {
   const products = [
     {
-      title: "Quizzy Feature 1",
+      title: "quizy Feature 1",
       link: "#",
       thumbnail: "/images/home/1.jpg",
     },
     {
-      title: "Quizzy Feature 2",
+      title: "quizy Feature 2",
       link: "#",
       thumbnail: "/images/home/2.jpg",
     },
     {
-      title: "Quizzy Feature 3",
+      title: "quizy Feature 3",
       link: "#",
       thumbnail: "/images/home/3.jpg",
     },
     {
-      title: "Quizzy Feature 4",
+      title: "quizy Feature 4",
       link: "#",
       thumbnail: "/images/home/4.jpg",
     },
     {
-      title: "Quizzy Feature 5",
+      title: "quizy Feature 5",
       link: "#",
       thumbnail: "/images/home/5.jpg",
     },
     {
-      title: "Quizzy Feature 6",
+      title: "quizy Feature 6",
       link: "#",
       thumbnail: "/images/home/6.jpg",
     },
     {
-      title: "Quizzy Feature 7",
+      title: "quizy Feature 7",
       link: "#",
       thumbnail: "/images/home/7.jpg",
     },
     {
-      title: "Quizzy Feature 8",
+      title: "quizy Feature 8",
       link: "#",
       thumbnail: "/images/home/11.jpg",
     },
     {
-      title: "Quizzy Feature 9",
+      title: "quizy Feature 9",
       link: "#",
       thumbnail: "/images/home/22.jpg",
     },
     {
-      title: "Quizzy Feature 10",
+      title: "quizy Feature 10",
       link: "#",
       thumbnail: "/images/home/33.jpg",
     },
     {
-      title: "Quizzy Feature 11",
+      title: "quizy Feature 11",
       link: "#",
       thumbnail: "/images/home/44.jpg",
     },
     {
-      title: "Quizzy Feature 12",
+      title: "quizy Feature 12",
       link: "#",
       thumbnail: "/images/home/55.jpg",
     },
     {
-      title: "Quizzy Feature 13",
+      title: "quizy Feature 13",
       link: "#",
       thumbnail: "/images/home/66.jpg",
     },
     {
-      title: "Quizzy Feature 14",
+      title: "quizy Feature 14",
       link: "#",
       thumbnail: "/images/home/77.jpg",
     },

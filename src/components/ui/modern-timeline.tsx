@@ -101,9 +101,7 @@ export default function ModernTimeline() {
         </p>
       </header>
 
-      <main>
-        <Timeline items={timelineItems} />
-      </main>
+      <Timeline items={timelineItems} />
     </div>
   );
 }

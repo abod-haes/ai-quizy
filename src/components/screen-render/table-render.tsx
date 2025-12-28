@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 import { useFakeApi } from "@/hooks/use-get-screen-render";
 import { ComponentSchema } from "@/types/screen.types";
 
@@ -37,7 +37,7 @@ export default function TableRenderer({ schema }: { schema: ComponentSchema }) {
             {columns.map((col: any) => (
               <th
                 key={col.accessor}
-                className="cursor-pointer border-b px-2 py-1 text-left"
+                className="cursor-pointer border-b px-2 py-1 text-start"
                 onClick={() => toggleSort(col.accessor)}
               >
                 {col.header}

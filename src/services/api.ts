@@ -45,8 +45,19 @@ export class ApiService {
 
       if (!response.ok) {
         const error = data as ApiError;
-        const errorMessage = error.title;
-        console.log("errorr");
+        
+        // Build error message with title and detail
+        const errorParts: string[] = [];
+        if (error.title) {
+          errorParts.push(error.title);
+        }
+        if (error.detail) {
+          errorParts.push(error.detail);
+        }
+        const errorMessage = errorParts.length > 0 
+          ? errorParts.join(" - ")
+          : error.title || "An unexpected error occurred";
+        
         if (
           (!authEndpoints.includes(endpoint) && response.status === 401) ||
           response.status === 403
@@ -54,6 +65,7 @@ export class ApiService {
           // Handle unauthorized access
           if (typeof document !== "undefined") {
             await deleteCookie(myCookies.auth);
+            await deleteCookie(myCookies.user);
             // helperNavigateTo(getLocalizedRoute(lang, "/login"));
             toast.error(
               lang === "en"

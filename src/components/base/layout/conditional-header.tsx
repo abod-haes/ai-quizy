@@ -8,7 +8,7 @@ export function ConditionalHeader() {
   const pathname = usePathname();
 
   // Hide header on AI assistant page
-  const hideHeader = pathname.includes(routesName.aiAssistant);
+  const hideHeader = pathname.includes(routesName.aiAssistant.href);
 
   if (hideHeader) {
     return null;

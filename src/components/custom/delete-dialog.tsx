@@ -58,34 +58,24 @@ export function DeleteDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn("sm:max-w-[425px]", isRTL && "rtl:text-right")}
+        className={cn("sm:max-w-[425px]", isRTL && "rtl:text-start")}
         dir={direction}
       >
         <DialogHeader className="border-b pb-2">
-          <div
-            className={cn(
-              "flex items-center gap-3",
-              isRTL && "rtl:flex-row-reverse",
-            )}
-          >
+          <div className={cn("flex items-center gap-3")}>
             <div className="bg-destructive/10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
               <AlertTriangle className="text-destructive h-4 w-4" />
             </div>
-            <div className={cn("flex-1", isRTL && "rtl:text-right")}>
+            <div className={cn("flex-1", isRTL && "rtl:text-start")}>
               <DialogTitle>{title}</DialogTitle>
             </div>
           </div>
         </DialogHeader>
-        <DialogDescription className={cn("pt-2", isRTL && "rtl:text-right")}>
+        <DialogDescription className={cn("pt-2", isRTL && "rtl:text-start")}>
           {description || defaultDescription}
         </DialogDescription>
 
-        <DialogFooter
-          className={cn(
-            "flex gap-2! sm:gap-0",
-            isRTL && "rtl:flex-row-reverse",
-          )}
-        >
+        <DialogFooter className={cn("flex gap-2! sm:gap-0")}>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}

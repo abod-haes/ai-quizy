@@ -8,12 +8,14 @@ import { useSearchParamsState } from "@/hooks/useSearchParams";
 import { QuizCard } from "@/components/quiz/quiz-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Filter, Loader2 } from "lucide-react";
+import { Filter } from "lucide-react";
+import { Loading } from "@/components/custom/loading";
 import ApiError from "@/components/custom/api-error";
 import { SelectWithOptions } from "@/components/ui/select";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { PaginationComponent } from "@/components/ui/pagination";
 import { PER_PAGE } from "@/utils/constant";
+import { useAuthStore } from "@/store/auth.store";
 
 function QuizzesPageContent() {
   const {
@@ -32,18 +34,25 @@ function QuizzesPageContent() {
 
   // Force re-render when search params change
   const searchParamsKey = searchParams.toString();
-
+  const userId = useAuthStore((state) => state.user?.id);
   // Fetch all data using hooks
   const { data: teacherBriefs } = useTeacherBriefs();
   const { data: subjectBriefs } = useSubjectBriefs();
   const { quizzes: quizzesDict } = useTranslation();
 
-  const { data, isLoading, error, refetch } = useQuizzes({
-    Page: page,
-    PerPage: perPage,
-    SubjectId: subjectId || undefined,
-    TeacherId: teacherId || undefined,
-  });
+  const { data, isLoading, error, refetch } = useQuizzes(
+    {
+      Page: page,
+      PerPage: perPage,
+      SubjectId: subjectId || undefined,
+      TeacherId: teacherId || undefined,
+      studentId: userId || undefined,
+    },
+    {
+      refetchOnMount: "always", // Refetch every time the component mounts (page visit)
+      refetchOnWindowFocus: false, // Don't refetch on window focus
+    },
+  );
 
   const handlePageChange = useCallback(
     (newPage: number) => {
@@ -169,7 +178,7 @@ function QuizzesPageContent() {
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="text-primary size-8 animate-spin" />
+          <Loading size="lg" spinnerOnly />
         </div>
       )}
 
@@ -209,7 +218,7 @@ export default function QuizzesSection() {
     <Suspense
       fallback={
         <div className="container mx-auto flex items-center justify-center px-4 py-20">
-          <Loader2 className="text-primary size-8 animate-spin" />
+          <Loading size="lg" spinnerOnly />
         </div>
       }
     >

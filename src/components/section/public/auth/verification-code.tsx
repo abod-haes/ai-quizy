@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader2, Mail, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
+import { ButtonLoading } from "@/components/custom/loading";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,12 +11,13 @@ import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { getDirection } from "@/utils/translations/language-utils";
 import { useVerifyCode } from "@/hooks/api/auth.query";
-import { routesName } from "@/utils/constant";
+import { routesName, dashboardRoutesName } from "@/utils/constant";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { setCookie } from "@/utils/cookies";
 import { myCookies } from "@/utils/cookies";
 import { AxiosError } from "axios";
 import { ApiError } from "@/types/common.type";
+import { roleType } from "@/utils/enum/common.enum";
 
 const VerificationCodeForm = () => {
   const lang = useCurrentLang();
@@ -103,29 +105,36 @@ const VerificationCodeForm = () => {
         setCookie(myCookies.auth, response.token, true);
       }
 
-      // Redirect to home
-      router.push(getLocalizedHref(routesName.home));
+      // Check user role and redirect accordingly
+      const userRole = parseInt(response.role, 10);
+      if (userRole === roleType.ADMIN) {
+        // Admin users go to dashboard
+        router.push(getLocalizedHref(dashboardRoutesName.dashboard.href));
+      } else {
+        // Other users go to home
+        router.push(getLocalizedHref(routesName.home.href));
+      }
     } catch (err: unknown) {
       // Handle error
       if (err instanceof AxiosError) {
         const errorData = err.response?.data as ApiError | undefined;
 
         if (errorData) {
-          // Extract error message from the new error structure
-          let errorMessage =
-            errorData.title ||
-            translations.errors.verificationFailed ||
-            "Verification failed";
-
-          // Handle validation errors (new format with errors object)
-          if (errorData.errors && Object.keys(errorData.errors).length > 0) {
-            // Get first error message from the first field
-            const firstField = Object.keys(errorData.errors)[0];
-            const firstError = errorData.errors[firstField]?.[0];
-            if (firstError) {
-              errorMessage = firstError;
-            }
+          // Build error message with title and detail only
+          const errorParts: string[] = [];
+          
+          if (errorData.title) {
+            errorParts.push(errorData.title);
           }
+          
+          if (errorData.detail) {
+            errorParts.push(errorData.detail);
+          }
+
+          // If we have both title and detail, join them
+          const errorMessage = errorParts.length > 0 
+            ? errorParts.join(" - ")
+            : errorData.title || translations.errors.verificationFailed || "Verification failed";
 
           setError(errorMessage);
         } else {
@@ -226,7 +235,7 @@ const VerificationCodeForm = () => {
           >
             {verifyMutation.isPending ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <ButtonLoading />
                 {translations.verifying}
               </>
             ) : (
@@ -249,11 +258,11 @@ const VerificationCodeForm = () => {
         </div>
 
         <div
-          className={`relative z-10 mt-4 w-full text-sm ${isRTL ? "text-right" : "text-center"}`}
+          className={`relative z-10 mt-4 w-full text-sm ${isRTL ? "text-start" : "text-center"}`}
         >
           <span className="text-slate-600">{translations.backToSignIn} </span>
           <Link
-            href={getLocalizedHref(routesName.signin)}
+            href={getLocalizedHref(routesName.signin.href)}
             className="text-primary hover:text-primary/80 font-medium transition-colors hover:underline"
           >
             {translations.signInLink}

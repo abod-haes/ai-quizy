@@ -1,5 +1,7 @@
 import { Toaster } from "sonner";
 import NextTopLoader from "nextjs-toploader";
+import Script from "next/script";
+import { MathJaxContext } from "better-react-mathjax";
 
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import ReactQueryProvider from "@/providers/QueryProvider";
@@ -37,7 +39,7 @@ export async function generateMetadata({
         { url: "/favicon.ico", sizes: "any" },
         { url: "/favicon.ico", type: "image/x-icon" },
       ],
-      apple: [{ url: "/favicon.ico", sizes: "180x180", type: "image/x-icon" }],
+      apple: [{ url: "/favicon.ico", sizes: "180x220", type: "image/x-icon" }],
     },
   };
 }
@@ -57,21 +59,63 @@ export default async function RootLayout({
   return (
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
       <body className={`${fontClass} antialiased`} suppressHydrationWarning>
+        {/* MathJax v3 Configuration */}
+        <Script
+          id="MathJax-config"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.MathJax = {
+                tex: {
+                  inlineMath: [['\\\\(', '\\\\)']],
+                  displayMath: [['\\\\[', '\\\\]']],
+                },
+                options: {
+                  skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                },
+              };
+            `,
+          }}
+        />
+        <Script
+          id="MathJax-script"
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+          strategy="lazyOnload"
+        />
         <ReactQueryProvider>
           <TranslationsProvider translations={translations}>
             <ThemeProvider>
-              <NextTopLoader color="var(--color-primary)" showSpinner={false} />
-              <Toaster
-                position={lang == "ar" ? "bottom-left" : "bottom-right"}
-                toastOptions={{
-                  style: {
-                    fontSize: "0.875rem",
-                    textAlign: "start",
+              <MathJaxContext
+                config={{
+                  tex: {
+                    inlineMath: [["\\(", "\\)"]],
+                    displayMath: [["\\[", "\\]"]],
                   },
-                  className: `antialiased ${fontClass}`,
+                  options: {
+                    skipHtmlTags: [
+                      "script",
+                      "noscript",
+                      "style",
+                      "textarea",
+                      "pre",
+                      "code",
+                    ],
+                  },
                 }}
-              />
-              <AuthProvider>{children}</AuthProvider>
+              >
+                <NextTopLoader color="var(--color-primary)" showSpinner={false} />
+                <Toaster
+                  position={lang == "ar" ? "bottom-left" : "bottom-right"}
+                  toastOptions={{
+                    style: {
+                      fontSize: "0.875rem",
+                      textAlign: "start",
+                    },
+                    className: `antialiased ${fontClass}`,
+                  }}
+                />
+                <AuthProvider>{children}</AuthProvider>
+              </MathJaxContext>
             </ThemeProvider>
           </TranslationsProvider>
         </ReactQueryProvider>

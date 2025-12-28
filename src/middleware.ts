@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { langMiddleware } from "./utils/middlewares/lang-middleware";
-// import { authMiddleware } from "./utils/middlewares/auth-middleware";
+import { authMiddleware } from "./utils/middlewares/auth-middleware";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const langResult = langMiddleware(request);
   if (langResult) {
     return langResult;
   }
 
-  // const authResult = authMiddleware(request);
-  // if (authResult) return authResult;
+  const authResult = await authMiddleware(request);
+  if (authResult) return authResult;
 
   return NextResponse.next();
 }

@@ -31,10 +31,10 @@ export function HeaderDesktopNav({ centerY }: HeaderDesktopNavProps) {
   const { header } = useTranslation();
 
   const navLinks = [
-    { href: routesName.home, label: header.navigation.home },
-    { href: routesName.quizzes, label: header.navigation.quizzes },
-    { href: routesName.download, label: header.navigation.download },
-    { href: routesName.about, label: header.navigation.about },
+    { href: routesName.home.href, label: header.navigation.home },
+    { href: routesName.quizzes.href, label: header.navigation.quizzes },
+    { href: routesName.download.href, label: header.navigation.download },
+    { href: routesName.about.href, label: header.navigation.about },
   ];
 
   return (
@@ -60,12 +60,12 @@ export function HeaderDesktopNav({ centerY }: HeaderDesktopNavProps) {
           const isActive = isLinkActive(link.href);
           return (
             <HeaderNavLink
-              key={link.href as string}
+              key={link.href}
               href={link.href}
               label={link.label}
               isActive={isActive}
-              isHovered={hoveredLink === (link.href as string)}
-              onMouseEnter={() => setHoveredLink(link.href as string)}
+              isHovered={hoveredLink === link.href}
+              onMouseEnter={() => setHoveredLink(link.href)}
               onMouseLeave={() => setHoveredLink(null)}
               variants={navItemVariants}
             />

@@ -57,7 +57,7 @@ function FooterSection() {
           initial="hidden"
           animate={controls}
           variants={fadeIn}
-          className="border-border/60 text-muted-foreground mt-8 flex flex-col items-center justify-center gap-2 border-t pt-6 text-center text-xs md:flex-row md:justify-between md:gap-4 md:text-left"
+          className="border-border/60 text-muted-foreground mt-8 flex flex-col items-center justify-center gap-2 border-t pt-6 text-center text-xs md:flex-row md:justify-between md:gap-4 md:text-start"
         >
           <span>
             © {year} {t.siteMeta.siteName}. {f.rights}.

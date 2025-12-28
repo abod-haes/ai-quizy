@@ -86,8 +86,9 @@ export function CreateStudentDialog({
             minLength: 8,
             messages: {
               required: "Password is required",
-              minLength: "Password must be at least 8 characters", 
-              pattern: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+              minLength: "Password must be at least 8 characters",
+              pattern:
+                "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
             },
           },
         },
@@ -124,7 +125,7 @@ export function CreateStudentDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn("sm:max-w-[650px]", isRTL && "rtl:text-right")}
+        className={cn("sm:max-w-[650px]", isRTL && "rtl:text-start")}
         dir={direction}
       >
         <DialogHeader className="border-b pb-2">
@@ -137,7 +138,7 @@ export function CreateStudentDialog({
         <div
           className={cn(
             "max-h-[70vh] overflow-y-auto",
-            isRTL && "rtl:text-right",
+            isRTL && "rtl:text-start",
           )}
         >
           <DynamicForm definition={formDefinition} onSubmit={handleSubmit} />

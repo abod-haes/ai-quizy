@@ -17,24 +17,8 @@ import {
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
 import { cn } from "@/lib/utils";
-
-// Default route labels mapping
-const DEFAULT_ROUTE_LABELS: Record<string, string> = {
-  dashboard: "Dashboard",
-  students: "Students",
-  teachers: "Teachers",
-  administration: "Administration",
-  libraries: "Libraries",
-  subjects: "Subjects",
-  lessons: "Lessons",
-  units: "Units",
-  quizzes: "Quizzes",
-  users: "Users",
-  settings: "Settings",
-  profile: "Profile",
-  "ai-assistant": "AI Assistant",
-  about: "About",
-};
+import { routesName, dashboardRoutesName } from "@/utils/constant";
+import { useTranslation } from "@/providers/TranslationsProvider";
 
 export type BreadcrumbItemType = {
   label: string;
@@ -42,34 +26,172 @@ export type BreadcrumbItemType = {
   icon?: React.ReactNode;
 };
 
-type BreadcrumbsProps = { 
-  items?: BreadcrumbItemType[]; 
-  homeLabel?: string; 
-  showHomeIcon?: boolean; 
-  maxMobileItems?: number; 
-  maxDesktopItems?: number; 
-  separator?: React.ReactNode; 
-  className?: string; 
-  routeLabels?: Record<string, string>;
+type BreadcrumbsProps = {
+  items?: BreadcrumbItemType[];
+  homeLabel?: string;
+  showHomeIcon?: boolean;
+  maxMobileItems?: number;
+  maxDesktopItems?: number;
+  separator?: React.ReactNode;
+  className?: string;
 };
 
- 
+/**
+ * Gets translation value from nested key path
+ */
+function getNestedTranslation(
+  translations: unknown,
+  keyPath: string,
+): string | null {
+  const keys = keyPath.split(".");
+  let current: unknown = translations;
+
+  for (const key of keys) {
+    if (
+      current &&
+      typeof current === "object" &&
+      key in current &&
+      current !== null
+    ) {
+      current = (current as Record<string, unknown>)[key];
+    } else {
+      return null;
+    }
+  }
+
+  return typeof current === "string" ? current : null;
+}
+
+/**
+ * Capitalizes a segment for fallback labels
+ */
+function capitalizeSegment(segment: string): string {
+  return segment
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+/**
+ * Creates a route map for efficient lookups
+ * Returns a map of route paths to keyNames, and a separate map for dynamic routes
+ */
+function createRouteMap(
+  routes: typeof routesName | typeof dashboardRoutesName,
+): {
+  staticRoutes: Map<string, string>;
+  dynamicRoutes: Array<{ pattern: RegExp; keyName: string; basePath: string }>;
+} {
+  const staticRoutes = new Map<string, string>();
+  const dynamicRoutes: Array<{
+    pattern: RegExp;
+    keyName: string;
+    basePath: string;
+  }> = [];
+
+  for (const route of Object.values(routes)) {
+    if (typeof route === "object" && route !== null && "href" in route) {
+      const href = route.href;
+      // Check if it's a dynamic route (contains :id or similar)
+      if (href.includes(":id") || href.includes(":")) {
+        // Create a regex pattern for dynamic routes
+        const basePath = href.split(":")[0].replace(/\/$/, ""); // Remove trailing slash
+        const pattern = new RegExp(
+          `^${href.replace(":id", "[^/]+").replace(":", "[^/]+")}$`,
+        );
+        dynamicRoutes.push({ pattern, keyName: route.keyName, basePath });
+      } else {
+        staticRoutes.set(href, route.keyName);
+      }
+    }
+  }
+
+  // Sort dynamic routes by specificity (longer base paths first)
+  dynamicRoutes.sort((a, b) => b.basePath.length - a.basePath.length);
+
+  return { staticRoutes, dynamicRoutes };
+}
+
+/**
+ * Finds the best matching route for a given path
+ */
+function findRouteLabel(
+  path: string,
+  routeMaps: {
+    staticRoutes: Map<string, string>;
+    dynamicRoutes: Array<{
+      pattern: RegExp;
+      keyName: string;
+      basePath: string;
+    }>;
+  },
+  getTranslation: (keyName: string) => string | null,
+): string | null {
+  // Try exact match first (static routes)
+  const exactKeyName = routeMaps.staticRoutes.get(path);
+  if (exactKeyName) {
+    return getTranslation(exactKeyName);
+  }
+
+  // Try dynamic routes (check more specific routes first)
+  for (const { pattern, keyName, basePath } of routeMaps.dynamicRoutes) {
+    if (path.startsWith(basePath) && pattern.test(path)) {
+      const translation = getTranslation(keyName);
+      if (translation) {
+        return translation;
+      }
+    }
+  }
+
+  // Try prefix match for static routes (for nested routes like /dashboard/students/123)
+  // But only if no dynamic route matched
+  for (const [routePath, keyName] of routeMaps.staticRoutes.entries()) {
+    if (path.startsWith(`${routePath}/`) || path === routePath) {
+      const translation = getTranslation(keyName);
+      if (translation) {
+        return translation;
+      }
+    }
+  }
+
+  return null;
+}
+
 export function Breadcrumbs({
   items: customItems,
-  homeLabel = "Home",
+  homeLabel,
   showHomeIcon = true,
   maxMobileItems = 2,
   maxDesktopItems = 5,
   separator,
   className,
-  routeLabels = {},
 }: BreadcrumbsProps) {
   const pathname = usePathname();
   const lang = useCurrentLang();
   const direction = getDirection(lang);
   const isRTL = direction === "rtl";
+  const t = useTranslation();
 
-  // Generate breadcrumbs from pathname if custom items not provided
+  // Create route maps for efficient lookups
+  const publicRouteMaps = React.useMemo(() => createRouteMap(routesName), []);
+  const dashboardRouteMaps = React.useMemo(
+    () => createRouteMap(dashboardRoutesName),
+    [],
+  );
+
+  // Get translation helper
+  const getTranslation = React.useCallback(
+    (keyName: string): string | null => {
+      return getNestedTranslation(t, keyName);
+    },
+    [t],
+  );
+
+  // Get home label from translations
+  const translatedHomeLabel =
+    homeLabel || getTranslation("common.home") || "Home";
+
+  // Generate breadcrumbs from pathname
   const breadcrumbItems = React.useMemo(() => {
     if (customItems) {
       return customItems;
@@ -81,7 +203,7 @@ export function Breadcrumbs({
 
     const items: BreadcrumbItemType[] = [
       {
-        label: homeLabel,
+        label: translatedHomeLabel,
         href: `/${lang}`,
         icon: showHomeIcon ? <Home className="h-4 w-4" /> : undefined,
       },
@@ -92,22 +214,13 @@ export function Breadcrumbs({
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`;
       const isLast = index === segments.length - 1;
+      const segmentPath = `/${segments.slice(0, index + 1).join("/")}`;
 
-      // Get label priority: custom routeLabels > default labels > capitalized segment
-      // Note: Translations can be added via routeLabels prop
-      let label = routeLabels[segment];
-
-      if (!label && DEFAULT_ROUTE_LABELS[segment]) {
-        label = DEFAULT_ROUTE_LABELS[segment];
-      }
-
-      if (!label) {
-        // Capitalize segment as fallback
-        label = segment
-          .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
-      }
+      // Try to find route label (check dashboard routes first, then public routes)
+      const label =
+        findRouteLabel(segmentPath, dashboardRouteMaps, getTranslation) ||
+        findRouteLabel(segmentPath, publicRouteMaps, getTranslation) ||
+        capitalizeSegment(segment);
 
       items.push({
         label,
@@ -116,7 +229,16 @@ export function Breadcrumbs({
     });
 
     return items;
-  }, [customItems, pathname, lang, homeLabel, showHomeIcon, routeLabels]);
+  }, [
+    customItems,
+    pathname,
+    lang,
+    translatedHomeLabel,
+    showHomeIcon,
+    dashboardRouteMaps,
+    publicRouteMaps,
+    getTranslation,
+  ]);
 
   // Responsive: Show fewer items on mobile
   const [isMobile, setIsMobile] = React.useState(false);
@@ -139,12 +261,9 @@ export function Breadcrumbs({
       return breadcrumbItems;
     }
 
-    // Always show first (home) and last (current page)
     const first = breadcrumbItems[0];
     const last = breadcrumbItems[breadcrumbItems.length - 1];
     const middle = breadcrumbItems.slice(1, -1);
-
-    // Show some middle items if space allows
     const middleToShow = Math.max(0, maxItems - 2);
     const startMiddle = Math.max(0, middle.length - middleToShow);
 
@@ -164,10 +283,7 @@ export function Breadcrumbs({
       aria-label="Breadcrumb navigation"
     >
       <BreadcrumbList
-        className={cn(
-          "flex-wrap items-center gap-1.5 sm:gap-2.5",
-          isRTL && "rtl:flex-row-reverse",
-        )}
+        className={cn("flex-wrap items-center gap-1.5 sm:gap-2.5")}
       >
         {visibleItems.map((item, index) => {
           const isLast = index === visibleItems.length - 1;

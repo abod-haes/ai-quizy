@@ -5,6 +5,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   role: number;
+  countryCallingCode: string;
 }
 
 export interface RegisterResponse {
@@ -40,6 +41,7 @@ export interface VerifyCodeResponse {
 export interface LoginRequest {
   phoneNumber: string;
   password: string;
+  countryCallingCode: string;
 }
 
 export interface LoginResponse {

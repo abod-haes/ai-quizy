@@ -158,12 +158,13 @@
   --border: #ffffff1a;
   --input: #ffffff26;
   --ring: var(--primary);
-  --sidebar: #2a2a2a;
-  --sidebar-foreground: #ffffff;
+  /* Sidebar colors aligned with card tone in dark mode */
+  --sidebar: #181a20; /* match card background */
+  --sidebar-foreground: #e5e7eb;
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #444444;
-  --sidebar-accent-foreground: #ffffff;
+  --sidebar-accent: #1f222b; /* subtle elevation over sidebar */
+  --sidebar-accent-foreground: #e5e7eb;
   --sidebar-border: #ffffff1a;
   --sidebar-ring: var(--primary);
   --border-primary: #543acc;
@@ -208,41 +209,34 @@
     font-kerning: normal;
   }
 
-
-
-  /* Better spacing for small screens */
-  @media (max-width: 640px) {
-    html {
-      font-size: 13px;
-    }
+    /* Custom Scrollbar Styles - Matching scroll-area component */
+  *::-webkit-scrollbar {
+    width: 8px; /* w-2 = 0.5rem = 8px */
+    height: 8px;
   }
 
-  /* Medium screens */
-  @media (min-width: 641px) and (max-width: 1024px) {
-    html {
-      font-size: 14px;
-    }
+  *::-webkit-scrollbar-track {
+    background: transparent;
   }
 
-  /* Large screens (laptops and smaller desktops) */
-  @media (min-width: 1025px) and (max-width: 1440px) {
-    html {
-      font-size: 14px;
-    }
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px; /* rounded-full */
+    border: 1px solid transparent;
+    background-clip: padding-box;
   }
 
-  /* Extra large screens (large desktops) */
-  @media (min-width: 1441px) and (max-width: 1499px) {
-    html {
-      font-size: 14px;
-    }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--border);
   }
 
-  /* Ultra large screens */
-  @media (min-width: 1500px) {
-    html {
-      font-size: 16px;
-    }
+  /* Firefox scrollbar styles */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .dashboard-container {
+    @apply grid h-fit max-h-full items-start space-y-4;
   }
 }
 

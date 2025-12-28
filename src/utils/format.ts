@@ -51,3 +51,8 @@ export function removeAl(word: string, lang: Lang) {
   }
   return word;
 }
+
+export function formatEntityName(entity: string, t: string | undefined) {
+  if (!t) return entity;
+  return t.replace("{entity}", entity);
+}

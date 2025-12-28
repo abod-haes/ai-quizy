@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { User, LogOut, FileQuestion } from "lucide-react";
+import { User, LogOut, FileQuestion, Grid } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -16,12 +16,13 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
-import { routesName } from "@/utils/constant";
+import { dashboardRoutesName, routesName } from "@/utils/constant";
 import { deleteCookie } from "@/utils/cookies";
 import { myCookies } from "@/utils/cookies";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { motion } from "framer-motion";
 import { SheetClose } from "@/components/ui/sheet";
+import { roleType } from "@/utils/enum/common.enum";
 
 interface HeaderUserMenuProps {
   variant?: "desktop" | "mobile";
@@ -37,8 +38,9 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
 
   const handleLogout = async () => {
     await deleteCookie(myCookies.auth);
+    await deleteCookie(myCookies.user);
     clearUser();
-    router.push(getLocalizedHref(routesName.home));
+    router.push(getLocalizedHref(routesName.home.href));
   };
 
   const getInitials = () => {
@@ -69,8 +71,8 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
         <SheetClose asChild>
           <Button
             variant="outline"
-            className="w-full justify-start"
-            onClick={() => router.push(getLocalizedHref(routesName.profile))}
+            className="w-full"
+            onClick={() => router.push(getLocalizedHref(routesName.profile.href))}
           >
             <User className="mr-2 h-4 w-4" />
             {header.userMenu?.profile || "Profile"}
@@ -79,21 +81,35 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
         <SheetClose asChild>
           <Button
             variant="outline"
-            className="w-full justify-start"
-            onClick={() => router.push(getLocalizedHref(routesName.quizzes))}
+            className="w-full"
+            onClick={() => router.push(getLocalizedHref(routesName.quizzes.href))}
           >
             <FileQuestion className="mr-2 h-4 w-4" />
             {header.userMenu?.myQuizzes}
           </Button>
         </SheetClose>
+        {user.role === roleType.ADMIN && (
+          <SheetClose asChild>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() =>
+                router.push(getLocalizedHref(dashboardRoutesName.dashboard.href))
+              }
+            >
+              <Grid className="mr-2 h-4 w-4" />
+              {header.userMenu?.dashboard}
+            </Button>
+          </SheetClose>
+        )}
         <SheetClose asChild>
           <Button
             variant="destructive"
-            className="w-full justify-start"
+            className="w-full"
             onClick={handleLogout}
           >
             <LogOut className="mr-2 h-4 w-4" />
-            {header.userMenu?.logout || "Logout"}
+            {header.userMenu?.logout}
           </Button>
         </SheetClose>
       </div>
@@ -123,22 +139,32 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => router.push(getLocalizedHref(routesName.profile))}
+            onClick={() => router.push(getLocalizedHref(routesName.profile.href))}
           >
             <User className="mr-2 h-4 w-4" />
-            <span>{header.userMenu?.profile || "Profile"}</span>
+            <span>{header.userMenu?.profile}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(getLocalizedHref(routesName.quizzes))}
+            onClick={() => router.push(getLocalizedHref(routesName.quizzes.href))}
           >
             <FileQuestion className="mr-2 h-4 w-4" />
-            <span>{header.userMenu?.myQuizzes || "My Quizzes"}</span>
+            <span>{header.userMenu?.myQuizzes}</span>
           </DropdownMenuItem>
+          {user.role === roleType.ADMIN && (
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(getLocalizedHref(dashboardRoutesName.dashboard.href))
+              }
+            >
+              <Grid className="mr-2 h-4 w-4" />
+              <span>{header.userMenu?.dashboard}</span>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} variant="destructive">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>{header.userMenu?.logout || "Logout"}</span>
+          <span>{header.userMenu?.logout}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,14 +1,14 @@
 import { api } from "../base.service";
 import type { User, UserInput } from "@/services/user.services/user.type";
-import type { ApiResponse, PaginationResponse } from "@/types/common.type";
+import type { ApiResponse, PaginatedResponse } from "@/types/common.type";
 import { END_POINTS } from "@/utils/query-apis";
 import type { QueryParams } from "@/utils/query-keys";
 
 export const userService = {
   async getUsers(
-    params?: Partial<QueryParams>,
-  ): Promise<PaginationResponse<User>> {
-    const response = await api.get<PaginationResponse<User>>(
+    params?: Partial<QueryParams & { Role?: number }>,
+  ): Promise<PaginatedResponse<User>> {
+    const response = await api.get<PaginatedResponse<User>>(
       END_POINTS.USER.GET_USERS,
       {
         params,
@@ -34,7 +34,7 @@ export const userService = {
 
   async updateUser(id: string, data: UserInput): Promise<User> {
     const response = await api.patch<ApiResponse<User>>(
-      END_POINTS.USER.UPDATE_USER,
+      END_POINTS.USER.UPDATE_USER(id),
       data,
     );
     return response.data;
@@ -50,6 +50,29 @@ export const userService = {
   async getCurrentUser(): Promise<User> {
     const response = await api.get<ApiResponse<User>>(
       END_POINTS.USER.GET_CURRENT_USER,
+    );
+    return response.data;
+  },
+
+  async updateProfile(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }): Promise<User> {
+    const response = await api.put<ApiResponse<User>>(
+      END_POINTS.AUTH.UPDATE_PROFILE,
+      data,
+    );
+    return response.data;
+  },
+
+  async changePassword(data: {
+    oldPassword: string;
+    newPassword: string;
+  }): Promise<{ message: string }> {
+    const response = await api.post<ApiResponse<{ message: string }>>(
+      END_POINTS.AUTH.CHANGE_PASSWORD,
+      data,
     );
     return response.data;
   },

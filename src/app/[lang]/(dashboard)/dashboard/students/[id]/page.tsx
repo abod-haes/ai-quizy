@@ -15,6 +15,8 @@ import { useState } from "react";
 import type { Student } from "@/services/student.services/student.type";
 import { DeleteDialog } from "@/components/custom/delete-dialog";
 import { useDeleteStudent } from "@/services/student.services/student.query";
+import { useTranslation } from "@/providers/TranslationsProvider";
+import { formatEntityName } from "@/utils/format";
 
 const StudentDetailsPage = () => {
   const { id } = useParams();
@@ -22,6 +24,9 @@ const StudentDetailsPage = () => {
   const lang = useCurrentLang();
   const direction = getDirection(lang);
   const isRTL = direction === "rtl";
+  const t = useTranslation();
+  const common = t.dashboard?.common;
+  const studentsDict = t.dashboard?.students;
   const { data: student, isLoading, isError } = useStudentById(id as string);
   const updateStudent = useUpdateStudent(id as string);
   const deleteStudent = useDeleteStudent(id as string);
@@ -40,17 +45,14 @@ const StudentDetailsPage = () => {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Breadcrumbs
-          className="mb-4"
-          routeLabels={{
-            dashboard: "Dashboard",
-            students: "Students",
-          }}
-        />
+        <Breadcrumbs className="mb-4" />
         <div className="bg-sidebar border-border rounded-lg border p-5">
-          <h1 className="mb-2 text-2xl font-semibold">Student Details</h1>
+          <h1 className="mb-2 text-2xl font-semibold">{studentsDict?.title}</h1>
           <p className="text-muted-foreground text-sm">
-            View and manage the details of a specific student
+            {formatEntityName(
+              t.sidebar?.students || "Students",
+              common?.descriptionEntity,
+            )}
           </p>
         </div>
         <div className="bg-sidebar border-border rounded-lg border p-5">
@@ -73,13 +75,7 @@ const StudentDetailsPage = () => {
   if (isError || !student) {
     return (
       <div className="space-y-6">
-        <Breadcrumbs
-          className="mb-4"
-          routeLabels={{
-            dashboard: "Dashboard",
-            students: "Students",
-          }}
-        />
+        <Breadcrumbs className="mb-4" />
         <div className="bg-sidebar border-border rounded-lg border p-5">
           <h1 className="mb-2 text-2xl font-semibold">Student Details</h1>
           <p className="text-muted-foreground text-sm">
@@ -88,17 +84,16 @@ const StudentDetailsPage = () => {
         </div>
         <div className="bg-sidebar border-border rounded-lg border p-5">
           <div className="flex flex-col items-center justify-center py-12">
-            <p className="text-muted-foreground mb-4">Student not found</p>
+            <p className="text-muted-foreground mb-4">
+              {studentsDict?.emptyMessage || "Student not found"}
+            </p>
             <Button
               variant="outline"
               onClick={() => router.push("/dashboard/students")}
-              className={cn(
-                "flex items-center gap-2",
-                isRTL && "rtl:flex-row-reverse",
-              )}
+              className={cn("flex items-center gap-2")}
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Students
+              {t.sidebar.students}
             </Button>
           </div>
         </div>
@@ -110,34 +105,22 @@ const StudentDetailsPage = () => {
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs
-        className="mb-4"
-        routeLabels={{
-          dashboard: "Dashboard",
-          students: "Students",
-          [id as string]: studentName,
-        }}
-      />
+      <Breadcrumbs className="mb-4" />
 
       <div className="bg-sidebar border-border rounded-lg border p-5">
-        <div
-          className={cn(
-            "flex items-start justify-between",
-            isRTL && "rtl:flex-row-reverse",
-          )}
-        >
+        <div className={cn("flex items-start justify-between")}>
           <div>
-            <h1 className="mb-2 text-2xl font-semibold">Student Details</h1>
+            <h1 className="mb-2 text-2xl font-semibold">
+              {studentsDict?.title}
+            </h1>
             <p className="text-muted-foreground text-sm">
-              View and manage the details of a specific student
+              {formatEntityName(
+                t.sidebar?.students || "Students",
+                common?.descriptionEntity,
+              )}
             </p>
           </div>
-          <div
-            className={cn(
-              "flex items-center gap-1",
-              isRTL && "rtl:flex-row-reverse",
-            )}
-          >
+          <div className={cn("flex items-center gap-1")}>
             <Button
               variant="ghost"
               size="icon"
@@ -162,34 +145,21 @@ const StudentDetailsPage = () => {
 
       <div className="bg-sidebar border-border rounded-lg border p-5">
         <div className="space-y-6">
-          <div
-            className={cn(
-              "flex items-center gap-4 border-b pb-4",
-              isRTL && "rtl:flex-row-reverse",
-            )}
-          >
+          <div className={cn("flex items-center gap-4 border-b pb-4")}>
             <div className="bg-primary/10 flex h-16 w-16 items-center justify-center rounded-full">
               <User className="text-primary h-8 w-8" />
             </div>
-            <div className={cn(isRTL && "rtl:text-right")}>
+            <div className={cn(isRTL && "rtl:text-start")}>
               <h2 className="text-xl font-semibold">{studentName}</h2>
-              <p className="text-muted-foreground text-sm">
-                Student ID: {student.id}
-              </p>
             </div>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className={cn("space-y-1", isRTL && "rtl:text-right")}>
+            <div className={cn("space-y-1", isRTL && "rtl:text-start")}>
               <label className="text-muted-foreground text-sm font-medium">
-                First Name
+                {common?.firstName || "First Name"}
               </label>
-              <div
-                className={cn(
-                  "flex items-center gap-2",
-                  isRTL && "rtl:flex-row-reverse",
-                )}
-              >
+              <div className={cn("flex items-center gap-2")}>
                 <User className="text-muted-foreground h-4 w-4" />
                 <p className="text-foreground text-base font-medium">
                   {student.firstName || "-"}
@@ -197,16 +167,11 @@ const StudentDetailsPage = () => {
               </div>
             </div>
 
-            <div className={cn("space-y-1", isRTL && "rtl:text-right")}>
+            <div className={cn("space-y-1", isRTL && "rtl:text-start")}>
               <label className="text-muted-foreground text-sm font-medium">
-                Last Name
+                {common?.lastName || "Last Name"}
               </label>
-              <div
-                className={cn(
-                  "flex items-center gap-2",
-                  isRTL && "rtl:flex-row-reverse",
-                )}
-              >
+              <div className={cn("flex items-center gap-2")}>
                 <User className="text-muted-foreground h-4 w-4" />
                 <p className="text-foreground text-base font-medium">
                   {student.lastName || "-"}
@@ -214,16 +179,11 @@ const StudentDetailsPage = () => {
               </div>
             </div>
 
-            <div className={cn("space-y-1", isRTL && "rtl:text-right")}>
+            <div className={cn("space-y-1", isRTL && "rtl:text-start")}>
               <label className="text-muted-foreground text-sm font-medium">
-                Email
+                {common?.email || "Email"}
               </label>
-              <div
-                className={cn(
-                  "flex items-center gap-2",
-                  isRTL && "rtl:flex-row-reverse",
-                )}
-              >
+              <div className={cn("flex items-center gap-2")}>
                 <Mail className="text-muted-foreground h-4 w-4" />
                 <a
                   href={`mailto:${student.email}`}
@@ -234,16 +194,11 @@ const StudentDetailsPage = () => {
               </div>
             </div>
 
-            <div className={cn("space-y-1", isRTL && "rtl:text-right")}>
+            <div className={cn("space-y-1", isRTL && "rtl:text-start")}>
               <label className="text-muted-foreground text-sm font-medium">
-                Phone Number
+                {common?.phoneNumber || "Phone Number"}
               </label>
-              <div
-                className={cn(
-                  "flex items-center gap-2",
-                  isRTL && "rtl:flex-row-reverse",
-                )}
-              >
+              <div className={cn("flex items-center gap-2")}>
                 <Phone className="text-muted-foreground h-4 w-4" />
                 <a
                   href={`tel:${student.phoneNumber}`}
@@ -269,11 +224,11 @@ const StudentDetailsPage = () => {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={handleDeleteStudent}
-        title="Delete Student"
+        title={studentsDict?.deleteTitle || "Delete Student"}
         itemName={studentName}
-        description={`Are you sure you want to delete "${studentName}"? This action cannot be undone.`}
+        description={`${common?.areYouSureDelete || "Are you sure you want to delete"} "${studentName}"? ${common?.thisActionCannotBeUndone || "This action cannot be undone."}`}
         isLoading={deleteStudent.isPending}
-        confirmText="Delete"
+        confirmText={common?.delete || "Delete"}
       />
     </div>
   );

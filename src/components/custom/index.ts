@@ -8,8 +8,6 @@ export type { TablePaginationProps } from "./table-pagination";
 export { DataTableWithPagination } from "./data-table-with-pagination";
 export type {
   Column,
-  SortConfig,
-  SortDirection,
   ActionMenuItem,
   DataTableWithPaginationProps,
 } from "./data-table-with-pagination";
@@ -17,3 +15,15 @@ export type {
 export { EditStudentDialog } from "../section/dashboard/student/edit-student-dialog";
 
 export { DeleteDialog } from "./delete-dialog";
+export { ConfirmDialog } from "./confirm-dialog";
+export type { ConfirmDialogVariant } from "./confirm-dialog";
+
+export {
+  Loading,
+  ButtonLoading,
+  TableLoading,
+  PageLoading,
+  CardLoading,
+} from "./loading";
+
+export { PhoneSelect, usePhoneSelect } from "./phone-select";

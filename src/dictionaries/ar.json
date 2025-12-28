@@ -2,8 +2,24 @@
   "siteMeta": {
     "siteName": "كويزي"
   },
+  "common": {
+    "home": "الرئيسية",
+    "aiAssistant": "المساعد الذكي",
+    "quizzes": "الاختبارات",
+    "signup": "تسجيل الحساب",
+    "signin": "تسجيل الدخول",
+    "verify": "التحقق",
+    "about": "من نحن",
+    "profile": "الملف الشخصي",
+    "download": "تحميل التطبيق"
+  },
   "home": {
     "homePage": "الرئيسية",
+    "hero": {
+      "title": "اختبر معلوماتك وتعلّم بطرق ممتعة مع Quizy",
+      "description": "أنشئ اختباراتك بسهولة، شاركها مع أصدقائك، وتابع تقدّمك لحظة بلحظة. تم تصميم Quizy ليمنحك تجربة عربية سلسة وحديثة في التعلّم باللعب.",
+      "downloadButton": "تحميل التطبيق"
+    },
     "about": {
       "title": "لماذا كويزي؟",
       "subtitle": "اختبارات مرحة تجعل التعلم يعلق في الذهن",
@@ -205,11 +221,11 @@
       "badge": "تواصل معنا",
       "title": "تابع رحلتنا",
       "description": "ابق على اطلاع بآخر التحديثات والنصائح وقصص المجتمع. انضم إلى مجتمعنا المتنامي من المتعلمين!",
-      "facebook": "https://facebook.com/quizzy",
-      "twitter": "https://twitter.com/quizzy",
-      "instagram": "https://instagram.com/quizzy",
-      "linkedin": "https://linkedin.com/company/quizzy",
-      "youtube": "https://youtube.com/@quizzy"
+      "facebook": "https://facebook.com/quizy",
+      "twitter": "https://twitter.com/quizy",
+      "instagram": "https://instagram.com/quizy",
+      "linkedin": "https://linkedin.com/company/quizy",
+      "youtube": "https://youtube.com/@quizy"
     }
   },
   "footer": {
@@ -254,7 +270,7 @@
         "invalidPhone": "يرجى إدخال رقم هاتف صحيح.",
         "passwordMismatch": "كلمة المرور وتأكيد كلمة المرور يجب أن يكونا متطابقين.",
         "agreeToTerms": "يرجى الموافقة على الشروط والأحكام.",
-        "signUpSuccess": "تم تسجيل الحساب بنجاح! (تجريبي)",
+        "signUpSuccess": "تم تسجيل الحساب بنجاح!",
         "signUpFailed": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
         "passwordLength": "يجب أن يكون كلمة المرور على الأقل 6 أحرف."
       }
@@ -275,7 +291,8 @@
       "errors": {
         "phonePasswordRequired": "يرجى إدخال رقم الهاتف وكلمة المرور.",
         "invalidPhone": "يرجى إدخال رقم هاتف صحيح.",
-        "signInSuccess": "تم تسجيل الدخول بنجاح! (تجريبي)"
+        "allFieldsRequired": "يرجى إدخال جميع الحقول.",
+        "signInSuccess": "تم تسجيل الدخول بنجاح!"
       }
     },
     "verification": {
@@ -380,7 +397,7 @@
     "title": "الاختبارات",
     "description": "استعرض وابدأ الاختبارات المتاحة",
     "filters": {
-      "title": "تصفية البحث",
+      "title": "الفلاتر",
       "subject": "المادة",
       "teacher": "المعلم",
       "selectSubject": "اختر المادة",
@@ -432,7 +449,29 @@
       "correct": "صحيح!",
       "incorrect": "خطأ!",
       "pleaseLogin": "يرجى تسجيل الدخول للوصول إلى هذا الاختبار",
-      "redirectingToLogin": "جاري التوجيه إلى صفحة تسجيل الدخول..."
+      "redirectingToLogin": "جاري التوجيه إلى صفحة تسجيل الدخول...",
+      "pleaseAnswerAll": "يرجى الإجابة على جميع الأسئلة قبل الإرسال.",
+      "submitSuccess": "تم إرسال الاختبار بنجاح!",
+      "submitError": "فشل إرسال الاختبار. يرجى المحاولة مرة أخرى.",
+      "results": {
+        "title": "نتائج الاختبار",
+        "totalQuestions": "إجمالي الأسئلة",
+        "correctAnswers": "الإجابات الصحيحة",
+        "incorrectAnswers": "الإجابات الخاطئة",
+        "score": "النتيجة",
+        "percentage": "النسبة المئوية",
+        "goToHome": "العودة إلى الرئيسية",
+        "backToQuiz": "العودة إلى الاختبار",
+        "replayQuiz": "إعادة الاختبار",
+        "loading": "جاري تحميل النتائج...",
+        "error": "فشل تحميل النتائج. يرجى المحاولة مرة أخرى.",
+        "timeSpent": "الوقت المستغرق",
+        "yourAnswer": "إجابتك",
+        "correctAnswer": "الإجابة الصحيحة",
+        "question": "السؤال",
+        "timeSpentOnQuestion": "الوقت: {seconds} ثانية"
+      },
+      "questionsCount": "الأسئلة: {count}"
     }
   },
   "header": {
@@ -451,13 +490,271 @@
       "login": "تسجيل دخول"
     },
     "userMenu": {
+      "home": "الرئيسية",
       "profile": "الملف الشخصي",
       "myQuizzes": "اختباراتي",
+      "dashboard": "لوحة تحكم",
       "logout": "تسجيل الخروج"
     },
     "menu": {
       "openMenu": "فتح القائمة",
       "navigationMenu": "قائمة التنقل"
     }
+  },
+  "sidebar": {
+    "dashboardAccess": "الوصول إلى لوحة التحكم",
+    "classes": "الفصول",
+    "subjects": "المواد",
+    "lessons": "الدروس",
+    "units": "الوحدات",
+    "questions": "الأسئلة",
+    "quizzes": "الاختبارات",
+    "users": "المستخدمون",
+    "mathematics": "الرياضيات",
+    "physics": "الفيزياء",
+    "chemistry": "الكيمياء",
+    "computerScience": "علوم الحاسوب",
+    "students": "الطلاب",
+    "teachers": "المعلمون",
+    "administration": "الإدارة",
+    "projects": "المشاريع",
+    "more": "المزيد"
+  },
+  "qrActivation": {
+    "openDialog": "فتح نافذة تفعيل الاشتراك",
+    "title": "تفعيل الاشتراك",
+    "description": "يمكن التفعيل عن طريق رفع صورة QR أو إدخال كود يدويًا.",
+    "codeLabel": "ادخل الكود",
+    "uploadLabel": "أو ارفع صورة للكود",
+    "cancel": "إلغاء",
+    "activate": "تفعيل"
+  },
+  "dashboard": {
+    "dashboard": {
+      "students": "الطلاب",
+      "teachers": "المعلمون",
+      "quizzes": "الاختبارات",
+      "pointsOfSale": "نقاط البيع",
+      "distribution": "التوزيع",
+      "comparison": "المقارنة",
+      "topStudents": "أفضل الطلاب",
+      "correctAnswers": "الإجابات الصحيحة",
+      "overview": "نظرة عامة"
+    },
+    "common": {
+      "descriptionEntity": "إدارة وعرض جميع {entity} في النظام",
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "addEntity": "إضافة {entity}",
+      "idLabel": "معرف {entity}",
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "description": "الوصف",
+      "areYouSureDelete": "هل أنت متأكد أنك تريد حذف",
+      "thisActionCannotBeUndone": "لا يمكن التراجع عن هذا الإجراء.",
+      "cancel": "إلغاء",
+      "password": "كلمة المرور",
+      "countryCode": "رمز الدولة",
+      "url": "الرابط",
+      "enterFirstName": "أدخل الاسم الأول",
+      "enterLastName": "أدخل الاسم الأخير",
+      "enterEmail": "أدخل عنوان البريد الإلكتروني",
+      "enterPassword": "أدخل كلمة المرور",
+      "enterPhoneNumber": "أدخل رقم الهاتف",
+      "enterDescription": "أدخل الوصف (اختياري)",
+      "enterUrl": "أدخل الرابط (اختياري)",
+      "firstNameRequired": "الاسم الأول مطلوب",
+      "lastNameRequired": "الاسم الأخير مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "invalidEmail": "عنوان بريد إلكتروني غير صحيح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+      "enterNewPassword": "أدخل كلمة المرور الجديدة (اتركها فارغة للاحتفاظ بالحالية)",
+      "pagination": {
+        "showing": "عرض",
+        "to": "إلى",
+        "of": "من",
+        "results": "نتيجة",
+        "perPage": "لكل صفحة",
+        "previous": "السابق",
+        "next": "التالي",
+        "previousAriaLabel": "الانتقال إلى الصفحة السابقة",
+        "nextAriaLabel": "الانتقال إلى الصفحة التالية",
+        "morePages": "المزيد من الصفحات"
+      }
+    },
+    "administration": {
+      "title": "الإدارة",
+      "emptyMessage": "لم يتم العثور على مسؤولين",
+      "deleteTitle": "حذف المسؤول",
+      "createTitle": "إنشاء مسؤول جديد",
+      "createDescription": "املأ المعلومات أدناه لإنشاء مسؤول جديد.",
+      "createButton": "إنشاء مسؤول",
+      "editTitle": "تعديل المسؤول",
+      "editDescription": "قم بتحديث المعلومات أدناه لتعديل هذا المسؤول.",
+      "editButton": "تحديث المسؤول"
+    },
+    "students": {
+      "title": "الطلاب",
+      "emptyMessage": "لم يتم العثور على طلاب",
+      "deleteTitle": "حذف الطالب",
+      "detailsTitle": "تفاصيل الطالب"
+    },
+    "teachers": {
+      "title": "المعلمون",
+      "emptyMessage": "لم يتم العثور على معلمين",
+      "deleteTitle": "حذف المعلم",
+      "numberOfQuizzes": "عدد الاختبارات"
+    },
+    "units": {
+      "title": "الوحدات",
+      "emptyMessage": "لم يتم العثور على وحدات",
+      "deleteTitle": "حذف الوحدة",
+      "subject": "المادة",
+      "createTitle": "إنشاء وحدة جديدة",
+      "createDescription": "املأ المعلومات أدناه لإنشاء وحدة جديدة.",
+      "createButton": "إنشاء وحدة",
+      "editTitle": "تعديل الوحدة",
+      "editDescription": "قم بتحديث معلومات الوحدة أدناه.",
+      "editButton": "حفظ التغييرات",
+      "name": "الاسم",
+      "namePlaceholder": "أدخل اسم الوحدة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل الوصف",
+      "subjectPlaceholder": "اختر المادة",
+      "loadingUnitData": "جاري تحميل بيانات الوحدة...",
+      "nameRequired": "الاسم مطلوب",
+      "subjectRequired": "المادة مطلوبة"
+    },
+    "lessons": {
+      "title": "الدروس",
+      "emptyMessage": "لم يتم العثور على دروس",
+      "deleteTitle": "حذف الدرس",
+      "unit": "الوحدة",
+      "createTitle": "إنشاء درس جديد",
+      "createDescription": "املأ المعلومات أدناه لإنشاء درس جديد.",
+      "createButton": "إنشاء درس",
+      "editTitle": "تعديل الدرس",
+      "editDescription": "قم بتحديث معلومات الدرس أدناه.",
+      "editButton": "حفظ التغييرات",
+      "name": "الاسم",
+      "namePlaceholder": "أدخل اسم الدرس",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل الوصف",
+      "unitPlaceholder": "اختر الوحدة",
+      "loadingLessonData": "جاري تحميل بيانات الدرس...",
+      "nameRequired": "الاسم مطلوب",
+      "unitRequired": "الوحدة مطلوبة",
+      "switchToJson": "التبديل إلى JSON",
+      "switchToForm": "التبديل إلى النموذج",
+      "jsonPlaceholder": "أدخل بيانات JSON",
+      "invalidJson": "تنسيق JSON غير صحيح",
+      "sendAsList": "إرسال كقائمة",
+      "sendAsSingle": "إرسال كعنصر واحد"
+    },
+    "subjects": {
+      "title": "المواد",
+      "emptyMessage": "لم يتم العثور على مواد",
+      "deleteTitle": "حذف المادة",
+      "createTitle": "إنشاء مادة جديدة",
+      "createDescription": "املأ المعلومات أدناه لإنشاء مادة جديدة.",
+      "createButton": "إنشاء مادة",
+      "editTitle": "تعديل المادة",
+      "editDescription": "قم بتحديث المعلومات أدناه لتعديل المادة.",
+      "editButton": "تحديث المادة",
+      "noSubjectsMessage": "لم يتم العثور على مواد",
+      "noSubjectsDescription": "تحتاج إلى إنشاء مادة واحدة على الأقل قبل إنشاء وحدة.",
+      "goToSubjects": "الذهاب إلى المواد",
+      "classes": "الفصول"
+    },
+    "classes": {
+      "title": "الفصول",
+      "emptyMessage": "لم يتم العثور على فصول",
+      "createTitle": "إنشاء فصل جديد",
+      "createDescription": "املأ المعلومات أدناه لإنشاء فصل جديد.",
+      "createButton": "إنشاء فصل",
+      "subjects": "المواد"
+    },
+    "questions": {
+      "title": "الأسئلة",
+      "emptyMessage": "لم يتم العثور على أسئلة",
+      "deleteTitle": "حذف السؤال",
+      "titleLabel": "العنوان",
+      "titlePlaceholder": "أدخل عنوان السؤال",
+      "hint": "تلميح",
+      "hintPlaceholder": "أدخل التلميح",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل الوصف",
+      "lessons": "الدروس",
+      "answers": "الإجابات",
+      "answerTitle": "نص الإجابة",
+      "answerTitlePlaceholder": "أدخل نص الإجابة",
+      "isCorrect": "صحيح",
+      "minAnswers": "يجب أن يكون هناك إجابتان على الأقل",
+      "createTitle": "إنشاء سؤال جديد",
+      "createDescription": "املأ المعلومات أدناه لإنشاء سؤال جديد.",
+      "createButton": "إنشاء سؤال",
+      "editTitle": "تعديل السؤال",
+      "editDescription": "قم بتحديث معلومات السؤال أدناه.",
+      "editButton": "تحديث السؤال",
+      "noLessonsMessage": "لم يتم العثور على دروس. يرجى إنشاء دروس أولاً."
+    }
+  },
+  "form": {
+    "selectPlaceholder": "اختر...",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "submit": "إرسال",
+    "submitting": "جاري الإرسال...",
+    "reset": "إعادة تعيين",
+    "fileUpload": {
+      "dropFilesHere": "أسقط الملفات هنا",
+      "clickToUpload": "انقر للتحميل أو اسحب وأفلت",
+      "acceptedTypes": "الأنواع المقبولة:",
+      "anyFileType": "أي نوع ملف",
+      "maxSize": "الحد الأقصى للحجم:",
+      "maxFiles": "الحد الأقصى للملفات:",
+      "uploadedFiles": "الملفات المرفوعة"
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "minLength": "الحد الأدنى للطول هو {min}",
+      "maxLength": "الحد الأقصى للطول هو {max}",
+      "min": "الحد الأدنى للقيمة هو {min}",
+      "max": "الحد الأقصى للقيمة هو {max}",
+      "pattern": "تنسيق غير صحيح",
+      "email": "عنوان بريد إلكتروني غير صحيح",
+      "selectOption": "يرجى اختيار خيار",
+      "selectAtLeastOne": "يرجى اختيار خيار واحد على الأقل",
+      "selectDate": "يرجى اختيار تاريخ",
+      "selectFile": "يرجى اختيار ملف",
+      "maxFileSize": "يجب أن يكون حجم الملف أقل من {size}",
+      "acceptedFileTypes": "يُسمح فقط بملفات {types}",
+      "maxFiles": "الحد الأقصى للملفات المسموح بها هو {max}"
+    }
+  },
+  "profile": {
+    "title": "معلومات الملف الشخصي",
+    "description": "قم بتحديث معلومات ملفك الشخصي أدناه.",
+    "updateButton": "تحديث الملف الشخصي",
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+    "updateError": "فشل تحديث الملف الشخصي",
+    "passwordTitle": "تغيير كلمة المرور",
+    "passwordDescription": "قم بتحديث كلمة المرور للحفاظ على أمان حسابك.",
+    "oldPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة",
+    "oldPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "confirmPasswordPlaceholder": "أكد كلمة المرور الجديدة",
+    "changePasswordButton": "تغيير كلمة المرور",
+    "passwordChangeSuccess": "تم تغيير كلمة المرور بنجاح",
+    "passwordChangeError": "فشل تغيير كلمة المرور",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "logout": "تسجيل الخروج",
+    "logoutDescription": "تسجيل الخروج من حسابك"
   }
 }
