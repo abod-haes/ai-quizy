@@ -20,3 +20,11 @@ export interface CreateTeacherInput {
   url: string;
   classSubjects: ClassSubject[];
 }
+
+
+export interface TeacherBrief {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+

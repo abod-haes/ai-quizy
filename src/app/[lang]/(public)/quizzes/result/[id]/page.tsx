@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuizResults } from "@/hooks/api/quizes.query";
+import { useQuizResults } from "@/services/quizes.services/quizes.query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageLoading } from "@/components/custom/loading";
@@ -15,7 +15,10 @@ import { cn } from "@/lib/utils";
 import { MathJaxContent } from "@/components/custom/mathjax-content";
 import { AxiosError } from "axios";
 import { ApiError } from "@/types/common.type";
-import type { Question, StudentAnswer } from "@/types/quiz.type";
+import type {
+  Question,
+  StudentAnswer,
+} from "@/services/quizes.services/quiz.type";
 
 export default function QuizResultsPage() {
   const params = useParams();

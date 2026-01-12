@@ -24,6 +24,7 @@ import { useState } from "react";
 import { formatEntityName } from "@/utils/format";
 import { ConfirmDialog } from "@/components/custom/confirm-dialog";
 import { toast } from "sonner";
+import { MathJaxContent } from "@/components/custom/mathjax-content";
 
 const QuestionsPage = () => {
   const [page, setPage] = useState(1);
@@ -74,7 +75,9 @@ const QuestionsPage = () => {
       accessor: "title",
       header: questionsDict.titleLabel,
       render: (value) => (
-        <span className="font-medium">{value ? String(value) : "-"}</span>
+        <span className="font-medium">
+          <MathJaxContent html={String(value)} className="text-base" />
+        </span>
       ),
     },
     {

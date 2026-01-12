@@ -13,9 +13,7 @@ import { useAuthStore } from "@/store/auth.store";
 
 const queryKey = queryKeys.user;
 
-export function useUsers(
-  params?: PartialQueryParams & { Role?: number },
-) {
+export function useUsers(params?: PartialQueryParams & { Role?: number }) {
   return useQuery({
     queryKey: queryKey.getList(params),
     queryFn: () => userService.getUsers(params),
@@ -97,8 +95,11 @@ export function useUpdateProfile() {
   const { setUser } = useAuthStore();
 
   return useMutation({
-    mutationFn: (data: { firstName: string; lastName: string; email: string }) =>
-      userService.updateProfile(data),
+    mutationFn: (data: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    }) => userService.updateProfile(data),
     onSuccess: (updatedUser) => {
       // Update the user in the auth store
       setUser(updatedUser);

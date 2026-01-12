@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import DynamicForm, {
   type FormDefinition,
 } from "@/components/form-render/form-render";
-import { useUser, useAuthStore } from "@/store/auth.store";
+import { useUser, useAuthStore, handleLogout } from "@/store/auth.store";
 import {
   useUpdateProfile,
   useChangePassword,
@@ -29,17 +29,18 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { routesName } from "@/utils/constant";
-import { deleteCookie, myCookies } from "@/utils/cookies";
-import { useQuizzes } from "@/hooks/api/quizes.query";
+import { useQuizzes } from "@/services/quizes.services/quizes.query";
 import { QuizCard } from "@/components/quiz/quiz-card";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ProfilePage() {
   const user = useUser();
-  const { setUser, clearUser } = useAuthStore();
+  const { setUser } = useAuthStore();
   const updateProfile = useUpdateProfile();
   const changePassword = useChangePassword();
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
+  const queryClient = useQueryClient();
   const t = useTranslation();
   const lang = useCurrentLang();
   const direction = getDirection(lang);
@@ -78,11 +79,13 @@ function ProfilePage() {
     );
   }, [user]);
 
-  const handleLogout = async () => {
-    await deleteCookie(myCookies.auth);
-    await deleteCookie(myCookies.user);
-    clearUser();
-    router.push(getLocalizedHref(routesName.home.href));
+  const onLogout = async () => {
+    await handleLogout(
+      router,
+      queryClient,
+      getLocalizedHref,
+      routesName.home.href,
+    );
   };
 
   const profileFormDefinition: FormDefinition = React.useMemo(
@@ -290,7 +293,7 @@ function ProfilePage() {
               </div>
               <Button
                 variant="destructive"
-                onClick={handleLogout}
+                onClick={onLogout}
                 className="gap-2"
               >
                 <LogOut className="size-4" />

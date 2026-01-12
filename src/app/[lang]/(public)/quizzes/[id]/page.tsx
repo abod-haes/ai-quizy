@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuizById, useSubmitQuizResults } from "@/hooks/api/quizes.query";
+import {
+  useQuizById,
+  useSubmitQuizResults,
+} from "@/services/quizes.services/quizes.query";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import { PageLoading } from "@/components/custom/loading";

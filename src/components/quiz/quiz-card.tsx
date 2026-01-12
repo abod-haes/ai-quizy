@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Quiz } from "@/types/quiz.type";
+import { Quiz } from "@/services/quizes.services/quiz.type";
 import { Clock, User, CheckCircle2, Circle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";

@@ -1,11 +1,18 @@
 import { PartialQueryParams } from "@/utils/query-keys";
 import { api } from "../base.service";
 import { END_POINTS } from "@/utils/query-apis";
-import { Teacher, CreateTeacherInput } from "./teacher.type";
-
+import { Teacher, CreateTeacherInput, TeacherBrief } from "./teacher.type";
+ 
 export const teacherServices = {
   async getTeachers(params?: PartialQueryParams) {
     const response = await api.get(END_POINTS.TEACHER.GET_TEACHERS(params));
+    return response.data;
+  },
+
+  async getTeachersBrief(): Promise<TeacherBrief[]> {
+    const response = await api.get<TeacherBrief[]>(
+      END_POINTS.TEACHER.GET_TEACHER_BRIEFS,
+    );
     return response.data;
   },
 

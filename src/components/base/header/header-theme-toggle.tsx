@@ -12,6 +12,8 @@ interface HeaderThemeToggleProps {
   setTheme: (theme: "light" | "dark") => void;
   mounted: boolean;
   variant?: "desktop" | "mobile";
+  title?: string;
+  item?: boolean;
 }
 
 export function HeaderThemeToggle({
@@ -19,10 +21,25 @@ export function HeaderThemeToggle({
   setTheme,
   mounted,
   variant = "desktop",
+  title = "Change Theme",
+  item = false,
 }: HeaderThemeToggleProps) {
   const { header } = useTranslation();
 
   if (!mounted) return null;
+  if (item) {
+    return (
+      <div
+        className="flex cursor-pointer items-center gap-2"
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+      >
+        <span className="text-sm">
+          {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+        </span>
+        <span className="text-sm">{title}</span>
+      </div>
+    );
+  }
 
   if (variant === "mobile") {
     return (
@@ -82,4 +99,3 @@ export function HeaderThemeToggle({
     </motion.div>
   );
 }
-

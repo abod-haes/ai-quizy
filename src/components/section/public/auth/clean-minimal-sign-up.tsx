@@ -13,7 +13,7 @@ import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { getDirection } from "@/utils/translations/language-utils";
 import { Input } from "@/components/ui/input";
-import { useRegister } from "@/hooks/api/auth.query";
+import { useRegister } from "@/services/auth.services/auth.query";
 import { setCookie } from "@/utils/cookies";
 import { myCookies } from "@/utils/cookies";
 import { routesName } from "@/utils/constant";

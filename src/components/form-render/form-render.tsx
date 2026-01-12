@@ -20,8 +20,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { X, Upload, File, Image, FileText, Music, Video } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  X,
+  Upload,
+  File,
+  Image,
+  FileText,
+  Music,
+  Video,
+  ChevronDown,
+  Check,
+} from "lucide-react";
 import { useTranslation } from "@/providers/TranslationsProvider";
+import { cn } from "@/lib/utils";
 // @ts-expect-error - react-select-country-list doesn't have type definitions
 import countryList from "react-select-country-list";
 
@@ -78,6 +94,7 @@ export type FieldDefinition = {
   };
   fields?: FieldDefinition[];
   visibleIf?: { field: string; value: any };
+  addButtonLabel?: string; // Custom label for array "Add" button
 };
 
 export type FormDefinition = {
@@ -812,36 +829,84 @@ function FieldRenderer({
               const selectedValues = Array.isArray(ctrlField.value)
                 ? ctrlField.value
                 : [];
+              const availableOptions = asyncOptions || options || [];
+
+              // Get selected option labels for display
+              const selectedLabels = availableOptions
+                .filter((o) => selectedValues.includes(String(o.value)))
+                .map((o) => o.label);
+
+              const displayText =
+                selectedLabels.length > 0
+                  ? selectedLabels.join(", ")
+                  : field.placeholder || "Select options...";
+
               return (
-                <div className="space-y-2">
-                  {(asyncOptions || options).map((o) => {
-                    const value = String(o.value);
-                    const isChecked = selectedValues.includes(value);
-                    return (
-                      <div key={value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`${field.key}-${value}`}
-                          checked={isChecked}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              ctrlField.onChange([...selectedValues, value]);
-                            } else {
-                              ctrlField.onChange(
-                                selectedValues.filter((v) => v !== value),
-                              );
-                            }
-                          }}
-                        />
-                        <Label
-                          htmlFor={`${field.key}-${value}`}
-                          className="text-sm font-normal"
-                        >
-                          {o.label}
-                        </Label>
-                      </div>
-                    );
-                  })}
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between",
+                        !selectedValues.length && "text-muted-foreground",
+                      )}
+                    >
+                      <span className="truncate">{displayText}</span>
+                      <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="min-w-[200px] p-0" align="start">
+                    <div className="max-h-[300px] overflow-y-auto p-1">
+                      {availableOptions.length === 0 ? (
+                        <div className="text-muted-foreground px-2 py-1.5 text-sm">
+                          No options available
+                        </div>
+                      ) : (
+                        availableOptions.map((o) => {
+                          const value = String(o.value);
+                          const isChecked = selectedValues.includes(value);
+                          return (
+                            <div
+                              key={value}
+                              className={cn(
+                                "hover:bg-accent hover:text-accent-foreground relative flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none",
+                                isChecked && "bg-accent",
+                              )}
+                              onClick={() => {
+                                if (isChecked) {
+                                  ctrlField.onChange(
+                                    selectedValues.filter((v) => v !== value),
+                                  );
+                                } else {
+                                  ctrlField.onChange([
+                                    ...selectedValues,
+                                    value,
+                                  ]);
+                                }
+                              }}
+                            >
+                              <div className="flex flex-1 items-center gap-2">
+                                <div
+                                  className={cn(
+                                    "border-primary flex h-4 w-4 items-center justify-center rounded-sm border",
+                                    isChecked
+                                      ? "bg-primary text-primary-foreground"
+                                      : "opacity-50",
+                                  )}
+                                >
+                                  {isChecked && <Check className="h-3 w-3" />}
+                                </div>
+                                <span>{o.label}</span>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               );
             }}
           />
@@ -923,7 +988,7 @@ function FieldRenderer({
                 )
               }
             >
-              {formDict?.add || "Add"}
+              {field.addButtonLabel || formDict?.add || "Add"}
             </Button>
           </div>
         </div>
@@ -970,9 +1035,19 @@ function FieldRenderer({
 export default function DynamicForm({
   definition,
   onSubmit,
+  formRef,
+  customFieldRenderers,
 }: {
   definition: FormDefinition;
   onSubmit: (data: Record<string, unknown>) => Promise<void> | void;
+  formRef?: React.MutableRefObject<{
+    setValue: (name: string, value: unknown) => void;
+    getValues: () => Record<string, unknown>;
+  } | null>;
+  customFieldRenderers?: Record<
+    string,
+    (props: { after?: boolean }) => React.ReactNode
+  >;
 }) {
   const { form: formDict } = useTranslation();
   const zodSchema = useMemo(
@@ -996,12 +1071,33 @@ export default function DynamicForm({
     [definition.fields],
   );
 
-  const { control, register, handleSubmit, watch, formState, reset } = useForm({
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    formState,
+    reset,
+    setValue,
+    getValues,
+  } = useForm({
     resolver: zodResolver(zodSchema),
     defaultValues,
     mode: "onBlur", // Only validate on blur to reduce re-renders while typing
     reValidateMode: "onBlur", // Re-validate on blur instead of onChange
   });
+
+  // Expose form methods via ref if provided
+  React.useEffect(() => {
+    if (formRef) {
+      formRef.current = {
+        setValue: (name: string, value: unknown) => {
+          setValue(name, value as any, { shouldDirty: true });
+        },
+        getValues: () => getValues(),
+      };
+    }
+  }, [formRef, setValue, getValues]);
 
   // Reset form when defaultValues change (for edit scenarios)
   const prevDefaultValuesRef = React.useRef(defaultValues);
@@ -1032,14 +1128,16 @@ export default function DynamicForm({
       )}
 
       {definition.fields.map((f) => (
-        <FieldRenderer
-          key={f.key}
-          field={f}
-          control={control}
-          register={register}
-          watch={watch}
-          errors={errors}
-        />
+        <React.Fragment key={f.key}>
+          <FieldRenderer
+            field={f}
+            control={control}
+            register={register}
+            watch={watch}
+            errors={errors}
+          />
+          {customFieldRenderers?.[f.key]?.({ after: true })}
+        </React.Fragment>
       ))}
 
       <div className="mt-6 flex gap-3">

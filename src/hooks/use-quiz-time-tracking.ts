@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Question } from "@/types/quiz.type";
+import type { Question } from "@/services/quizes.services/quiz.type";
 
 interface UseQuizTimeTrackingProps {
   questions?: Question[];
@@ -57,8 +57,7 @@ export function useQuizTimeTracking({
     }
 
     // Calculate initial time
-    const previousTime =
-      questionTimeSpentRef.current[currentQuestion.id] || 0;
+    const previousTime = questionTimeSpentRef.current[currentQuestion.id] || 0;
     const initialTimeSpent = Math.floor((Date.now() - startTime) / 1000);
     setCurrentTimeSpent(previousTime + initialTimeSpent);
 
@@ -114,4 +113,3 @@ export function useQuizTimeTracking({
     getTimeSpent,
   };
 }
-

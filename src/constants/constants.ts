@@ -7,6 +7,7 @@ import {
   FileQuestion,
   Users,
   School,
+  Newspaper,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -74,15 +75,15 @@ export const data = {
       url: dashboardRoutesName.units.href,
       icon: Folder,
     },
-    // {
-    //   title: "Questions",
-    //   url: dashboardRoutesName.questions.href,
-    //   icon: FileQuestion,
-    // },
+    {
+      title: "Questions",
+      url: dashboardRoutesName.questions.href,
+      icon: FileQuestion,
+    },
     {
       title: "Quizzes",
       url: dashboardRoutesName.quizzes.href,
-      icon: FileQuestion,
+      icon: Newspaper,
     },
     {
       title: "Users",

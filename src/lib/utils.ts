@@ -22,3 +22,15 @@ export function buildQueryString(
   const queryString = searchParams.toString();
   return queryString ? `?${queryString}` : "";
 }
+export function htmlToPlainText(html: string) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  // Convert MathLm tags to their inner text
+  doc.querySelectorAll("MathLm").forEach((node) => {
+    const text = node.textContent;
+    node.replaceWith(text);
+  });
+
+  return doc.body.textContent.trim();
+}

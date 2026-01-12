@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, Suspense } from "react";
-import { useQuizzes } from "@/hooks/api/quizes.query";
-import { useTeacherBriefs } from "@/hooks/api/teachers.query";
-import { useSubjectBriefs } from "@/hooks/api/subjects.query";
+import { useQuizzes } from "@/services/quizes.services/quizes.query";
+import { useTeachersBrief } from "@/services/teacher.services/teacher.query";
+import { useSubjectsBrief } from "@/services/subject.services/subject.query";
 import { useSearchParamsState } from "@/hooks/useSearchParams";
 import { QuizCard } from "@/components/quiz/quiz-card";
 import { Button } from "@/components/ui/button";
@@ -36,8 +36,8 @@ function QuizzesPageContent() {
   const searchParamsKey = searchParams.toString();
   const userId = useAuthStore((state) => state.user?.id);
   // Fetch all data using hooks
-  const { data: teacherBriefs } = useTeacherBriefs();
-  const { data: subjectBriefs } = useSubjectBriefs();
+  const { data: teacherBriefs } = useTeachersBrief();
+  const { data: subjectBriefs } = useSubjectsBrief();
   const { quizzes: quizzesDict } = useTranslation();
 
   const { data, isLoading, error, refetch } = useQuizzes(

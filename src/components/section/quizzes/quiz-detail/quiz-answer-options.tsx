@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { MathJaxContent } from "@/components/custom/mathjax-content";
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Question } from "@/types/quiz.type";
+import type { Question } from "@/services/quizes.services/quiz.type";
 
 interface QuizAnswerOptionsProps {
   question: Question;

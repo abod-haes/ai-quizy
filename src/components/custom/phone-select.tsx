@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "@/providers/TranslationsProvider";
 
 // Country calling codes mapping (common countries)
 export const COUNTRY_CALLING_CODES: Record<string, string> = {
@@ -99,8 +100,8 @@ export function PhoneSelect({
   onCountryCodeChange,
   onPhoneNumberChange,
   placeholder,
-  countryCodePlaceholder = "Country",
-  phoneNumberPlaceholder = "Phone number",
+  countryCodePlaceholder,
+  phoneNumberPlaceholder,
   className,
   disabled = false,
   error = false,
@@ -108,6 +109,8 @@ export function PhoneSelect({
   const lang = useCurrentLang();
   const direction = getDirection(lang);
   const isRTL = direction === "rtl";
+  const { dashboard } = useTranslation();
+  const common = dashboard?.common || {};
 
   const [countryCode, setCountryCode] = React.useState<string>(
     value?.countryCode || "SY",
@@ -117,8 +120,34 @@ export function PhoneSelect({
   );
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   const countryOptions = React.useMemo(() => countryList().getData(), []);
+  
+  // Get current country name
+  const currentCountry = React.useMemo(() => {
+    return countryOptions.find(
+      (country: { value: string }) => country.value === countryCode,
+    ) || { label: "", value: countryCode };
+  }, [countryOptions, countryCode]);
+
+  // Maintain focus on search input when select opens
+  React.useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      // Small delay to ensure the input is rendered
+      const timer = setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Maintain focus after search query changes
+  React.useLayoutEffect(() => {
+    if (isOpen && searchInputRef.current && document.activeElement !== searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchQuery, isOpen]);
 
   // Filter countries based on search query
   const filteredCountries = React.useMemo(() => {
@@ -172,6 +201,10 @@ export function PhoneSelect({
   );
 
   const callingCode = COUNTRY_CALLING_CODES[countryCode] || "+1";
+  const defaultCountryPlaceholder = common.countryCode || "Country Code";
+  const defaultPhonePlaceholder = common.phoneNumber || "Phone Number";
+  const searchPlaceholder = lang === "ar" ? "البحث عن دولة..." : "Search country...";
+  const noCountriesFound = lang === "ar" ? "لم يتم العثور على دول" : "No countries found";
 
   return (
     <div
@@ -193,29 +226,89 @@ export function PhoneSelect({
           }}
           disabled={disabled}
           open={isOpen}
-          onOpenChange={setIsOpen}
+          onOpenChange={(open) => {
+            setIsOpen(open);
+            if (!open) {
+              setSearchQuery("");
+            }
+          }}
         >
-          <SelectTrigger className={cn("w-[120px]")} aria-invalid={error}>
-            <SelectValue placeholder={countryCodePlaceholder}>
+          <SelectTrigger 
+            className={cn(
+              "w-[140px] px-3 py-2 [&[data-size=default]]:py-2",
+              error && "border-destructive aria-invalid:border-destructive"
+            )} 
+            aria-invalid={error}
+            size="default"
+          >
+            <SelectValue placeholder={countryCodePlaceholder || defaultCountryPlaceholder}>
               <span className="flex items-center gap-1.5">
-                <span className="text-base">{getCountryFlag(countryCode)}</span>
+                <span className="text-base leading-none">{getCountryFlag(countryCode)}</span>
                 <span className="text-xs font-medium">{callingCode}</span>
               </span>
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="p-0">
             {/* Search Input */}
-            <div className="bg-popover sticky top-0 z-10 border-b p-2">
+            <div 
+              className="bg-popover sticky top-0 z-10 border-b p-2"
+              data-search-input
+              onMouseDown={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <div className="relative">
-                <Search className="text-muted-foreground absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2" />
+                <Search className={cn(
+                  "text-muted-foreground absolute top-1/2 h-4 w-4 -translate-y-1/2",
+                  isRTL ? "right-2" : "left-2"
+                )} />
                 <Input
+                  ref={searchInputRef}
                   type="text"
-                  placeholder="Search country..."
+                  placeholder={searchPlaceholder}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-8 pr-2 pl-8 text-sm"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => e.stopPropagation()}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    setSearchQuery(e.target.value);
+                  }}
+                  onFocus={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onBlur={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    // Maintain focus on the input
+                    setTimeout(() => {
+                      searchInputRef.current?.focus();
+                    }, 0);
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    // Prevent Enter key from closing the select
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                    // Prevent Escape from closing if there's text
+                    if (e.key === "Escape" && searchQuery) {
+                      e.stopPropagation();
+                      setSearchQuery("");
+                      searchInputRef.current?.focus();
+                    }
+                  }}
+                  className={cn(
+                    "h-8 text-sm",
+                    isRTL ? "pr-8 pl-2" : "pr-2 pl-8"
+                  )}
                 />
               </div>
             </div>
@@ -230,13 +323,16 @@ export function PhoneSelect({
                     return (
                       <SelectItem key={code} value={code}>
                         <span className="flex items-center gap-2">
-                          <span className="text-base">
+                          <span className="text-base leading-none">
                             {getCountryFlag(code)}
+                          </span>
+                          <span className="flex-1 truncate text-sm">
+                            {option.label}
                           </span>
                           <span
                             className={cn(
                               "text-xs font-medium",
-                              isSelected ? "text-primary" : "text-foreground",
+                              isSelected ? "text-primary" : "text-muted-foreground",
                             )}
                           >
                             {codeCallingCode}
@@ -248,7 +344,7 @@ export function PhoneSelect({
                 )
               ) : (
                 <div className="text-muted-foreground px-2 py-4 text-center text-sm">
-                  No countries found
+                  {noCountriesFound}
                 </div>
               )}
             </div>
@@ -262,7 +358,7 @@ export function PhoneSelect({
           type="tel"
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
-          placeholder={phoneNumberPlaceholder || placeholder}
+          placeholder={phoneNumberPlaceholder || placeholder || defaultPhonePlaceholder}
           startIcon={<Phone className="h-5 w-5" />}
           disabled={disabled}
           inputMode="numeric"

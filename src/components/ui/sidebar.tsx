@@ -20,7 +20,7 @@ import {
 import { useSidebarStore } from "@/store/sidebar.store";
 
 const SIDEBAR_WIDTH = "15rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
+const SIDEBAR_WIDTH_ICON = "4rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 type SidebarContextProps = {

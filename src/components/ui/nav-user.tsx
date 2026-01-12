@@ -20,12 +20,15 @@ import {
 } from "@/components/ui/sidebar";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
-import { useUser, useAuthStore } from "@/store/auth.store";
+import { useUser, handleLogout } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { routesName } from "@/utils/constant";
-import { deleteCookie, myCookies } from "@/utils/cookies";
 import { useTranslation } from "@/providers/TranslationsProvider";
+import { useQueryClient } from "@tanstack/react-query";
+import { HeaderThemeToggle } from "../base/header";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -35,9 +38,16 @@ export function NavUser() {
   const user = useUser();
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
-  const clearUser = useAuthStore((state) => state.clearUser);
+  const queryClient = useQueryClient();
   const { header } = useTranslation();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
+  const isDark = resolvedTheme === "dark";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   // Get user data or use fallback
   const userName = user
     ? `${user.firstName} ${user.lastName}`.trim() || user.email
@@ -50,11 +60,13 @@ export function NavUser() {
       "U"
     : "U";
 
-  const handleLogout = async () => {
-    await deleteCookie(myCookies.auth);
-    await deleteCookie(myCookies.user);
-    clearUser();
-    router.push(getLocalizedHref(routesName.home.href));
+  const onLogout = async () => {
+    await handleLogout(
+      router,
+      queryClient,
+      getLocalizedHref,
+      routesName.home.href,
+    );
   };
 
   return (
@@ -134,11 +146,20 @@ export function NavUser() {
                   {header.userMenu?.profile || "Profile"}
                 </span>
               </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer gap-2 ltr:flex-row rtl:flex-row-reverse">
+                <HeaderThemeToggle
+                  isDark={isDark}
+                  setTheme={setTheme}
+                  mounted={mounted}
+                  variant="desktop"
+                  item={true}
+                />
+              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive focus:text-destructive cursor-pointer gap-2 ltr:flex-row rtl:flex-row-reverse"
-              onClick={handleLogout}
+              onClick={onLogout}
             >
               <LogOut className="h-4 w-4 shrink-0" />
               <span className="text-sm">

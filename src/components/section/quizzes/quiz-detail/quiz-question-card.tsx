@@ -3,7 +3,7 @@
 import React from "react";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { MathJaxContent } from "@/components/custom/mathjax-content";
-import type { Question } from "@/types/quiz.type";
+import type { Question } from "@/services/quizes.services/quiz.type";
 import { QuizTimeDisplay } from "./quiz-time-display";
 
 interface QuizQuestionCardProps {

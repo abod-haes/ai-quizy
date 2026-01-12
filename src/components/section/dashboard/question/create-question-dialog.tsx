@@ -237,7 +237,9 @@ export function CreateQuestionDialog({
               "Add a new question to the system"}
           </DialogDescription>
         </DialogHeader>
-        <DynamicForm definition={formDefinition} onSubmit={handleSubmit} />
+        <div className={cn("max-h-[70vh] overflow-y-auto", "rtl:text-start")}>
+          <DynamicForm definition={formDefinition} onSubmit={handleSubmit} />
+        </div>
       </DialogContent>
     </Dialog>
   );

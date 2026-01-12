@@ -17,7 +17,7 @@ import {
   PhoneSelect,
   COUNTRY_CALLING_CODES,
 } from "@/components/custom/phone-select";
-import { useLogin } from "@/hooks/api/auth.query";
+import { useLogin } from "@/services/auth.services/auth.query";
 import { setCookie } from "@/utils/cookies";
 import { myCookies } from "@/utils/cookies";
 import { routesName, dashboardRoutesName } from "@/utils/constant";

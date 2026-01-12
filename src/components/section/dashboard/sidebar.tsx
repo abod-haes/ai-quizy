@@ -16,6 +16,7 @@ import Image from "next/image";
 import { NavMain } from "../../ui/nav-main";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
+import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = useCurrentLang();
@@ -31,19 +32,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       dir={direction}
       className="relative ltr:border-r rtl:border-l"
     >
-      <SidebarHeader className="flex flex-row items-center justify-center gap-2 p-4 sm:p-2">
-        <Image
-          src="/images/logo-light.png"
-          alt="logo"
-          width={35}
-          height={35}
-          className="shrink-0"
-        />
-        {!isCollapsed && (
-          <p className="from-primary to-primary/70 relative z-10 mt-1 bg-gradient-to-br bg-clip-text text-3xl font-bold text-transparent">
-            Quizy
-          </p>
-        )}
+      <SidebarHeader>
+        <Link
+          href={"/"}
+          className="flex flex-row items-center justify-start gap-1 ps-1"
+        >
+          <Image
+            src="/images/logo-light.png"
+            alt="logo"
+            width={40}
+            height={40}
+            className="shrink-0"
+          />
+          {!isCollapsed && (
+            <p className="from-primary to-primary/70 relative z-10 mt-1 bg-gradient-to-br bg-clip-text text-3xl font-bold text-transparent">
+              Quizy
+            </p>
+          )}
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

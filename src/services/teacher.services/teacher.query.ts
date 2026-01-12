@@ -5,10 +5,17 @@ import { CreateTeacherInput } from "./teacher.type";
 
 const queryKey = queryKeys.teacher;
 
-export function useTeacchers(params?: PartialQueryParams) {
+export function useTeachers(params?: PartialQueryParams) {
   return useQuery({
     queryKey: queryKey.getList(params),
     queryFn: () => teacherServices.getTeachers(params),
+  });
+}
+
+export function useTeachersBrief() {
+  return useQuery({
+    queryKey: queryKey.getBriefs(),
+    queryFn: () => teacherServices.getTeachersBrief(),
   });
 }
 
@@ -20,7 +27,9 @@ export function useCreateTeacher() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         predicate: (query) => {
-          return query.queryKey[0] === "teacher" && query.queryKey[1] === "list";
+          return (
+            query.queryKey[0] === "teacher" && query.queryKey[1] === "list"
+          );
         },
       });
     },
@@ -35,7 +44,9 @@ export function useUpdateTeacher(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         predicate: (query) => {
-          return query.queryKey[0] === "teacher" && query.queryKey[1] === "list";
+          return (
+            query.queryKey[0] === "teacher" && query.queryKey[1] === "list"
+          );
         },
       });
       queryClient.invalidateQueries({ queryKey: queryKey.detail(id) });
@@ -50,7 +61,9 @@ export function useDeleteTeacher(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         predicate: (query) => {
-          return query.queryKey[0] === "teacher" && query.queryKey[1] === "list";
+          return (
+            query.queryKey[0] === "teacher" && query.queryKey[1] === "list"
+          );
         },
       });
       queryClient.invalidateQueries({ queryKey: queryKey.detail(id) });

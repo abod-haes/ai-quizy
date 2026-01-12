@@ -8,3 +8,9 @@ export interface CreateSubjectInput {
   classIds?: string[];
 }
 
+
+export interface SubjectBrief {
+  id: string;
+  name: string;
+}
+

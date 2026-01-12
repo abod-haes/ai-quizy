@@ -22,7 +22,7 @@ import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { getDirection } from "@/utils/translations/language-utils";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useTranslation } from "@/providers/TranslationsProvider";
-import { useSubjectBriefs } from "@/hooks/api/subjects.query";
+import { useSubjectsBrief } from "@/services/subject.services/subject.query";
 import { dashboardRoutesName } from "@/utils/constant";
 import { Loading } from "@/components/custom/loading";
 import type { NavMainItem } from "@/constants/constants";
@@ -38,7 +38,7 @@ export function NavMain({ items }: { items: NavMainItem[] }) {
   const isRTL = direction === "rtl";
   const getLocalizedHref = useLocalizedHref();
   const { sidebar: sidebarDict } = useTranslation();
-  const { data: subjects, isLoading: isLoadingSubjects } = useSubjectBriefs();
+  const { data: subjects, isLoading: isLoadingSubjects } = useSubjectsBrief();
   const { isLinkActive } = useActiveLink();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -257,48 +257,55 @@ export function NavMain({ items }: { items: NavMainItem[] }) {
         className={cn(
           "group/menu-item relative",
           !isCollapsedProp && hasItems && "group/collapsible",
+          isCollapsedProp && "my-2",
         )}
         onMouseEnter={() => hasItems && isCollapsedProp && setIsHovered(true)}
         onMouseLeave={() => isCollapsedProp && setIsHovered(false)}
       >
         {hasUrl && !hasItems ? (
-          <SidebarMenuButton
-            asChild
-            isActive={isItemActive}
-            tooltip={translatedTitle}
-            className={cn(
-              "hover:bg-primary/10 hover:text-primary flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors duration-200 ltr:text-start rtl:flex-row-reverse rtl:text-right",
-              isItemActive && "bg-primary/20 text-primary font-medium",
-            )}
-          >
-            <a href={item.url ? getLocalizedHrefProp(item.url) : "#"}>
-              {item.icon && (
-                <item.icon
-                  className={cn(
-                    "h-10 w-10 shrink-0 transition-colors duration-200",
-                    isItemActive && "text-primary",
-                  )}
-                />
+          <div className="flex items-center justify-center">
+            <SidebarMenuButton
+              asChild
+              size={"lg"}
+              isActive={isItemActive}
+              tooltip={translatedTitle}
+              className={cn(
+                "hover:bg-primary/10 hover:text-primary flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-200 ltr:text-start rtl:flex-row-reverse rtl:text-right",
+                isItemActive && "bg-primary/20 text-primary font-medium",
               )}
-              <span
-                className={cn(
-                  "flex-1 text-sm transition-colors duration-200 sm:text-base",
-                  isItemActive && "text-primary font-medium",
+            >
+              <a href={item.url ? getLocalizedHrefProp(item.url) : "#"}>
+                {item.icon && (
+                  <item.icon
+                    className={cn(
+                      "h-7! w-7! shrink-0 transition-colors duration-200",
+                      isItemActive && "text-primary",
+                      isCollapsedProp && "h-7! w-7!",
+                    )}
+                    strokeWidth={1}
+                  />
                 )}
-              >
-                {translatedTitle}
-              </span>
-            </a>
-          </SidebarMenuButton>
+                <span
+                  className={cn(
+                    "flex-1 text-sm transition-colors duration-200 sm:text-base",
+                    isItemActive && "text-primary font-medium",
+                  )}
+                >
+                  {translatedTitle}
+                </span>
+              </a>
+            </SidebarMenuButton>
+          </div>
         ) : isCollapsedProp && hasItems ? (
           // Collapsed sidebar: show hover menu
           <>
-            <div ref={triggerRef}>
+            <div ref={triggerRef} className="flex items-center justify-center">
               <SidebarMenuButton
+                size={"lg"}
                 tooltip={undefined}
                 isActive={isItemActive || isChildActive}
                 className={cn(
-                  "hover:bg-primary/10 group-hover/menu-item:bg-primary/20 group-hover/menu-item:text-primary flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors duration-200 ltr:text-start rtl:flex-row-reverse rtl:text-right",
+                  "hover:bg-primary/10 group-hover/menu-item:bg-primary/20 group-hover/menu-item:text-primary flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-200 ltr:text-start rtl:flex-row-reverse rtl:text-right",
                   (isItemActive || isChildActive) &&
                     "bg-primary/20 text-primary",
                 )}
@@ -306,9 +313,11 @@ export function NavMain({ items }: { items: NavMainItem[] }) {
                 {item.icon && (
                   <item.icon
                     className={cn(
-                      "group-hover/menu-item:text-primary size-10 h-5 w-5 shrink-0 transition-colors duration-200",
+                      "group-hover/menu-item:text-primary h-7! w-7! shrink-0 transition-colors duration-200",
                       (isItemActive || isChildActive) && "text-primary",
+                      isCollapsedProp && "h-7! w-7!",
                     )}
+                    strokeWidth={1}
                   />
                 )}
                 <span
@@ -396,11 +405,13 @@ export function NavMain({ items }: { items: NavMainItem[] }) {
                 {item.icon && (
                   <item.icon
                     className={cn(
-                      "group-hover/collapsible:text-primary group-data-[state=open]/collapsible:text-primary size-10 h-5 w-5 shrink-0 transition-colors duration-200",
+                      "group-hover/collapsible:text-primary group-data-[state=open]/collapsible:text-primary size-10 h-7! w-7! shrink-0 transition-colors duration-200",
                       (isItemActive || isChildActive) && "text-primary",
                     )}
+                    strokeWidth={1}
                   />
                 )}
+
                 <span
                   className={cn(
                     "group-hover/collapsible:text-primary flex-1 text-sm transition-colors duration-200 sm:text-base",

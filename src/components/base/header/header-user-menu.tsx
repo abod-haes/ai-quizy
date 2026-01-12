@@ -13,13 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore, handleLogout } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { dashboardRoutesName, routesName } from "@/utils/constant";
-import { deleteCookie } from "@/utils/cookies";
-import { myCookies } from "@/utils/cookies";
 import { useTranslation } from "@/providers/TranslationsProvider";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { SheetClose } from "@/components/ui/sheet";
 import { roleType } from "@/utils/enum/common.enum";
@@ -29,18 +28,15 @@ interface HeaderUserMenuProps {
 }
 
 export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
-  const clearUser = useAuthStore((state) => state.clearUser);
   const user = useAuthStore((state) => state.user);
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
+  const queryClient = useQueryClient();
   const { header } = useTranslation();
   if (!user) return null;
 
-  const handleLogout = async () => {
-    await deleteCookie(myCookies.auth);
-    await deleteCookie(myCookies.user);
-    clearUser();
-    router.push(getLocalizedHref(routesName.home.href));
+  const onLogout = async () => {
+    await handleLogout(router, queryClient, getLocalizedHref, routesName.home.href);
   };
 
   const getInitials = () => {
@@ -106,7 +102,7 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
           <Button
             variant="destructive"
             className="w-full"
-            onClick={handleLogout}
+            onClick={onLogout}
           >
             <LogOut className="mr-2 h-4 w-4" />
             {header.userMenu?.logout}
@@ -162,7 +158,7 @@ export function HeaderUserMenu({ variant = "desktop" }: HeaderUserMenuProps) {
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} variant="destructive">
+        <DropdownMenuItem onClick={onLogout} variant="destructive">
           <LogOut className="mr-2 h-4 w-4" />
           <span>{header.userMenu?.logout}</span>
         </DropdownMenuItem>

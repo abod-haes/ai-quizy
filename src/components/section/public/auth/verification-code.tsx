@@ -10,7 +10,7 @@ import { Button } from "../../../ui/button";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { getDirection } from "@/utils/translations/language-utils";
-import { useVerifyCode } from "@/hooks/api/auth.query";
+import { useVerifyCode } from "@/services/auth.services/auth.query";
 import { routesName, dashboardRoutesName } from "@/utils/constant";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { setCookie } from "@/utils/cookies";
@@ -32,7 +32,7 @@ const VerificationCodeForm = () => {
   const phoneNumber = searchParams.get("phoneNumber");
   const email = searchParams.get("email");
 
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [code, setCode] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -53,7 +53,7 @@ const VerificationCodeForm = () => {
     setError("");
 
     // Auto-focus next input
-    if (value && index < 5) {
+    if (value && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -69,22 +69,22 @@ const VerificationCodeForm = () => {
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").slice(0, 6);
-    if (/^\d{1,6}$/.test(pastedData)) {
+    const pastedData = e.clipboardData.getData("text").slice(0, 4);
+    if (/^\d{1,4}$/.test(pastedData)) {
       const newCode = [...code];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 4; i++) {
         newCode[i] = pastedData[i] || "";
       }
       setCode(newCode);
       // Focus the last filled input or the last input
-      const lastIndex = Math.min(pastedData.length - 1, 5);
+      const lastIndex = Math.min(pastedData.length - 1, 3);
       inputRefs.current[lastIndex]?.focus();
     }
   };
 
   const handleSubmit = async () => {
     const verificationCode = code.join("");
-    if (verificationCode.length !== 6) {
+    if (verificationCode.length !== 4) {
       setError(translations.errors.invalidCode);
       return;
     }
@@ -122,19 +122,22 @@ const VerificationCodeForm = () => {
         if (errorData) {
           // Build error message with title and detail only
           const errorParts: string[] = [];
-          
+
           if (errorData.title) {
             errorParts.push(errorData.title);
           }
-          
+
           if (errorData.detail) {
             errorParts.push(errorData.detail);
           }
 
           // If we have both title and detail, join them
-          const errorMessage = errorParts.length > 0 
-            ? errorParts.join(" - ")
-            : errorData.title || translations.errors.verificationFailed || "Verification failed";
+          const errorMessage =
+            errorParts.length > 0
+              ? errorParts.join(" - ")
+              : errorData.title ||
+                translations.errors.verificationFailed ||
+                "Verification failed";
 
           setError(errorMessage);
         } else {
@@ -201,7 +204,7 @@ const VerificationCodeForm = () => {
         )}
 
         <div className="relative z-10 mb-4 flex w-full flex-col gap-4">
-          {/* 6-digit code inputs */}
+          {/* 4-digit code inputs */}
           <div className="flex justify-center gap-2" dir={"ltr"}>
             {code.map((digit, index) => (
               <input
@@ -231,7 +234,7 @@ const VerificationCodeForm = () => {
           <Button
             onClick={handleSubmit}
             className="w-full"
-            disabled={verifyMutation.isPending || code.join("").length !== 6}
+            disabled={verifyMutation.isPending || code.join("").length !== 4}
           >
             {verifyMutation.isPending ? (
               <>

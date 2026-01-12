@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/section/dashboard/page-header";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import {
   useCreateTeacher,
-  useTeacchers,
+  useTeachers,
   useUpdateTeacher,
   useDeleteTeacher,
 } from "@/services/teacher.services/teacher.query";
@@ -36,7 +36,7 @@ const TeachersPage = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   const router = useRouter();
-  const { data, isLoading } = useTeacchers({ page, PerPage: pageSize });
+  const { data, isLoading } = useTeachers({ page, PerPage: pageSize });
   const createTeacher = useCreateTeacher();
   const updateTeacher = useUpdateTeacher(selectedTeacher?.id || "");
   const deleteTeacher = useDeleteTeacher(selectedTeacher?.id || "");
