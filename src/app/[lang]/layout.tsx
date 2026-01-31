@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import ReactQueryProvider from "@/providers/QueryProvider";
 import { TranslationsProvider } from "@/providers/TranslationsProvider";
 
-import { arFont, enFont } from "@/lib/fonts";
+import { appFont } from "@/lib/fonts";
 import { getDirection } from "@/utils/translations/language-utils";
 import {
   getDictionary,
@@ -54,11 +54,13 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const { lang } = await params;
   const translations = await getDictionary(lang);
-  const fontClass = lang == "ar" ? arFont.className : enFont.className;
 
   return (
     <html lang={lang} dir={getDirection(lang)} suppressHydrationWarning>
-      <body className={`${fontClass} antialiased`} suppressHydrationWarning>
+      <body
+        className={`${appFont.className} antialiased`}
+        suppressHydrationWarning
+      >
         {/* MathJax v3 Configuration */}
         <Script
           id="MathJax-config"
@@ -103,7 +105,10 @@ export default async function RootLayout({
                   },
                 }}
               >
-                <NextTopLoader color="var(--color-primary)" showSpinner={false} />
+                <NextTopLoader
+                  color="var(--color-primary)"
+                  showSpinner={false}
+                />
                 <Toaster
                   position={lang == "ar" ? "bottom-left" : "bottom-right"}
                   toastOptions={{
@@ -111,7 +116,7 @@ export default async function RootLayout({
                       fontSize: "0.875rem",
                       textAlign: "start",
                     },
-                    className: `antialiased ${fontClass}`,
+                    className: `antialiased ${appFont.className}`,
                   }}
                 />
                 <AuthProvider>{children}</AuthProvider>

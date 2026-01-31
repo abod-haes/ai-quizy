@@ -31,23 +31,24 @@ export async function handleLogout(
   getLocalizedHref?: (path: string) => string,
   homePath: string = "/",
 ) {
-  // Delete cookies
-  await deleteCookie(myCookies.auth);
-  await deleteCookie(myCookies.user);
-  
-  // Clear auth store
+  // Clear auth store first
   useAuthStore.getState().clearUser();
   
-  // Invalidate user query cache if queryClient is provided
+  // Remove user queries from cache instead of invalidating (to prevent refetch)
   if (queryClient) {
-    queryClient.invalidateQueries({
+    // Remove current user query from cache
+    queryClient.removeQueries({
       queryKey: queryKeys.user.currentUser(),
     });
-    // Also invalidate all user-related queries
-    queryClient.invalidateQueries({
+    // Remove all user-related queries from cache
+    queryClient.removeQueries({
       queryKey: ["user"],
     });
   }
+  
+  // Delete cookies after clearing cache
+  await deleteCookie(myCookies.auth);
+  await deleteCookie(myCookies.user);
   
   // Refresh router to ensure all components re-render
   router.refresh();

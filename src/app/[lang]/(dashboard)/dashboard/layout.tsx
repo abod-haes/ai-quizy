@@ -1,16 +1,20 @@
 "use client";
 import "@/styles/globals.css";
 
-import { SidebarInset, SidebarProvider, useSidebar } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/section/dashboard/sidebar";
 import { RoleRouteGuard } from "@/components/auth/role-route-guard";
 import { roleType } from "@/utils/enum/common.enum";
 
 function MobileBackdrop() {
   const { isMobile, openMobile, setOpenMobile } = useSidebar();
-  
+
   if (!isMobile || !openMobile) return null;
-  
+
   return (
     <div
       className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 md:hidden"

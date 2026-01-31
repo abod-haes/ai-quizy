@@ -21,7 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Quiz } from "@/services/quizes.services/quiz.type";
-import { Clock, User, CheckCircle2, Circle, Timer } from "lucide-react";
+import { User, CheckCircle2, Circle, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { motion } from "framer-motion";
@@ -39,11 +39,6 @@ export function QuizCard({ quiz }: QuizCardProps) {
   const { quizzes: quizzesDict } = useTranslation();
   const isAuth = useAuthStore((state) => state.isAuth());
   const [showLoginDialog, setShowLoginDialog] = useState(false);
-
-  const timeLeft =
-    quiz.timeExpiration > 0
-      ? `${quiz.timeExpiration} ${quizzesDict.card.minutes}`
-      : quizzesDict.card.noTimeLimit;
 
   const handleStartQuiz = (e: React.MouseEvent) => {
     if (!isAuth && !quiz.isSolved) {
@@ -84,11 +79,6 @@ export function QuizCard({ quiz }: QuizCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-3">
-          <div className="text-muted-foreground flex items-center gap-2 text-sm">
-            <Clock className="size-4" />
-            <span>{timeLeft}</span>
-          </div>
-
           {quiz.timeSpentSeconds > 0 && (
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <Timer className="size-4" />

@@ -29,8 +29,8 @@ export function htmlToPlainText(html: string) {
   // Convert MathLm tags to their inner text
   doc.querySelectorAll("MathLm").forEach((node) => {
     const text = node.textContent;
-    node.replaceWith(text);
+    node.replaceWith(text || "");
   });
 
-  return doc.body.textContent.trim();
+  return doc.body.textContent?.trim() || "";
 }

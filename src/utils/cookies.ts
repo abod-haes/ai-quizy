@@ -4,7 +4,6 @@ import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adap
 export const myCookies = {
   lang: "NEXT_LANG",
   auth: "NEXT_AUTH_TOKEN_quizy",
-  sidebar: "sidebar_state",
   user: "NEXT_USER_quizy",
 };
 

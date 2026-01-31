@@ -587,6 +587,17 @@
         "morePages": "More pages"
       }
     },
+    "administration": {
+      "title": "Administration",
+      "emptyMessage": "No administrators found",
+      "deleteTitle": "Delete Administrator",
+      "createTitle": "Create New Administrator",
+      "createDescription": "Fill in the information below to create a new administrator.",
+      "createButton": "Create Administrator",
+      "editTitle": "Edit Administrator",
+      "editDescription": "Update the information below to edit this administrator.",
+      "editButton": "Update Administrator"
+    },
     "students": {
       "title": "Students",
       "emptyMessage": "No students found",

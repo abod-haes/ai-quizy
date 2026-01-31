@@ -33,6 +33,7 @@ export function useUserById(
 }
 
 export function useCurrentUser() {
+  console.log(readCookieFromDocument(myCookies.auth));
   return useQuery({
     queryKey: queryKey.currentUser(),
     queryFn: () => userService.getCurrentUser(),
