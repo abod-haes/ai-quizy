@@ -1,6 +1,6 @@
 export const i18n = {
-  defaultLang: "en",
-  langs: ["en", "ar"] as const,
+  defaultLang: "ar",
+  langs: ["ar", "en"] as const,
 };
 
 export type Lang = (typeof i18n.langs)[number];
