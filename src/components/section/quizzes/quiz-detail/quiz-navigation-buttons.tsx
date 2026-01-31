@@ -26,7 +26,6 @@ export function QuizNavigationButtons({
   isFirstQuestion,
   isLastQuestion,
   isCurrentQuestionAnswered,
-  allQuestionsAnswered,
   isSubmitting,
   showFeedback,
   previousText,

@@ -31,7 +31,6 @@ const ClassesPage = () => {
     data && Array.isArray(data.items) ? (data.items as unknown as Class[]) : [];
   const totalCount = data?.totalCount ?? 0;
   const t = useTranslation();
-  const common = t.dashboard.common;
   const classesDict = t.dashboard.classes;
 
   const columns: Column<Class>[] = [

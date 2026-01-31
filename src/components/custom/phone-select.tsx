@@ -123,13 +123,6 @@ export function PhoneSelect({
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   const countryOptions = React.useMemo(() => countryList().getData(), []);
-  
-  // Get current country name
-  const currentCountry = React.useMemo(() => {
-    return countryOptions.find(
-      (country: { value: string }) => country.value === countryCode,
-    ) || { label: "", value: countryCode };
-  }, [countryOptions, countryCode]);
 
   // Maintain focus on search input when select opens
   React.useEffect(() => {

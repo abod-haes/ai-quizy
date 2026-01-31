@@ -39,6 +39,8 @@ export const data = {
     role: "Student",
   },
 
+  projects: [] as ProjectItem[],
+
   teachers: [
     {
       name: "Dr. Ahmed Ali",

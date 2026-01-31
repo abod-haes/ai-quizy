@@ -35,7 +35,6 @@ export function CreateClassDialog({
   const isRTL = direction === "rtl";
   const t = useTranslation();
   const classesDict = t.dashboard.classes;
-  const common = t.dashboard.common;
 
   const formDefinition: FormDefinition = React.useMemo(
     () => ({

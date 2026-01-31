@@ -33,7 +33,7 @@ const QuizzesPage = () => {
 
   // Dialog state - controls visibility of create, edit, and delete dialogs
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Selected quiz state - stores the quiz being edited or deleted
@@ -242,6 +242,8 @@ const QuizzesPage = () => {
     }
   };
 
+  // Used when EditQuizDialog is uncommented
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleUpdateQuiz = async (data: CreateQuizInput) => {
     if (!selectedQuiz) return;
     try {

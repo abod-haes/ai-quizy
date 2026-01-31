@@ -54,7 +54,7 @@ export function EditSubjectDialog({
     // Note: The API might return subjects array on the class, not classIds on the subject
     // This depends on the actual API response structure
     return [];
-  }, [subject]);
+  }, []);
 
   const formDefinition: FormDefinition = React.useMemo(
     () => ({
