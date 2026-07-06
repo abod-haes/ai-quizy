@@ -32,7 +32,7 @@ export default function CoursesSection() {
   const isLoading = subjectsLoading || teachersLoading;
 
   return (
-    <div className="from-primary/8 via-background to-background relative min-h-screen overflow-hidden bg-gradient-to-b">
+    <div className="from-primary/10 via-background to-background relative min-h-screen overflow-hidden bg-gradient-to-b">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_420px_at_75%_-5%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_65%)]" />
 
       <div className="container relative z-10 mx-auto space-y-8 py-8 md:py-12">
@@ -119,7 +119,7 @@ export default function CoursesSection() {
                     transition={{ duration: 0.25, delay: index * 0.03 }}
                     className="h-full"
                   >
-                    <Card className="h-full justify-between bg-gradient-to-b from-card to-primary/3">
+                    <Card className="h-full justify-between bg-gradient-to-b from-card to-primary/5">
                       <CardHeader>
                         <div className="bg-primary/10 text-primary mb-4 flex size-14 items-center justify-center rounded-3xl">
                           <BookOpenCheck className="size-7" />
