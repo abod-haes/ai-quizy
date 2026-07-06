@@ -21,7 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Quiz } from "@/services/quizes.services/quiz.type";
-import { User, CheckCircle2, Circle, Timer } from "lucide-react";
+import { User, CheckCircle2, Circle, Timer, FileQuestion } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { motion } from "framer-motion";
@@ -54,33 +54,77 @@ export function QuizCard({ quiz }: QuizCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
+      className="h-full"
     >
-      <Card className="group hover:shadow-primary/5 relative h-fit transition-all duration-300 hover:shadow-lg">
+      <Card className="group h-full min-h-[285px] justify-between bg-gradient-to-b from-card to-primary/3">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <CardTitle className="mb-2 text-xl font-bold">
-                {quizzesDict.card.quiz}
-              </CardTitle>
-              <CardDescription className="flex items-center gap-2 text-sm">
-                <User className="size-4" />
-                <span>{quiz.teacherName}</span>
-              </CardDescription>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 text-primary flex size-12 shrink-0 items-center justify-center rounded-2xl">
+                <FileQuestion className="size-6" />
+              </div>
+              <div className="space-y-2">
+                <CardTitle className="text-xl">
+                  {quizzesDict.card.quiz}
+                </CardTitle>
+                <CardDescription className="flex items-center gap-2">
+                  <User className="size-4" />
+                  <span>{quiz.teacherName}</span>
+                </CardDescription>
+              </div>
             </div>
-            {quiz.isSolved ? (
-              <CheckCircle2 className="text-success size-6 flex-shrink-0" />
-            ) : (
-              <Circle className="text-muted-foreground size-6 flex-shrink-0" />
-            )}
+            <div
+              className={cn(
+                "flex size-9 shrink-0 items-center justify-center rounded-full border",
+                quiz.isSolved
+                  ? "border-success/20 bg-success/10 text-success"
+                  : "border-primary/15 bg-primary/8 text-muted-foreground",
+              )}
+            >
+              {quiz.isSolved ? (
+                <CheckCircle2 className="size-5" />
+              ) : (
+                <Circle className="size-5" />
+              )}
+            </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            {quiz.questionsCount && (
+              <div className="rounded-2xl border border-primary/10 bg-primary/5 p-3">
+                <span className="text-muted-foreground block text-xs">
+                  {quizzesDict.card.questionsCount}
+                </span>
+                <span className="font-bold">{quiz.questionsCount}</span>
+              </div>
+            )}
+            <div className="rounded-2xl border border-primary/10 bg-background/70 p-3">
+              <span className="text-muted-foreground block text-xs">
+                {quiz.isSolved ? quizzesDict.card.percentage : quizzesDict.card.noTimeLimit}
+              </span>
+              <span
+                className={cn(
+                  "font-bold",
+                  quiz.isSolved &&
+                    (quiz.solvedPercentage >= 80
+                      ? "text-success"
+                      : quiz.solvedPercentage >= 50
+                        ? "text-warning"
+                        : "text-destructive"),
+                )}
+              >
+                {quiz.isSolved ? `${quiz.solvedPercentage}%` : quizzesDict.card.minutes}
+              </span>
+            </div>
+          </div>
+
           {quiz.timeSpentSeconds > 0 && (
-            <div className="text-muted-foreground flex items-center gap-2 text-sm">
+            <div className="text-muted-foreground flex items-center gap-2 rounded-2xl bg-muted/60 px-3 py-2 text-sm">
               <Timer className="size-4" />
               <span>
                 {quizzesDict.card.timeSpent}: {quiz.timeSpentFormatted}
@@ -89,28 +133,17 @@ export function QuizCard({ quiz }: QuizCardProps) {
           )}
 
           {quiz.isSolved && (
-            <div className="mt-4">
+            <div>
               <div className="mb-2 flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
                   {quizzesDict.card.percentage}
                 </span>
-                <span
-                  className={cn(
-                    "font-semibold",
-                    quiz.solvedPercentage >= 80
-                      ? "text-success"
-                      : quiz.solvedPercentage >= 50
-                        ? "text-warning"
-                        : "text-destructive",
-                  )}
-                >
-                  {quiz.solvedPercentage}%
-                </span>
+                <span className="font-bold">{quiz.solvedPercentage}%</span>
               </div>
-              <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
+              <div className="bg-muted h-2.5 w-full overflow-hidden rounded-full">
                 <div
                   className={cn(
-                    "h-full transition-all duration-500",
+                    "h-full rounded-full transition-all duration-500",
                     quiz.solvedPercentage >= 80
                       ? "bg-success"
                       : quiz.solvedPercentage >= 50
@@ -120,14 +153,6 @@ export function QuizCard({ quiz }: QuizCardProps) {
                   style={{ width: `${quiz.solvedPercentage}%` }}
                 />
               </div>
-            </div>
-          )}
-
-          {quiz.questionsCount && (
-            <div className="text-muted-foreground border-t pt-2 text-sm">
-              <span>
-                {quizzesDict.card.questionsCount}: {quiz.questionsCount}
-              </span>
             </div>
           )}
         </CardContent>
@@ -167,7 +192,6 @@ export function QuizCard({ quiz }: QuizCardProps) {
         </CardFooter>
       </Card>
 
-      {/* Login Required Dialog */}
       <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
         <DialogContent>
           <DialogHeader>
