@@ -8,7 +8,7 @@ import { useSearchParamsState } from "@/hooks/useSearchParams";
 import { QuizCard } from "@/components/quiz/quiz-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Filter } from "lucide-react";
+import { Filter, Sparkles } from "lucide-react";
 import { Loading } from "@/components/custom/loading";
 import ApiError from "@/components/custom/api-error";
 import { SelectWithOptions } from "@/components/ui/select";
@@ -32,10 +32,8 @@ function QuizzesPageContent() {
   const subjectId = getParam("subjectId") ?? "";
   const teacherId = getParam("teacherId") ?? "";
 
-  // Force re-render when search params change
   const searchParamsKey = searchParams.toString();
   const userId = useAuthStore((state) => state.user?.id);
-  // Fetch all data using hooks
   const { data: teacherBriefs } = useTeachersBrief();
   const { data: subjectBriefs } = useSubjectsBrief();
   const { quizzes: quizzesDict } = useTranslation();
@@ -49,8 +47,8 @@ function QuizzesPageContent() {
       studentId: userId || undefined,
     },
     {
-      refetchOnMount: "always", // Refetch every time the component mounts (page visit)
-      refetchOnWindowFocus: false, // Don't refetch on window focus
+      refetchOnMount: "always",
+      refetchOnWindowFocus: false,
     },
   );
 
@@ -80,28 +78,39 @@ function QuizzesPageContent() {
 
   const totalPages = data ? Math.ceil(data.totalCount / perPage) : 1;
   const quizzes = data?.items || [];
-  return (
-    <div className="container mx-auto flex h-full flex-1 flex-col justify-between gap-4 py-8">
-      <div className="flex flex-col gap-4">
-        {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold">{quizzesDict.title}</h1>
-          <p className="text-muted-foreground">{quizzesDict.description}</p>
-        </div>
 
-        {/* Filters */}
-        <Card className="p-6">
+  return (
+    <div className="from-primary/8 via-background to-background relative flex min-h-screen flex-1 flex-col overflow-hidden bg-gradient-to-b">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_420px_at_70%_0%,color-mix(in_srgb,var(--primary)_14%,transparent),transparent_65%)]" />
+
+      <div className="container relative z-10 mx-auto flex h-full flex-1 flex-col gap-6 py-8 md:py-12">
+        <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div className="space-y-4">
+            <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold">
+              <Sparkles className="size-4" />
+              تعلم → اختبر → راجع → تحسّن
+            </div>
+            <div className="space-y-3">
+              <h1 className="max-w-2xl text-4xl font-black tracking-tight md:text-5xl">
+                {quizzesDict.title}
+              </h1>
+              <p className="text-muted-foreground max-w-xl text-base md:text-lg">
+                {quizzesDict.description}
+              </p>
+            </div>
+          </div>
+
+          <Card className="bg-background/85 p-5 backdrop-blur-xl">
             <div className="mb-4 flex items-center gap-2">
-              <Filter className="size-5" />
-              <h2 className="text-lg font-semibold">
-                {quizzesDict.filters.title}
-              </h2>
+              <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-2xl">
+                <Filter className="size-5" />
+              </div>
+              <h2 className="text-lg font-bold">{quizzesDict.filters.title}</h2>
             </div>
 
-            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="text-sm font-medium">
+                <label className="text-sm font-bold">
                   {quizzesDict.filters.subject}
                 </label>
                 <SelectWithOptions
@@ -123,12 +132,12 @@ function QuizzesPageContent() {
                   placeholder={quizzesDict.filters.selectSubject}
                   showAllOption
                   allOptionLabel={quizzesDict.filters.all}
-                  triggerClassName="w-full"
+                  triggerClassName="w-full rounded-2xl min-h-11"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">
+                <label className="text-sm font-bold">
                   {quizzesDict.filters.teacher}
                 </label>
                 <SelectWithOptions
@@ -150,65 +159,61 @@ function QuizzesPageContent() {
                   placeholder={quizzesDict.filters.selectTeacher}
                   showAllOption
                   allOptionLabel={quizzesDict.filters.all}
-                  triggerClassName="w-full"
+                  triggerClassName="w-full rounded-2xl min-h-11"
                 />
               </div>
 
-              <div className="flex gap-2">
-                <Button onClick={handleFilterChange}>
+              <div className="flex gap-2 md:col-span-2">
+                <Button className="flex-1" onClick={handleFilterChange}>
                   {quizzesDict.filters.applyFilter}
                 </Button>
-                <Button variant="outline" onClick={clearFilters}>
+                <Button variant="outline" className="flex-1" onClick={clearFilters}>
                   {quizzesDict.filters.clearFilters}
                 </Button>
               </div>
             </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Error State */}
-      {error && (
-        <ApiError
-          errorMessage={quizzesDict.results.loadingError}
-          refetchFunction={() => refetch()}
-        />
-      )}
-
-      {/* Loading State */}
-      {isLoading && (
-        <div className="flex items-center justify-center py-20">
-          <Loading size="lg" spinnerOnly />
+          </Card>
         </div>
-      )}
 
-      {/* Quizzes Grid */}
-      {!isLoading && !error && (
-        <>
-          {quizzes.length === 0 ? (
-            <Card className="flex h-full flex-1 flex-col justify-center p-12 text-center">
-              <p className="text-muted-foreground text-lg">
-                {quizzesDict.results.noQuizzesFound}
-              </p>
-            </Card>
-          ) : (
-            <div className="flex h-full flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {quizzes.map((quiz) => (
-                  <QuizCard key={quiz.id} quiz={quiz} />
-                ))}
+        {error && (
+          <ApiError
+            errorMessage={quizzesDict.results.loadingError}
+            refetchFunction={() => refetch()}
+          />
+        )}
+
+        {isLoading && (
+          <div className="flex items-center justify-center py-20">
+            <Loading size="lg" spinnerOnly />
+          </div>
+        )}
+
+        {!isLoading && !error && (
+          <>
+            {quizzes.length === 0 ? (
+              <Card className="flex min-h-[260px] flex-1 flex-col justify-center p-12 text-center">
+                <p className="text-muted-foreground text-lg">
+                  {quizzesDict.results.noQuizzesFound}
+                </p>
+              </Card>
+            ) : (
+              <div className="flex flex-1 flex-col justify-between gap-8">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {quizzes.map((quiz) => (
+                    <QuizCard key={quiz.id} quiz={quiz} />
+                  ))}
+                </div>
+
+                <PaginationComponent
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </div>
-
-              {/* Pagination */}
-              <PaginationComponent
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </div>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
