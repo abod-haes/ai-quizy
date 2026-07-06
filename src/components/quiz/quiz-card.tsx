@@ -59,7 +59,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
       transition={{ duration: 0.3 }}
       className="h-full"
     >
-      <Card className="group h-full min-h-[285px] justify-between bg-gradient-to-b from-card to-primary/3">
+      <Card className="group h-full min-h-[285px] justify-between bg-gradient-to-b from-card to-primary/5">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -81,7 +81,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
                 "flex size-9 shrink-0 items-center justify-center rounded-full border",
                 quiz.isSolved
                   ? "border-success/20 bg-success/10 text-success"
-                  : "border-primary/15 bg-primary/8 text-muted-foreground",
+                  : "border-primary/15 bg-primary/10 text-muted-foreground",
               )}
             >
               {quiz.isSolved ? (
@@ -105,7 +105,9 @@ export function QuizCard({ quiz }: QuizCardProps) {
             )}
             <div className="rounded-2xl border border-primary/10 bg-background/70 p-3">
               <span className="text-muted-foreground block text-xs">
-                {quiz.isSolved ? quizzesDict.card.percentage : quizzesDict.card.noTimeLimit}
+                {quiz.isSolved
+                  ? quizzesDict.card.percentage
+                  : quizzesDict.card.noTimeLimit}
               </span>
               <span
                 className={cn(
@@ -118,7 +120,9 @@ export function QuizCard({ quiz }: QuizCardProps) {
                         : "text-destructive"),
                 )}
               >
-                {quiz.isSolved ? `${quiz.solvedPercentage}%` : quizzesDict.card.minutes}
+                {quiz.isSolved
+                  ? `${quiz.solvedPercentage}%`
+                  : quizzesDict.card.startQuiz}
               </span>
             </div>
           </div>
