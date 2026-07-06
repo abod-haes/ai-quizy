@@ -3,6 +3,8 @@ import React from "react";
 import { HeroParallax } from "@/components/section/public/home/hero-parallax";
 import AboutSection from "@/components/section/public/home/about-section";
 import AIFeatureSection from "@/components/section/public/home/ai-feature-section";
+import HomeSubjectsSection from "@/components/section/public/home/home-subjects-section";
+import HomeTeachersSection from "@/components/section/public/home/home-teachers-section";
 
 export default function Page() {
   const products = [
@@ -82,6 +84,8 @@ export default function Page() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,hsl(var(--primary)/0.12),transparent_60%)]" />
       <div className="relative z-0">
         <HeroParallax products={products} />
+        <HomeSubjectsSection />
+        <HomeTeachersSection />
         <AboutSection />
         <AIFeatureSection />
       </div>
