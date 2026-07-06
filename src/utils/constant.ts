@@ -3,6 +3,10 @@ export const routesName = {
     keyName: "common.home",
     href: "/",
   },
+  courses: {
+    keyName: "common.courses",
+    href: "/courses",
+  },
   aiAssistant: {
     keyName: "common.aiAssistant",
     href: "/ai-assistant",
@@ -104,14 +108,17 @@ export type TRouteName = TPublicRouteName | TDashboardRouteName | string;
 
 export const NavLinkHeader: { label: string; href: TRouteName }[] = [
   {
-    label: "رئيسية",
+    label: "الرئيسية",
     href: routesName.home.href,
+  },
+  {
+    label: "الكورسات",
+    href: routesName.courses.href,
   },
   {
     label: "الاختبارات",
     href: routesName.quizzes.href,
   },
-
   {
     label: "تحميل التطبيق",
     href: routesName.download.href,
