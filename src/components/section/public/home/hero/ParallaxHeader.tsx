@@ -14,22 +14,22 @@ export const Header = () => {
   if (!hero) return null;
 
   return (
-    <div className="relative top-0 left-0 z-50 mx-auto w-full max-w-7xl px-4 py-16 text-center md:py-32 lg:py-40">
+    <div className="relative top-0 left-0 z-50 mx-auto w-full max-w-5xl px-4 py-12 text-center md:py-24 lg:py-28">
       <h1
-        className="text-3xl font-extrabold text-balance text-foreground md:text-6xl"
-        style={{ lineHeight: "1.5" }}
+        className="text-2xl font-extrabold text-balance text-foreground sm:text-3xl md:text-5xl"
+        style={{ lineHeight: "1.45" }}
       >
         {hero.title}
       </h1>
-      <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-base text-pretty md:text-lg">
+      <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-sm text-pretty md:text-base">
         {hero.description}
       </p>
       <Button
         size={"lg"}
-        className="mt-6"
+        className="mt-5"
         href={getLocalizedHref(routesName.download.href)}
       >
-        <DownloadIcon className="size-5" />
+        <DownloadIcon className="size-4" />
         {hero.downloadButton}
       </Button>
     </div>
