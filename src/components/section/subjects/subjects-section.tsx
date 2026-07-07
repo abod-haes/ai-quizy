@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loading } from "@/components/custom/loading";
 import ApiError from "@/components/custom/api-error";
+import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useSubjects } from "@/services/subject.services/subject.query";
 import { routesName, TRouteName } from "@/utils/constant";
@@ -81,7 +82,7 @@ export default function SubjectsSection() {
         )}
 
         {!isLoading && !error && (
-          <section className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {subjects.map((subject, index) => (
               <motion.div
                 key={subject.id}
@@ -90,27 +91,43 @@ export default function SubjectsSection() {
                 transition={{ duration: 0.3, delay: index * 0.035 }}
                 className="h-full"
               >
-                <Card className="h-full justify-between bg-gradient-to-b from-card to-primary/5">
-                  <CardHeader>
-                    <div className="bg-primary/10 text-primary mb-4 flex size-14 items-center justify-center rounded-3xl">
-                      <BookOpenCheck className="size-7" />
-                    </div>
-                    <CardTitle className="text-xl">{subject.name}</CardTitle>
+                <Card className="group h-full justify-between bg-gradient-to-b from-card to-primary/5 p-3">
+                  <EntityCover
+                    entity={subject}
+                    title={subject.name}
+                    label="مادة Quizy"
+                    className="mb-3"
+                  />
+                  <CardHeader className="px-2 pb-2 pt-3">
+                    <CardTitle className="line-clamp-2 text-xl">
+                      {subject.name}
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3 px-2 pb-2">
                     <div className="text-muted-foreground flex items-center gap-2 rounded-2xl bg-muted/60 px-3 py-2 text-sm">
                       <Layers3 className="size-4" />
-                      اختبارات ومراجعات حسب المادة
+                      اختبارات ودروس حسب المادة
                     </div>
-                    <Button className="w-full" asChild>
-                      <Link
-                        href={getLocalizedHref(
-                          `${routesName.quizzes.href}?subjectId=${subject.id}` as TRouteName,
-                        )}
-                      >
-                        عرض اختبارات المادة
-                      </Link>
-                    </Button>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      <Button className="w-full" asChild>
+                        <Link
+                          href={getLocalizedHref(
+                            `${routesName.quizzes.href}?subjectId=${subject.id}` as TRouteName,
+                          )}
+                        >
+                          الاختبارات
+                        </Link>
+                      </Button>
+                      <Button className="w-full" variant="outline" asChild>
+                        <Link
+                          href={getLocalizedHref(
+                            `${routesName.lessons.href}?subjectId=${subject.id}` as TRouteName,
+                          )}
+                        >
+                          الدروس
+                        </Link>
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
