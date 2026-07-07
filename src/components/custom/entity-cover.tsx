@@ -40,11 +40,13 @@ function getNestedUrl(value: unknown): string | undefined {
   return undefined;
 }
 
-export function getEntityImage(entity?: Record<string, unknown> | null) {
+export function getEntityImage(entity?: object | null) {
   if (!entity) return undefined;
 
+  const entityRecord = entity as Record<string, unknown>;
+
   for (const key of imageKeys) {
-    const image = getNestedUrl(entity[key]);
+    const image = getNestedUrl(entityRecord[key]);
     if (image) return image;
   }
 
@@ -57,7 +59,7 @@ export function EntityCover({
   label,
   className,
 }: {
-  entity?: Record<string, unknown> | null;
+  entity?: object | null;
   title: string;
   label?: string;
   className?: string;
