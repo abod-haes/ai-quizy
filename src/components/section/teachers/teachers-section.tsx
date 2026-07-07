@@ -41,7 +41,7 @@ export default function TeachersSection() {
                 أساتذتك موجودين معك على Quizy
               </h1>
               <p className="text-muted-foreground max-w-xl text-sm md:text-base">
-                نفس بيانات التطبيق من API الأساتذة. اختار الأستاذ وشوف الاختبارات المرتبطة فيه مباشرة.
+                اختار الأستاذ وشوف الاختبارات المرتبطة فيه مباشرة.
               </p>
             </div>
           </div>
@@ -60,8 +60,8 @@ export default function TeachersSection() {
               </div>
               <div className="rounded-2xl border border-border bg-muted/45 p-3">
                 <UserRoundCheck className="text-primary mb-2 size-5" />
-                <p className="text-xl font-black">API</p>
-                <p className="text-muted-foreground text-xs">بيانات مباشرة</p>
+                <p className="text-xl font-black">جاهز</p>
+                <p className="text-muted-foreground text-xs">اختيار سريع</p>
               </div>
             </CardContent>
           </Card>
