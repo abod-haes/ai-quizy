@@ -22,8 +22,23 @@ const imageKeys = [
   "url",
 ];
 
+function makeImageUrl(value: string) {
+  const cleanValue = value.trim();
+  if (!cleanValue) return undefined;
+
+  const hasProtocol = /^[a-z][a-z0-9+.-]*:/i.test(cleanValue);
+  if (hasProtocol) return cleanValue;
+
+  if (cleanValue.startsWith("//")) return `https:${cleanValue}`;
+
+  const apiBase = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+  if (!apiBase) return cleanValue;
+
+  return `${apiBase}/${cleanValue.replace(/^\//, "")}`;
+}
+
 function getNestedUrl(value: unknown): string | undefined {
-  if (typeof value === "string" && value.trim()) return value.trim();
+  if (typeof value === "string") return makeImageUrl(value);
 
   if (value && typeof value === "object") {
     const objectValue = value as Record<string, unknown>;
@@ -31,8 +46,9 @@ function getNestedUrl(value: unknown): string | undefined {
 
     for (const key of nestedKeys) {
       const nestedValue = objectValue[key];
-      if (typeof nestedValue === "string" && nestedValue.trim()) {
-        return nestedValue.trim();
+      if (typeof nestedValue === "string") {
+        const imageUrl = makeImageUrl(nestedValue);
+        if (imageUrl) return imageUrl;
       }
     }
   }
