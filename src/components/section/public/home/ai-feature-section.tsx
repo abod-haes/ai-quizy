@@ -4,13 +4,10 @@ import { motion } from "framer-motion";
 import { useCurrentLang } from "@/hooks/useCurrentLang";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Sparkles, BrainCircuit, Bot } from "lucide-react";
-import {
-  createFadeInUp,
-  staggerContainer,
-  useRevealedControls,
-} from "@/lib/motion";
+import { Check, Sparkles } from "lucide-react";
+import { createFadeInUp, useRevealedControls } from "@/lib/motion";
 import { useTranslation } from "@/providers/TranslationsProvider";
+import { Card, CardContent } from "@/components/ui/card";
 
 function AIFeatureSection() {
   const lang = useCurrentLang();
@@ -23,62 +20,50 @@ function AIFeatureSection() {
 
   if (!ai) return null;
 
-  const features: { icon: React.ReactNode; title: string; desc: string }[] =
-    ai.features.map((f: { title: string; desc: string }) => ({
-      icon:
-        f.title.includes("توليد") || f.title.includes("Auto") ? (
-          <Sparkles className="size-4" />
-        ) : f.title.toLowerCase().includes("adapt") ||
-          f.title.includes("متكيفة") ? (
-          <BrainCircuit className="size-4" />
-        ) : (
-          <Bot className="size-4" />
-        ),
-      title: f.title,
-      desc: f.desc,
-    }));
-
   return (
     <section ref={sectionRef} className="relative py-8 md:py-10">
       <div className="relative container">
         <motion.div
           initial="hidden"
           animate={controls}
-          className="mx-auto max-w-3xl text-center"
+          className="mx-auto max-w-3xl space-y-4"
         >
-          <motion.h3
-            variants={fadeInUp}
-            className="text-xl font-black sm:text-2xl md:text-3xl"
-          >
-            {ai.title}
-          </motion.h3>
-          <motion.p
-            variants={fadeInUp}
-            className="text-muted-foreground mx-auto mt-2 max-w-2xl text-sm sm:text-base"
-          >
-            {ai.subtitle}
-          </motion.p>
+          <motion.div variants={fadeInUp} className="space-y-2 text-center">
+            <div className="bg-primary/10 text-primary mx-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+              <Sparkles className="size-3.5" />
+              مميزات Quizy
+            </div>
+            <h3 className="text-xl font-black sm:text-2xl md:text-3xl">
+              {ai.title}
+            </h3>
+            <p className="text-muted-foreground mx-auto max-w-2xl text-sm sm:text-base">
+              {ai.subtitle}
+            </p>
+          </motion.div>
 
-          <motion.ul
-            variants={staggerContainer}
-            className="mt-6 grid gap-3 sm:grid-cols-3"
-          >
-            {features.map((f, i) => (
-              <motion.li
-                key={i}
-                variants={fadeInUp}
-                className="border-border bg-card group rounded-xl border p-3 text-center"
-              >
-                <div className="text-primary mb-1.5 inline-flex items-center gap-1.5 text-sm">
-                  {f.icon}
-                  <span className="font-semibold">{f.title}</span>
-                </div>
-                <p className="text-muted-foreground text-xs">{f.desc}</p>
-              </motion.li>
-            ))}
-          </motion.ul>
+          <motion.div variants={fadeInUp}>
+            <Card className="mx-auto max-w-2xl p-0">
+              <CardContent className="space-y-3 p-4">
+                {ai.features.map((feature: { title: string; desc: string }, index: number) => (
+                  <div key={index} className="flex items-start gap-2.5">
+                    <div className="bg-primary/10 text-primary mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full">
+                      <Check className="size-3.5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm font-bold text-foreground">
+                        {feature.title}
+                      </h4>
+                      <p className="text-muted-foreground mt-0.5 text-xs leading-5">
+                        {feature.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <motion.div variants={fadeInUp} className="mt-6">
+          <motion.div variants={fadeInUp} className="flex justify-center">
             <Button size="lg" asChild>
               <Link href={`/${lang}/quizzes`}>{ai.cta}</Link>
             </Button>
