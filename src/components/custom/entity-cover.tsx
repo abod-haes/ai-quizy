@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -69,6 +69,19 @@ export function getEntityImage(entity?: object | null) {
   return undefined;
 }
 
+function EntityImageFallback({ label }: { label?: string }) {
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-muted/70">
+      <div className="text-primary flex flex-col items-center gap-2 text-center">
+        <div className="bg-card flex size-11 items-center justify-center rounded-2xl border border-border shadow-sm">
+          <ImageIcon className="size-5" />
+        </div>
+        {label && <span className="text-xs font-bold">{label}</span>}
+      </div>
+    </div>
+  );
+}
+
 export function EntityCover({
   entity,
   title,
@@ -81,6 +94,8 @@ export function EntityCover({
   className?: string;
 }) {
   const image = getEntityImage(entity);
+  const [hasImageError, setHasImageError] = useState(false);
+  const showImage = image && !hasImageError;
 
   return (
     <div
@@ -89,22 +104,17 @@ export function EntityCover({
         className,
       )}
     >
-      {image ? (
+      {showImage ? (
         <img
+          key={image}
           src={image}
           alt={title}
           loading="lazy"
+          onError={() => setHasImageError(true)}
           className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-muted/70">
-          <div className="text-primary flex flex-col items-center gap-2 text-center">
-            <div className="bg-card flex size-11 items-center justify-center rounded-2xl border border-border shadow-sm">
-              <ImageIcon className="size-5" />
-            </div>
-            {label && <span className="text-xs font-bold">{label}</span>}
-          </div>
-        </div>
+        <EntityImageFallback label={label} />
       )}
       <div className="pointer-events-none absolute inset-0 bg-black/0" />
     </div>
