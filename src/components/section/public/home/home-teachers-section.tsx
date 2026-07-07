@@ -7,13 +7,10 @@ import { ArrowLeft, GraduationCap, UserRoundCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/custom/loading";
+import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useTeachersBrief } from "@/services/teacher.services/teacher.query";
 import { routesName, TRouteName } from "@/utils/constant";
-
-function getInitials(firstName?: string, lastName?: string) {
-  return `${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}` || "أ";
-}
 
 export default function HomeTeachersSection() {
   const getLocalizedHref = useLocalizedHref();
@@ -66,24 +63,23 @@ export default function HomeTeachersSection() {
               transition={{ duration: 0.35, delay: index * 0.05 }}
               className="h-full"
             >
-              <Card className="h-full">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary text-primary-foreground flex size-14 shrink-0 items-center justify-center rounded-3xl text-lg font-black">
-                      {getInitials(teacher.firstName, teacher.lastName)}
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl">
-                        {teacher.firstName} {teacher.lastName}
-                      </CardTitle>
-                      <p className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
-                        <UserRoundCheck className="size-4" />
-                        أستاذ في Quizy
-                      </p>
-                    </div>
-                  </div>
+              <Card className="group h-full p-3">
+                <EntityCover
+                  entity={teacher}
+                  title={`${teacher.firstName} ${teacher.lastName}`}
+                  label="أستاذ Quizy"
+                  className="mb-3 aspect-[4/3] rounded-[1.35rem]"
+                />
+                <CardHeader className="px-2 pb-2 pt-3">
+                  <CardTitle className="text-xl">
+                    {teacher.firstName} {teacher.lastName}
+                  </CardTitle>
+                  <p className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
+                    <UserRoundCheck className="size-4" />
+                    أستاذ في Quizy
+                  </p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-2 pb-2">
                   <Button className="w-full" asChild>
                     <Link
                       href={getLocalizedHref(
