@@ -22,9 +22,7 @@ export default function SubjectsSection() {
   const subjects = data?.items || [];
 
   return (
-    <div className="from-primary/10 via-background to-background relative min-h-screen overflow-hidden bg-gradient-to-b">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_420px_at_72%_-5%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_65%)]" />
-
+    <div className="relative min-h-screen overflow-hidden bg-background">
       <div className="container relative z-10 mx-auto space-y-8 py-8 md:py-12">
         <motion.section
           initial={{ opacity: 0, y: 18 }}
@@ -47,19 +45,19 @@ export default function SubjectsSection() {
             </div>
           </div>
 
-          <Card className="bg-background/85 p-2 backdrop-blur-xl">
+          <Card className="p-2">
             <CardContent className="grid gap-4 p-5 sm:grid-cols-3">
-              <div className="rounded-3xl border border-primary/10 bg-primary/5 p-4">
+              <div className="rounded-3xl border border-border bg-muted/45 p-4">
                 <BookOpenCheck className="text-primary mb-3 size-6" />
                 <p className="text-2xl font-black">{subjects.length}</p>
                 <p className="text-muted-foreground text-sm">مادة متاحة</p>
               </div>
-              <div className="rounded-3xl border border-primary/10 bg-primary/5 p-4">
+              <div className="rounded-3xl border border-border bg-muted/45 p-4">
                 <SearchCheck className="text-primary mb-3 size-6" />
                 <p className="text-2xl font-black">API</p>
                 <p className="text-muted-foreground text-sm">بيانات مباشرة</p>
               </div>
-              <div className="rounded-3xl border border-primary/10 bg-primary/5 p-4">
+              <div className="rounded-3xl border border-border bg-muted/45 p-4">
                 <Layers3 className="text-primary mb-3 size-6" />
                 <p className="text-2xl font-black">Quizy</p>
                 <p className="text-muted-foreground text-sm">مراجعة واختبارات</p>
@@ -91,7 +89,7 @@ export default function SubjectsSection() {
                 transition={{ duration: 0.3, delay: index * 0.035 }}
                 className="h-full"
               >
-                <Card className="group h-full justify-between bg-gradient-to-b from-card to-primary/5 p-3">
+                <Card className="group h-full justify-between p-3">
                   <EntityCover
                     entity={subject}
                     title={subject.name}
