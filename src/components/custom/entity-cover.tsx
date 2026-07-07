@@ -69,7 +69,7 @@ export function EntityCover({
   return (
     <div
       className={cn(
-        "relative aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-primary/10 bg-primary/10",
+        "relative aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-border bg-muted/50",
         className,
       )}
     >
@@ -83,16 +83,16 @@ export function EntityCover({
           className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
         />
       ) : (
-        <div className="from-primary/20 via-primary/10 to-background flex h-full w-full items-center justify-center bg-gradient-to-br">
+        <div className="flex h-full w-full items-center justify-center bg-muted/70">
           <div className="text-primary flex flex-col items-center gap-3 text-center">
-            <div className="bg-background/80 flex size-14 items-center justify-center rounded-3xl shadow-sm backdrop-blur">
+            <div className="bg-card flex size-14 items-center justify-center rounded-3xl border border-border shadow-sm">
               <ImageIcon className="size-7" />
             </div>
             {label && <span className="text-sm font-bold">{label}</span>}
           </div>
         </div>
       )}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-black/0 to-white/5" />
+      <div className="pointer-events-none absolute inset-0 bg-black/0" />
     </div>
   );
 }
