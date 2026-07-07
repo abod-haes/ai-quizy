@@ -6,24 +6,18 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  Award,
   BookOpen,
+  Brain,
   CheckCircle2,
-  Circle,
   FileQuestion,
+  Lock,
   Timer,
   User,
 } from "lucide-react";
 
-import { EntityCover } from "@/components/custom/entity-cover";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -55,29 +49,76 @@ function getTextValue(entity: object | null | undefined, keys: string[]) {
   return undefined;
 }
 
+function getBooleanValue(entity: object, key: string) {
+  const value = (entity as Record<string, unknown>)[key];
+  return typeof value === "boolean" ? value : undefined;
+}
+
+function getQuizTitle(quiz: Quiz) {
+  return getTextValue(quiz, ["title", "name", "quizName"]) || "اختبار";
+}
+
 function getSubjectName(quiz: Quiz, subject?: object | null) {
   return (
     getTextValue(subject, ["name"]) ||
     getTextValue(quiz, ["subjectName", "subject", "entityName", "courseName"]) ||
-    quiz.linkedQuiz?.find((item) => item.name)?.name ||
-    "مادة Quizy"
+    quiz.linkedQuiz?.find((item) => item.name)?.name
   );
 }
 
-export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
+function normalizePercentage(value?: number) {
+  if (typeof value !== "number" || Number.isNaN(value)) return 0;
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+export function QuizCard({ quiz, subject }: QuizCardProps) {
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
   const { quizzes: quizzesDict } = useTranslation();
   const isAuth = useAuthStore((state) => state.isAuth());
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showLockedDialog, setShowLockedDialog] = useState(false);
+
+  const title = getQuizTitle(quiz);
   const subjectName = getSubjectName(quiz, subject);
+  const isFree = getBooleanValue(quiz, "isFree");
+  const isPurchased = getBooleanValue(quiz, "isPurchased");
+  const hasAccessFlags = isFree !== undefined || isPurchased !== undefined;
+  const isLocked = hasAccessFlags && !isFree && !isPurchased;
+  const solvedPercent = normalizePercentage(quiz.solvedPercentage);
 
   const handleStartQuiz = (e: React.MouseEvent) => {
     if (!isAuth && !quiz.isSolved) {
       e.preventDefault();
       setShowLoginDialog(true);
+      return;
+    }
+
+    if (isLocked) {
+      e.preventDefault();
+      setShowLockedDialog(true);
     }
   };
+
+  const status = quiz.isSolved
+    ? {
+        label: "محلول",
+        icon: Award,
+        className: "border-success/20 bg-success/10 text-success",
+      }
+    : isLocked
+      ? {
+          label: "مغلق",
+          icon: Lock,
+          className: "border-destructive/20 bg-destructive/10 text-destructive",
+        }
+      : {
+          label: "جاهز",
+          icon: Brain,
+          className: "border-primary/20 bg-primary/10 text-primary",
+        };
+
+  const StatusIcon = status.icon;
 
   return (
     <motion.div
@@ -86,115 +127,98 @@ export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
       transition={{ duration: 0.22 }}
       className="h-full"
     >
-      <Card className="group h-full min-h-[270px] justify-between p-2.5">
-        <div className="relative">
-          <EntityCover
-            entity={subject || quiz}
-            title={subjectName}
-            label="مادة Quizy"
-            className="aspect-[2/1] rounded-2xl"
-          />
-          <div
-            className={cn(
-              "absolute start-2 top-2 flex h-7 items-center gap-1.5 rounded-full border bg-card/90 px-2 text-[11px] font-bold shadow-sm backdrop-blur",
-              quiz.isSolved ? "text-success" : "text-muted-foreground",
-            )}
-          >
-            {quiz.isSolved ? (
-              <CheckCircle2 className="size-3.5" />
-            ) : (
-              <Circle className="size-3.5" />
-            )}
-            {quiz.isSolved ? "منتهي" : "جاهز"}
-          </div>
-        </div>
-
-        <CardHeader className="px-1.5 pb-1 pt-2.5">
-          <div className="flex items-start gap-2.5">
-            <EntityCover
-              entity={teacher || quiz}
-              title={quiz.teacherName || "أستاذ Quizy"}
-              label=""
-              className="aspect-square size-10 shrink-0 rounded-xl"
-            />
-            <div className="min-w-0 space-y-1">
-              <CardTitle className="line-clamp-1 text-base font-black">
-                {quizzesDict.card.quiz}
-              </CardTitle>
-              <CardDescription className="flex items-center gap-1.5 text-xs">
-                <User className="size-3.5" />
-                <span className="truncate">{quiz.teacherName}</span>
-              </CardDescription>
-              <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                <BookOpen className="size-3.5" />
-                <span className="truncate">{subjectName}</span>
-              </p>
+      <Card
+        className={cn(
+          "group h-full min-h-[190px] justify-between p-0",
+          quiz.isSolved && "border-success/30",
+          isLocked && "border-dashed border-muted-foreground/35 opacity-75",
+        )}
+      >
+        <CardContent className="flex h-full flex-col justify-between gap-3 p-3.5">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <div
+                className={cn(
+                  "flex size-9 items-center justify-center rounded-full border",
+                  status.className,
+                )}
+              >
+                <StatusIcon className="size-4" />
+              </div>
+              <span
+                className={cn(
+                  "rounded-full border px-2.5 py-1 text-[11px] font-bold",
+                  status.className,
+                )}
+              >
+                {status.label}
+              </span>
             </div>
-          </div>
-        </CardHeader>
 
-        <CardContent className="space-y-2.5 px-1.5">
-          <div className="rounded-xl border border-border bg-muted/45 p-2.5 text-sm">
-            <span className="text-muted-foreground flex items-center gap-1.5 text-[11px]">
-              <FileQuestion className="size-3.5" />
-              الأسئلة
-            </span>
-            <span className="mt-0.5 block text-sm font-black">
-              {quiz.questionsCount || 0}
-            </span>
-          </div>
-
-          {quiz.isSolved ? (
-            <div className="rounded-xl border border-border bg-background p-2.5">
-              <div className="mb-2 flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">
-                  {quizzesDict.card.percentage}
-                </span>
+            {quiz.isSolved && (
+              <div className="flex items-center gap-2">
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className={cn(
+                      "h-full rounded-full",
+                      solvedPercent >= 80
+                        ? "bg-success"
+                        : solvedPercent >= 50
+                          ? "bg-warning"
+                          : "bg-destructive",
+                    )}
+                    style={{ width: `${solvedPercent}%` }}
+                  />
+                </div>
                 <span
                   className={cn(
-                    "font-black",
-                    quiz.solvedPercentage >= 80
+                    "text-xs font-black",
+                    solvedPercent >= 80
                       ? "text-success"
-                      : quiz.solvedPercentage >= 50
+                      : solvedPercent >= 50
                         ? "text-warning"
                         : "text-destructive",
                   )}
                 >
-                  {quiz.solvedPercentage}%
+                  {solvedPercent}%
                 </span>
               </div>
-              <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
-                <div
-                  className={cn(
-                    "h-full rounded-full transition-all duration-500",
-                    quiz.solvedPercentage >= 80
-                      ? "bg-success"
-                      : quiz.solvedPercentage >= 50
-                        ? "bg-warning"
-                        : "bg-destructive",
-                  )}
-                  style={{ width: `${quiz.solvedPercentage}%` }}
-                />
+            )}
+
+            {subjectName && (
+              <p className="text-muted-foreground flex items-center gap-1.5 text-[11px] font-semibold">
+                <BookOpen className="size-3.5" />
+                <span className="line-clamp-1">{subjectName}</span>
+              </p>
+            )}
+
+            <div className="space-y-1.5">
+              <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-black leading-5 text-foreground">
+                {title}
+              </h3>
+              {quiz.teacherName && (
+                <p className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold">
+                  <User className="size-3.5" />
+                  <span className="line-clamp-1">{quiz.teacherName}</span>
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <FileQuestion className="size-3.5" />
+              <span>{quiz.questionsCount || 0} سؤال</span>
+            </div>
+
+            {quiz.isSolved && quiz.timeSpentSeconds > 0 && (
+              <div className="text-success flex items-center gap-1.5 text-xs font-semibold">
+                <Timer className="size-3.5" />
+                <span>{quiz.timeSpentFormatted}</span>
               </div>
-            </div>
-          ) : (
-            <div className="text-muted-foreground flex items-center gap-1.5 rounded-xl bg-muted/60 px-2.5 py-2 text-xs">
-              <Timer className="size-3.5" />
-              ركّز، جاوب، وبعدين راجع نتيجتك
-            </div>
-          )}
+            )}
+          </div>
 
-          {quiz.timeSpentSeconds > 0 && (
-            <div className="text-muted-foreground flex items-center gap-1.5 rounded-xl bg-muted/60 px-2.5 py-2 text-xs">
-              <Timer className="size-3.5" />
-              <span>
-                {quizzesDict.card.timeSpent}: {quiz.timeSpentFormatted}
-              </span>
-            </div>
-          )}
-        </CardContent>
-
-        <CardFooter className="px-1.5 pb-1.5">
           {quiz.isSolved ? (
             <Link
               href={getLocalizedHref(
@@ -202,19 +226,20 @@ export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
               )}
               className="w-full"
             >
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" size="sm" className="w-full">
                 {quizzesDict.card.viewResults}
                 <ArrowLeft className="size-4" />
               </Button>
             </Link>
           ) : (
             <Button
-              variant="default"
+              variant={isLocked ? "outline" : "default"}
+              size="sm"
               className="w-full"
               onClick={handleStartQuiz}
-              asChild={isAuth}
+              asChild={isAuth && !isLocked}
             >
-              {isAuth ? (
+              {isAuth && !isLocked ? (
                 <Link
                   href={getLocalizedHref(
                     routesName.quizzesDetails(quiz.id) as TRouteName,
@@ -224,11 +249,11 @@ export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
                   <ArrowLeft className="size-4" />
                 </Link>
               ) : (
-                <span>{quizzesDict.card.startQuiz}</span>
+                <span>{isLocked ? "تفعيل الاختبار" : quizzesDict.card.startQuiz}</span>
               )}
             </Button>
           )}
-        </CardFooter>
+        </CardContent>
       </Card>
 
       <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
@@ -245,6 +270,22 @@ export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
             </Button>
             <Button onClick={() => router.push(getLocalizedHref(routesName.signin.href))}>
               {quizzesDict.card.loginRequired.goToLogin}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showLockedDialog} onOpenChange={setShowLockedDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>الاختبار مغلق</DialogTitle>
+            <DialogDescription>
+              فعّل الاختبار من التطبيق باستخدام كود الكورس أو من أحد مراكز البيع.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLockedDialog(false)}>
+              إغلاق
             </Button>
           </DialogFooter>
         </DialogContent>
