@@ -80,8 +80,7 @@ export default function Page() {
     },
   ];
   return (
-    <div className="from-primary/10 via-background to-background relative min-h-screen w-full bg-gradient-to-b">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,hsl(var(--primary)/0.12),transparent_60%)]" />
+    <div className="relative min-h-screen w-full bg-background">
       <div className="relative z-0">
         <HeroParallax products={products} />
         <HomeSubjectsSection />
