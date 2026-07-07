@@ -68,7 +68,7 @@ function LessonsPageContent() {
                   : "دروس Quizy بطريقة واضحة"}
               </h1>
               <p className="text-muted-foreground max-w-xl text-sm md:text-base">
-                الدروس مربوطة بنفس API التطبيق، ومعروضة بكروت صور ثابتة النسبة ومتجاوبة مع كل الشاشات.
+                تصفّح الدروس حسب المادة، وابدأ الاختبارات المرتبطة فيها مباشرة.
               </p>
             </div>
           </div>
@@ -87,8 +87,8 @@ function LessonsPageContent() {
               </div>
               <div className="rounded-2xl border border-border bg-muted/45 p-3">
                 <Route className="text-primary mb-2 size-5" />
-                <p className="text-xl font-black">API</p>
-                <p className="text-muted-foreground text-xs">بيانات مباشرة</p>
+                <p className="text-xl font-black">مرتب</p>
+                <p className="text-muted-foreground text-xs">حسب المادة</p>
               </div>
             </CardContent>
           </Card>
