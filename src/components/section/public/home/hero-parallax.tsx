@@ -23,10 +23,11 @@ export const HeroParallax = ({
     offset: ["start start", "end start"],
   });
 
-  const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
+  const springConfig = { stiffness: 220, damping: 28, bounce: 0 };
 
   const isMobile = useIsMobile();
-  const maxShift = isMobile ? 200 : 1000;
+  const maxShift = isMobile ? 10 : 70;
+  const thirdRowShift = isMobile ? 0 : 35;
   const translateX = useSpring(
     useTransform(scrollYProgress, [0, 1], [0, maxShift]),
     springConfig,
@@ -35,39 +36,47 @@ export const HeroParallax = ({
     useTransform(scrollYProgress, [0, 1], [0, -maxShift]),
     springConfig,
   );
+  const translateXSoft = useSpring(
+    useTransform(scrollYProgress, [0, 1], [0, thirdRowShift]),
+    springConfig,
+  );
   const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [isMobile ? 5 : 15, 0]),
+    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 2 : 8, 0]),
     springConfig,
   );
   const opacity = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [0.2, 1]),
+    useTransform(scrollYProgress, [0, 0.18], [0.45, 1]),
     springConfig,
   );
   const rotateZ = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [isMobile ? 8 : 20, 0]),
+    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 2 : 5, 0]),
     springConfig,
   );
   const translateY = useSpring(
     useTransform(
       scrollYProgress,
-      [0, 0.2],
-      [isMobile ? -200 : -700, isMobile ? 200 : 500],
+      [0, 0.22],
+      [isMobile ? -24 : -80, isMobile ? 10 : 40],
     ),
     springConfig,
   );
+
+  const rowClass =
+    "mx-auto flex w-full max-w-7xl flex-wrap justify-center gap-3 px-4 sm:gap-4 sm:px-6 md:gap-5 lg:gap-6";
+
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[160vh] flex-col overflow-hidden pt-40 antialiased [perspective:1000px] [transform-style:preserve-3d] md:min-h-[260vh]"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-24 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:pt-28 md:min-h-[118svh] md:pt-32 lg:min-h-[125svh]"
     >
-      <div className="flex items-center justify-center md:flex-1 md:items-start md:justify-start">
+      <div className="flex items-center justify-center">
         <Header />
       </div>
       <motion.div
         style={{ rotateX, rotateZ, translateY, opacity }}
-        className="px-4 sm:px-6 md:px-0"
+        className="space-y-3 pb-10 sm:space-y-4 md:space-y-5 lg:space-y-6"
       >
-        <motion.div className="custom-scrollbar mb-10 flex snap-x snap-mandatory scroll-px-4 flex-row-reverse gap-4 overflow-x-auto sm:mb-16 sm:gap-6 md:mb-20 md:snap-none md:gap-20 md:overflow-visible">
+        <motion.div className={rowClass}>
           {firstRow.map((product) => (
             <ProductCard
               product={product}
@@ -76,7 +85,7 @@ export const HeroParallax = ({
             />
           ))}
         </motion.div>
-        <motion.div className="custom-scrollbar mb-10 flex snap-x snap-mandatory scroll-px-4 flex-row gap-4 overflow-x-auto sm:mb-16 sm:gap-6 md:mb-20 md:snap-none md:gap-20 md:overflow-visible">
+        <motion.div className={rowClass}>
           {secondRow.map((product) => (
             <ProductCard
               product={product}
@@ -85,11 +94,11 @@ export const HeroParallax = ({
             />
           ))}
         </motion.div>
-        <motion.div className="custom-scrollbar flex snap-x snap-mandatory scroll-px-4 flex-row-reverse gap-4 overflow-x-auto sm:gap-6 md:snap-none md:gap-20 md:overflow-visible">
+        <motion.div className={rowClass}>
           {thirdRow.map((product) => (
             <ProductCard
               product={product}
-              translate={translateX}
+              translate={translateXSoft}
               key={product.title}
             />
           ))}
