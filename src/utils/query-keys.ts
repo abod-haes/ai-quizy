@@ -68,4 +68,8 @@ export const queryKeys = {
   statistics: {
     getStatistics: () => ["statistics"] as const,
   },
+  salesCenter: {
+    getList: (params?: PartialQueryParams) =>
+      ["salesCenter", "list", params] as const,
+  },
 } as const;
