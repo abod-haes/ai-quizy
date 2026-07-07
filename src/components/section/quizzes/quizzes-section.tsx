@@ -8,7 +8,7 @@ import { useSearchParamsState } from "@/hooks/useSearchParams";
 import { QuizCard } from "@/components/quiz/quiz-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Filter, FileQuestion, Sparkles } from "lucide-react";
+import { Filter, FileQuestion } from "lucide-react";
 import { Loading } from "@/components/custom/loading";
 import ApiError from "@/components/custom/api-error";
 import { SelectWithOptions } from "@/components/ui/select";
@@ -83,44 +83,39 @@ function QuizzesPageContent() {
 
   const totalPages = data ? Math.ceil(data.totalCount / perPage) : 1;
   const quizzes = data?.items || [];
+  const quizzesCount = data?.totalCount ?? 0;
 
   return (
     <div className="relative flex min-h-screen flex-1 flex-col overflow-hidden bg-background">
-      <div className="container relative z-10 mx-auto flex h-full flex-1 flex-col gap-5 py-6 md:py-8">
-        <div className="space-y-4">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-2.5">
-              <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
-                <Sparkles className="size-3.5" />
-                اختبارات Quizy
-              </div>
-              <div className="space-y-1.5">
-                <h1 className="max-w-2xl text-2xl font-black tracking-tight md:text-4xl">
-                  {quizzesDict.title}
-                </h1>
-                <p className="text-muted-foreground max-w-xl text-sm md:text-base">
-                  اختر المادة أو الأستاذ وابدأ الاختبار بنفس أسلوب التطبيق: صورة واضحة، أستاذ الاختبار، عدد الأسئلة، وزر مباشر.
-                </p>
-              </div>
+      <div className="container relative z-10 mx-auto flex h-full flex-1 flex-col gap-4 py-5 md:py-7">
+        <div className="space-y-3">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="space-y-1.5">
+              <h1 className="text-xl font-black tracking-tight md:text-2xl">
+                الاختبارات المتاحة ({quizzesCount})
+              </h1>
+              <p className="text-muted-foreground max-w-xl text-sm">
+                اختار المادة أو الأستاذ وابدأ الاختبار من الكروت مباشرة.
+              </p>
             </div>
 
-            <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2.5 shadow-sm">
-              <div className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-xl">
+            <div className="flex w-fit items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2 shadow-sm">
+              <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
                 <FileQuestion className="size-4" />
               </div>
               <div>
-                <p className="text-xl font-black">{data?.totalCount ?? 0}</p>
-                <p className="text-muted-foreground text-[11px]">اختبار متاح</p>
+                <p className="text-lg font-black">{quizzesCount}</p>
+                <p className="text-muted-foreground text-[11px]">اختبار</p>
               </div>
             </div>
           </div>
 
           <Card className="p-3">
             <div className="mb-3 flex items-center gap-2">
-              <div className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-xl">
+              <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
                 <Filter className="size-4" />
               </div>
-              <h2 className="text-base font-bold">{quizzesDict.filters.title}</h2>
+              <h2 className="text-sm font-bold">فلترة الاختبارات</h2>
             </div>
 
             <div className="grid grid-cols-1 items-end gap-3 md:grid-cols-[1fr_1fr_auto]">
@@ -178,11 +173,11 @@ function QuizzesPageContent() {
                 />
               </div>
 
-              <div className="flex gap-2 md:min-w-[190px]">
-                <Button className="flex-1" onClick={handleFilterChange}>
+              <div className="flex gap-2 md:min-w-[180px]">
+                <Button size="sm" className="flex-1" onClick={handleFilterChange}>
                   تطبيق
                 </Button>
-                <Button variant="outline" className="flex-1" onClick={clearFilters}>
+                <Button size="sm" variant="outline" className="flex-1" onClick={clearFilters}>
                   مسح
                 </Button>
               </div>
@@ -213,7 +208,7 @@ function QuizzesPageContent() {
               </Card>
             ) : (
               <div className="flex flex-1 flex-col justify-between gap-6">
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                   {quizzes.map((quiz) => (
                     <QuizCard key={quiz.id} quiz={quiz} />
                   ))}
