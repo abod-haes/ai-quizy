@@ -2,20 +2,20 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, GraduationCap, UserRoundCheck } from "lucide-react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/custom/loading";
 import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
-import { useTeachersBrief } from "@/services/teacher.services/teacher.query";
+import { useTeachers } from "@/services/teacher.services/teacher.query";
 import { routesName } from "@/utils/constant";
 
 export default function HomeTeachersSection() {
   const getLocalizedHref = useLocalizedHref();
-  const { data: teachers, isLoading } = useTeachersBrief();
-  const previewTeachers = teachers?.slice(0, 10) || [];
+  const { data, isLoading } = useTeachers({ page: 1, PerPage: 10 });
+  const previewTeachers = data?.items || [];
 
   return (
     <section className="container relative z-10 mx-auto space-y-5 py-8 md:py-10">
@@ -61,23 +61,22 @@ export default function HomeTeachersSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.3, delay: index * 0.035 }}
-              className="w-[260px] min-w-[260px] snap-start sm:w-[300px] sm:min-w-[300px] lg:w-[340px] lg:min-w-[340px]"
+              className="w-[192px] min-w-[192px] snap-start"
             >
-              <Card className="group h-full p-2.5">
-                <EntityCover
-                  entity={teacher}
-                  title={`${teacher.firstName} ${teacher.lastName}`}
-                  label="أستاذ Quizy"
-                  className="mb-2.5 aspect-[16/9] rounded-2xl"
-                />
-                <CardHeader className="px-1.5 pb-1 pt-2">
-                  <CardTitle className="text-lg">
+              <Card className="group h-full p-0">
+                <div className="bg-muted/40 p-1">
+                  <EntityCover
+                    entity={teacher}
+                    title={`${teacher.firstName} ${teacher.lastName}`}
+                    label="أستاذ Quizy"
+                    fit="contain"
+                    className="aspect-[0.92] rounded-xl border-0 bg-muted/40"
+                  />
+                </div>
+                <CardHeader className="border-t border-border px-3 py-2 text-center">
+                  <CardTitle className="line-clamp-1 text-sm font-black">
                     {teacher.firstName} {teacher.lastName}
                   </CardTitle>
-                  <p className="text-muted-foreground mt-1 flex items-center gap-1.5 text-xs">
-                    <UserRoundCheck className="size-3.5" />
-                    أستاذ في Quizy
-                  </p>
                 </CardHeader>
               </Card>
             </motion.div>
