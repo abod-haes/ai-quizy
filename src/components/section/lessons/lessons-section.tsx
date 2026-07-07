@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -16,7 +17,7 @@ import { useSubjects } from "@/services/subject.services/subject.query";
 import { useUnits } from "@/services/unit.services/unit.query";
 import { routesName, TRouteName } from "@/utils/constant";
 
-export default function LessonsSection() {
+function LessonsPageContent() {
   const getLocalizedHref = useLocalizedHref();
   const searchParams = useSearchParams();
   const subjectId = searchParams.get("subjectId");
@@ -115,6 +116,9 @@ export default function LessonsSection() {
               const subjectName = unit?.subjectId
                 ? subjectMap.get(unit.subjectId)
                 : undefined;
+              const quizzesHref = unit?.subjectId
+                ? `${routesName.quizzes.href}?subjectId=${unit.subjectId}&isLesson=true`
+                : `${routesName.quizzes.href}?isLesson=true`;
 
               return (
                 <motion.div
@@ -157,13 +161,9 @@ export default function LessonsSection() {
                         )}
                       </div>
                       <Button className="w-full" asChild>
-                        <Link
-                          href={getLocalizedHref(
-                            `${routesName.quizzes.href}?lessonId=${lesson.id}` as TRouteName,
-                          )}
-                        >
+                        <Link href={getLocalizedHref(quizzesHref as TRouteName)}>
                           <FileQuestion className="size-4" />
-                          اختبارات الدرس
+                          اختبارات الدروس
                         </Link>
                       </Button>
                     </CardContent>
@@ -181,5 +181,19 @@ export default function LessonsSection() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function LessonsSection() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto flex items-center justify-center px-4 py-20">
+          <Loading size="lg" spinnerOnly />
+        </div>
+      }
+    >
+      <LessonsPageContent />
+    </Suspense>
   );
 }
