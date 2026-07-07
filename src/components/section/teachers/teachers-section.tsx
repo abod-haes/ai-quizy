@@ -8,13 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loading } from "@/components/custom/loading";
 import ApiError from "@/components/custom/api-error";
+import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useTeachers } from "@/services/teacher.services/teacher.query";
 import { routesName, TRouteName } from "@/utils/constant";
-
-function getInitials(firstName?: string, lastName?: string) {
-  return `${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}` || "أ";
-}
 
 function getTeacherName(teacher: { firstName?: string; lastName?: string }) {
   return `${teacher.firstName || ""} ${teacher.lastName || ""}`.trim() || "أستاذ Quizy";
@@ -22,10 +19,7 @@ function getTeacherName(teacher: { firstName?: string; lastName?: string }) {
 
 export default function TeachersSection() {
   const getLocalizedHref = useLocalizedHref();
-  const { data, isLoading, error, refetch } = useTeachers({
-    page: 1,
-    PerPage: 100,
-  });
+  const { data, isLoading, error, refetch } = useTeachers({ page: 1, PerPage: 100 });
   const teachers = data?.items || [];
 
   return (
@@ -96,29 +90,23 @@ export default function TeachersSection() {
                 transition={{ duration: 0.3, delay: index * 0.035 }}
                 className="h-full"
               >
-                <Card className="h-full justify-between">
-                  <CardHeader>
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary text-primary-foreground flex size-16 shrink-0 items-center justify-center rounded-3xl text-xl font-black shadow-sm">
-                        {getInitials(teacher.firstName, teacher.lastName)}
-                      </div>
-                      <div className="min-w-0 space-y-2">
-                        <CardTitle className="text-xl">
-                          {getTeacherName(teacher)}
-                        </CardTitle>
-                        <p className="text-muted-foreground flex items-center gap-2 text-sm">
-                          <UserRoundCheck className="size-4" />
-                          أستاذ في Quizy
-                        </p>
-                      </div>
-                    </div>
+                <Card className="group h-full justify-between p-3">
+                  <EntityCover
+                    entity={teacher}
+                    title={getTeacherName(teacher)}
+                    label="أستاذ Quizy"
+                    className="mb-3 aspect-[4/3] rounded-[1.35rem]"
+                  />
+                  <CardHeader className="px-2 pb-2 pt-3">
+                    <CardTitle className="line-clamp-1 text-xl">
+                      {getTeacherName(teacher)}
+                    </CardTitle>
+                    <p className="text-muted-foreground flex items-center gap-2 text-sm">
+                      <UserRoundCheck className="size-4" />
+                      أستاذ في Quizy
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {teacher.description && (
-                      <p className="text-muted-foreground line-clamp-3 text-sm">
-                        {teacher.description}
-                      </p>
-                    )}
+                  <CardContent className="space-y-4 px-2 pb-2">
                     {typeof teacher.numberOfQuizzes === "number" && (
                       <div className="text-muted-foreground flex items-center gap-2 rounded-2xl bg-muted/60 px-3 py-2 text-sm">
                         <FileQuestion className="size-4" />
@@ -126,11 +114,7 @@ export default function TeachersSection() {
                       </div>
                     )}
                     <Button className="w-full" asChild>
-                      <Link
-                        href={getLocalizedHref(
-                          `${routesName.quizzes.href}?teacherId=${teacher.id}` as TRouteName,
-                        )}
-                      >
+                      <Link href={getLocalizedHref(`${routesName.quizzes.href}?teacherId=${teacher.id}` as TRouteName)}>
                         عرض اختبارات الأستاذ
                       </Link>
                     </Button>
