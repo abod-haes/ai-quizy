@@ -5,6 +5,7 @@ import AboutSection from "@/components/section/public/home/about-section";
 import AIFeatureSection from "@/components/section/public/home/ai-feature-section";
 import HomeSubjectsSection from "@/components/section/public/home/home-subjects-section";
 import HomeTeachersSection from "@/components/section/public/home/home-teachers-section";
+import HomeSalesCentersSection from "@/components/section/public/home/home-sales-centers-section";
 
 export default function Page() {
   const products = [
@@ -83,8 +84,9 @@ export default function Page() {
     <div className="relative min-h-screen w-full bg-background">
       <div className="relative z-0">
         <HeroParallax products={products} />
-        <HomeSubjectsSection />
+        <HomeSalesCentersSection />
         <HomeTeachersSection />
+        <HomeSubjectsSection />
         <AboutSection />
         <AIFeatureSection />
       </div>
