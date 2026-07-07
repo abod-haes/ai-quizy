@@ -66,7 +66,7 @@ export default function HomeTeachersSection() {
               transition={{ duration: 0.35, delay: index * 0.05 }}
               className="h-full"
             >
-              <Card className="h-full bg-gradient-to-b from-card to-primary/5">
+              <Card className="h-full">
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <div className="bg-primary text-primary-foreground flex size-14 shrink-0 items-center justify-center rounded-3xl text-lg font-black">
