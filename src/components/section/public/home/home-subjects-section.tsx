@@ -4,18 +4,18 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/custom/loading";
 import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useSubjectsBrief } from "@/services/subject.services/subject.query";
-import { routesName, TRouteName } from "@/utils/constant";
+import { routesName } from "@/utils/constant";
 
 export default function HomeSubjectsSection() {
   const getLocalizedHref = useLocalizedHref();
   const { data: subjects, isLoading } = useSubjectsBrief();
-  const previewSubjects = subjects?.slice(0, 6) || [];
+  const previewSubjects = subjects?.slice(0, 10) || [];
 
   return (
     <section className="container relative z-10 mx-auto space-y-5 py-8 md:py-10">
@@ -36,7 +36,7 @@ export default function HomeSubjectsSection() {
               اختار المادة وابدأ مراجعتك
             </h2>
             <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm md:text-base">
-              المواد مربوطة بنفس API التطبيق، وكل مادة بتاخدك مباشرة لاختباراتها وتمارينها.
+              صور المواد بتاخدك بسرعة للمحتوى المناسب.
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function HomeSubjectsSection() {
           <Loading size="md" spinnerOnly />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="custom-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
           {previewSubjects.map((subject, index) => (
             <motion.div
               key={subject.id}
@@ -61,43 +61,18 @@ export default function HomeSubjectsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.3, delay: index * 0.035 }}
-              className="h-full"
+              className="w-[260px] min-w-[260px] snap-start sm:w-[300px] sm:min-w-[300px] lg:w-[340px] lg:min-w-[340px]"
             >
-              <Card className="group h-full p-2.5">
-                <EntityCover
-                  entity={subject}
-                  title={subject.name}
-                  label="مادة Quizy"
-                  className="mb-2.5 aspect-[2/1] rounded-2xl"
-                />
-                <CardHeader className="px-1.5 pb-1 pt-2">
-                  <CardTitle className="line-clamp-2 text-lg">
-                    {subject.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="px-1.5 pb-1.5">
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    <Button className="w-full" asChild>
-                      <Link
-                        href={getLocalizedHref(
-                          `${routesName.quizzes.href}?subjectId=${subject.id}` as TRouteName,
-                        )}
-                      >
-                        الاختبارات
-                      </Link>
-                    </Button>
-                    <Button className="w-full" variant="outline" asChild>
-                      <Link
-                        href={getLocalizedHref(
-                          `${routesName.lessons.href}?subjectId=${subject.id}` as TRouteName,
-                        )}
-                      >
-                        الدروس
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <Link href={getLocalizedHref(routesName.subjects.href)}>
+                <Card className="group p-2.5">
+                  <EntityCover
+                    entity={subject}
+                    title={subject.name}
+                    label=""
+                    className="aspect-[16/9] rounded-2xl"
+                  />
+                </Card>
+              </Link>
             </motion.div>
           ))}
         </div>
