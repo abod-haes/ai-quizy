@@ -41,7 +41,6 @@ function AIFeatureSection() {
       ref={sectionRef}
       className="relative py-[var(--section-padding-y)]"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_400px_at_50%_100%,hsl(var(--primary)/0.08),transparent_60%)]" />
       <div className="relative container">
         <motion.div
           initial="hidden"
@@ -50,7 +49,7 @@ function AIFeatureSection() {
         >
           <motion.h3
             variants={fadeInUp}
-            className="from-foreground to-foreground/70 bg-gradient-to-b bg-clip-text text-2xl font-bold text-transparent sm:text-3xl"
+            className="text-2xl font-black sm:text-3xl"
           >
             {ai.title}
           </motion.h3>
@@ -69,7 +68,7 @@ function AIFeatureSection() {
               <motion.li
                 key={i}
                 variants={fadeInUp}
-                className="border-border/60 bg-card/50 group rounded-xl border p-4 text-center backdrop-blur-sm"
+                className="border-border bg-card group rounded-xl border p-4 text-center"
               >
                 <div className="text-primary mb-2 inline-flex items-center gap-2">
                   {f.icon}
