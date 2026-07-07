@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { BookOpenCheck, ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/custom/loading";
+import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useSubjectsBrief } from "@/services/subject.services/subject.query";
 import { routesName, TRouteName } from "@/utils/constant";
@@ -62,23 +63,39 @@ export default function HomeSubjectsSection() {
               transition={{ duration: 0.35, delay: index * 0.05 }}
               className="h-full"
             >
-              <Card className="h-full bg-gradient-to-b from-card to-primary/5">
-                <CardHeader>
-                  <div className="bg-primary/10 text-primary mb-4 flex size-12 items-center justify-center rounded-2xl">
-                    <BookOpenCheck className="size-6" />
-                  </div>
-                  <CardTitle className="text-xl">{subject.name}</CardTitle>
+              <Card className="group h-full bg-gradient-to-b from-card to-primary/5 p-3">
+                <EntityCover
+                  entity={subject}
+                  title={subject.name}
+                  label="مادة Quizy"
+                  className="mb-3"
+                />
+                <CardHeader className="px-2 pb-2 pt-3">
+                  <CardTitle className="line-clamp-2 text-xl">
+                    {subject.name}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <Button className="w-full" asChild>
-                    <Link
-                      href={getLocalizedHref(
-                        `${routesName.quizzes.href}?subjectId=${subject.id}` as TRouteName,
-                      )}
-                    >
-                      اختبارات المادة
-                    </Link>
-                  </Button>
+                <CardContent className="px-2 pb-2">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <Button className="w-full" asChild>
+                      <Link
+                        href={getLocalizedHref(
+                          `${routesName.quizzes.href}?subjectId=${subject.id}` as TRouteName,
+                        )}
+                      >
+                        الاختبارات
+                      </Link>
+                    </Button>
+                    <Button className="w-full" variant="outline" asChild>
+                      <Link
+                        href={getLocalizedHref(
+                          `${routesName.lessons.href}?subjectId=${subject.id}` as TRouteName,
+                        )}
+                      >
+                        الدروس
+                      </Link>
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
