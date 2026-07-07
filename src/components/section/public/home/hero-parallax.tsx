@@ -26,8 +26,8 @@ export const HeroParallax = ({
   const springConfig = { stiffness: 220, damping: 28, bounce: 0 };
 
   const isMobile = useIsMobile();
-  const maxShift = isMobile ? 10 : 70;
-  const thirdRowShift = isMobile ? 0 : 35;
+  const maxShift = isMobile ? 8 : 55;
+  const thirdRowShift = isMobile ? 0 : 25;
   const translateX = useSpring(
     useTransform(scrollYProgress, [0, 1], [0, maxShift]),
     springConfig,
@@ -41,40 +41,40 @@ export const HeroParallax = ({
     springConfig,
   );
   const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 2 : 8, 0]),
+    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 1.5 : 6, 0]),
     springConfig,
   );
   const opacity = useSpring(
-    useTransform(scrollYProgress, [0, 0.18], [0.45, 1]),
+    useTransform(scrollYProgress, [0, 0.18], [0.55, 1]),
     springConfig,
   );
   const rotateZ = useSpring(
-    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 2 : 5, 0]),
+    useTransform(scrollYProgress, [0, 0.22], [isMobile ? 1.5 : 4, 0]),
     springConfig,
   );
   const translateY = useSpring(
     useTransform(
       scrollYProgress,
       [0, 0.22],
-      [isMobile ? -24 : -80, isMobile ? 10 : 40],
+      [isMobile ? -18 : -55, isMobile ? 8 : 28],
     ),
     springConfig,
   );
 
   const rowClass =
-    "mx-auto flex w-full max-w-7xl flex-wrap justify-center gap-3 px-4 sm:gap-4 sm:px-6 md:gap-5 lg:gap-6";
+    "mx-auto flex w-full max-w-6xl flex-wrap justify-center gap-2.5 px-4 sm:gap-3 sm:px-6 md:gap-4 lg:gap-5";
 
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-24 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:pt-28 md:min-h-[118svh] md:pt-32 lg:min-h-[125svh]"
+      className="relative flex min-h-[92svh] flex-col overflow-hidden pt-20 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:pt-24 md:min-h-[105svh] md:pt-28 lg:min-h-[112svh]"
     >
       <div className="flex items-center justify-center">
         <Header />
       </div>
       <motion.div
         style={{ rotateX, rotateZ, translateY, opacity }}
-        className="space-y-3 pb-10 sm:space-y-4 md:space-y-5 lg:space-y-6"
+        className="space-y-2.5 pb-8 sm:space-y-3 md:space-y-4"
       >
         <motion.div className={rowClass}>
           {firstRow.map((product) => (
