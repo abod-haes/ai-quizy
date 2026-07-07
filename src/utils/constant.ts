@@ -124,10 +124,6 @@ export const NavLinkHeader: { label: string; href: TRouteName }[] = [
     href: routesName.home.href,
   },
   {
-    label: "الكورسات",
-    href: routesName.courses.href,
-  },
-  {
     label: "المواد",
     href: routesName.subjects.href,
   },
@@ -146,10 +142,6 @@ export const NavLinkHeader: { label: string; href: TRouteName }[] = [
   {
     label: "تحميل التطبيق",
     href: routesName.download.href,
-  },
-  {
-    label: "من نحن",
-    href: routesName.about.href,
   },
 ];
 export const PER_PAGE = 12;
