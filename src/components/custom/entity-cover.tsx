@@ -5,6 +5,8 @@ import { ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const imageKeys = [
+  "primaryImage",
+  "mainImage",
   "image",
   "imageUrl",
   "thumbnail",
@@ -87,11 +89,13 @@ export function EntityCover({
   title,
   label,
   className,
+  fit = "cover",
 }: {
   entity?: object | null;
   title: string;
   label?: string;
   className?: string;
+  fit?: "cover" | "contain";
 }) {
   const image = getEntityImage(entity);
   const [hasImageError, setHasImageError] = useState(false);
@@ -111,7 +115,10 @@ export function EntityCover({
           alt={title}
           loading="lazy"
           onError={() => setHasImageError(true)}
-          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "h-full w-full object-center transition-transform duration-500 group-hover:scale-105",
+            fit === "contain" ? "object-contain" : "object-cover",
+          )}
         />
       ) : (
         <EntityImageFallback label={label} />
