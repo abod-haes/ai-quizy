@@ -11,6 +11,10 @@ export const routesName = {
     keyName: "common.subjects",
     href: "/subjects",
   },
+  lessons: {
+    keyName: "common.lessons",
+    href: "/lessons",
+  },
   teachers: {
     keyName: "common.teachers",
     href: "/teachers",
@@ -126,6 +130,10 @@ export const NavLinkHeader: { label: string; href: TRouteName }[] = [
   {
     label: "المواد",
     href: routesName.subjects.href,
+  },
+  {
+    label: "الدروس",
+    href: routesName.lessons.href,
   },
   {
     label: "الأساتذة",
