@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, Store } from "lucide-react";
+import { MapPin, Store } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loading } from "@/components/custom/loading";
 import { usePointsOfSale } from "@/services/sales-center.services/sales-center.query";
@@ -21,26 +20,20 @@ export default function HomeSalesCentersSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.25 }}
         transition={{ duration: 0.35 }}
-        className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
+        className="space-y-2.5"
       >
-        <div className="space-y-2.5">
-          <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
-            <Store className="size-3.5" />
-            مراكز البيع
-          </div>
-          <div>
-            <h2 className="text-2xl font-black tracking-tight md:text-3xl">
-              اشترك من أقرب مركز بيع
-            </h2>
-            <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm md:text-base">
-              مراكز معتمدة لشراء أكواد الكورسات والاشتراكات.
-            </p>
-          </div>
+        <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+          <Store className="size-3.5" />
+          مراكز البيع
         </div>
-        <Button variant="outline">
-          عرض الكل
-          <ArrowLeft className="size-4" />
-        </Button>
+        <div>
+          <h2 className="text-2xl font-black tracking-tight md:text-3xl">
+            اشترك من أقرب مركز بيع
+          </h2>
+          <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm md:text-base">
+            مراكز معتمدة لشراء أكواد الكورسات والاشتراكات.
+          </p>
+        </div>
       </motion.div>
 
       {isLoading ? (
@@ -63,7 +56,7 @@ export default function HomeSalesCentersSection() {
                 <div className="absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-primary/5" />
                 <CardContent className="relative space-y-3 p-4">
                   <div className="flex items-start gap-3">
-                    <div className="bg-primary/13 text-primary flex size-12 shrink-0 items-center justify-center rounded-full">
+                    <div className="bg-primary/10 text-primary flex size-12 shrink-0 items-center justify-center rounded-full">
                       <Store className="size-5" />
                     </div>
                     <div className="min-w-0 flex-1 space-y-1">
