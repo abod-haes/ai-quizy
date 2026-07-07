@@ -5,12 +5,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[1.35rem] text-sm font-extrabold outline-none transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 active:scale-[0.98]",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-bold outline-none transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "border border-primary bg-primary text-primary-foreground shadow-[0_10px_22px_-16px_var(--primary)] hover:bg-primary/90",
+          "border border-primary bg-primary text-primary-foreground shadow-[0_8px_18px_-15px_var(--primary)] hover:bg-primary/90",
         destructive:
           "border border-destructive bg-destructive text-white shadow-sm hover:bg-destructive/90",
         outline:
@@ -22,10 +22,10 @@ const buttonVariants = cva(
         link: "rounded-md bg-transparent px-0 py-0 text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-11 px-6 py-2.5 has-[>svg]:px-5",
-        sm: "h-9 rounded-2xl gap-1.5 px-4 has-[>svg]:px-3",
-        lg: "h-12 rounded-[1.45rem] px-8 text-base has-[>svg]:px-6",
-        icon: "size-11 rounded-2xl",
+        default: "h-10 px-5 py-2 has-[>svg]:px-4",
+        sm: "h-8 rounded-xl gap-1.5 px-3 text-xs has-[>svg]:px-2.5",
+        lg: "h-11 rounded-2xl px-6 text-sm has-[>svg]:px-5",
+        icon: "size-10 rounded-2xl",
       },
     },
     defaultVariants: {
