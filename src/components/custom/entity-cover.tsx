@@ -69,13 +69,11 @@ export function EntityCover({
   return (
     <div
       className={cn(
-        "relative aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-border bg-muted/50",
+        "relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-muted/50",
         className,
       )}
     >
       {image ? (
-        // Use a native image so API-hosted images work even when the domain is not listed in next.config.
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={image}
           alt={title}
@@ -84,11 +82,11 @@ export function EntityCover({
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-muted/70">
-          <div className="text-primary flex flex-col items-center gap-3 text-center">
-            <div className="bg-card flex size-14 items-center justify-center rounded-3xl border border-border shadow-sm">
-              <ImageIcon className="size-7" />
+          <div className="text-primary flex flex-col items-center gap-2 text-center">
+            <div className="bg-card flex size-11 items-center justify-center rounded-2xl border border-border shadow-sm">
+              <ImageIcon className="size-5" />
             </div>
-            {label && <span className="text-sm font-bold">{label}</span>}
+            {label && <span className="text-xs font-bold">{label}</span>}
           </div>
         </div>
       )}
