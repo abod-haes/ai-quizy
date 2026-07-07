@@ -21,6 +21,7 @@ function QuizzesPageContent() {
   const {
     getParam,
     getParamAsNumber,
+    getParamAsBoolean,
     setParam,
     setParams,
     clearParams,
@@ -31,6 +32,7 @@ function QuizzesPageContent() {
   const perPage = PER_PAGE;
   const subjectId = getParam("subjectId") ?? "";
   const teacherId = getParam("teacherId") ?? "";
+  const isLesson = getParamAsBoolean("isLesson") ?? false;
 
   const searchParamsKey = searchParams.toString();
   const userId = useAuthStore((state) => state.user?.id);
@@ -44,6 +46,7 @@ function QuizzesPageContent() {
       PerPage: perPage,
       SubjectId: subjectId || undefined,
       TeacherId: teacherId || undefined,
+      IsLesson: isLesson || undefined,
       studentId: userId || undefined,
     },
     {
@@ -58,10 +61,11 @@ function QuizzesPageContent() {
         page: newPage,
         subjectId: subjectId || undefined,
         teacherId: teacherId || undefined,
+        isLesson: isLesson || undefined,
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [setParams, subjectId, teacherId],
+    [setParams, subjectId, teacherId, isLesson],
   );
 
   const handleFilterChange = useCallback(() => {
@@ -69,8 +73,9 @@ function QuizzesPageContent() {
       page: 1,
       subjectId: subjectId || undefined,
       teacherId: teacherId || undefined,
+      isLesson: isLesson || undefined,
     });
-  }, [subjectId, teacherId, setParams]);
+  }, [subjectId, teacherId, isLesson, setParams]);
 
   const clearFilters = useCallback(() => {
     clearParams();
