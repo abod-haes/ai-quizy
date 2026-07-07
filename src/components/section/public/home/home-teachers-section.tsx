@@ -4,18 +4,18 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, GraduationCap, UserRoundCheck } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/custom/loading";
 import { EntityCover } from "@/components/custom/entity-cover";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
 import { useTeachersBrief } from "@/services/teacher.services/teacher.query";
-import { routesName, TRouteName } from "@/utils/constant";
+import { routesName } from "@/utils/constant";
 
 export default function HomeTeachersSection() {
   const getLocalizedHref = useLocalizedHref();
   const { data: teachers, isLoading } = useTeachersBrief();
-  const previewTeachers = teachers?.slice(0, 6) || [];
+  const previewTeachers = teachers?.slice(0, 10) || [];
 
   return (
     <section className="container relative z-10 mx-auto space-y-5 py-8 md:py-10">
@@ -53,7 +53,7 @@ export default function HomeTeachersSection() {
           <Loading size="md" spinnerOnly />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="custom-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
           {previewTeachers.map((teacher, index) => (
             <motion.div
               key={teacher.id}
@@ -61,14 +61,14 @@ export default function HomeTeachersSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.3, delay: index * 0.035 }}
-              className="h-full"
+              className="w-[260px] min-w-[260px] snap-start sm:w-[300px] sm:min-w-[300px] lg:w-[340px] lg:min-w-[340px]"
             >
               <Card className="group h-full p-2.5">
                 <EntityCover
                   entity={teacher}
                   title={`${teacher.firstName} ${teacher.lastName}`}
                   label="أستاذ Quizy"
-                  className="mb-2.5 aspect-[2/1] rounded-2xl"
+                  className="mb-2.5 aspect-[16/9] rounded-2xl"
                 />
                 <CardHeader className="px-1.5 pb-1 pt-2">
                   <CardTitle className="text-lg">
@@ -79,17 +79,6 @@ export default function HomeTeachersSection() {
                     أستاذ في Quizy
                   </p>
                 </CardHeader>
-                <CardContent className="px-1.5 pb-1.5">
-                  <Button className="w-full" asChild>
-                    <Link
-                      href={getLocalizedHref(
-                        `${routesName.quizzes.href}?teacherId=${teacher.id}` as TRouteName,
-                      )}
-                    >
-                      اختبارات الأستاذ
-                    </Link>
-                  </Button>
-                </CardContent>
               </Card>
             </motion.div>
           ))}
