@@ -36,7 +36,7 @@ export default function HomeTeachersSection() {
               تمرّن بعد شرح أستاذك
             </h2>
             <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm md:text-base">
-              الأساتذة ظاهرين من نفس API التطبيق، لتختار أستاذك وتشوف الاختبارات المرتبطة فيه.
+              تصفّح الأساتذة وشوف الاختبارات المرتبطة فيهم.
             </p>
           </div>
         </div>
