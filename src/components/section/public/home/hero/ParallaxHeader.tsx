@@ -14,10 +14,10 @@ export const Header = () => {
   if (!hero) return null;
 
   return (
-    <div className="relative top-0 left-0 z-50 mx-auto w-full max-w-7xl px-4 py-14 text-center md:py-24 lg:py-28">
+    <div className="relative top-0 left-0 z-50 mx-auto w-full max-w-7xl px-4 py-16 text-center md:py-32 lg:py-40">
       <h1
-        className="text-3xl font-black text-balance text-foreground md:text-6xl"
-        style={{ lineHeight: "1.35" }}
+        className="text-3xl font-extrabold text-balance text-foreground md:text-6xl"
+        style={{ lineHeight: "1.5" }}
       >
         {hero.title}
       </h1>
