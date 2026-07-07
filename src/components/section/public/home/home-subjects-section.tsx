@@ -53,7 +53,7 @@ export default function HomeSubjectsSection() {
           <Loading size="md" spinnerOnly />
         </div>
       ) : (
-        <div className="custom-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {previewSubjects.map((subject, index) => (
             <motion.div
               key={subject.id}
@@ -61,7 +61,7 @@ export default function HomeSubjectsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.3, delay: index * 0.035 }}
-              className="w-[260px] min-w-[260px] snap-start sm:w-[300px] sm:min-w-[300px] lg:w-[340px] lg:min-w-[340px]"
+              className="w-[290px] min-w-[290px] snap-start sm:w-[340px] sm:min-w-[340px] lg:w-[380px] lg:min-w-[380px]"
             >
               <Link href={getLocalizedHref(routesName.subjects.href)}>
                 <Card className="group p-2.5">
@@ -69,7 +69,8 @@ export default function HomeSubjectsSection() {
                     entity={subject}
                     title={subject.name}
                     label=""
-                    className="aspect-[16/9] rounded-2xl"
+                    fit="contain"
+                    className="aspect-[16/9] rounded-2xl bg-muted/30"
                   />
                 </Card>
               </Link>
