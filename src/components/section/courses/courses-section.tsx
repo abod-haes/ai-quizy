@@ -34,22 +34,22 @@ export default function CoursesSection() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      <div className="container relative z-10 mx-auto space-y-8 py-8 md:py-12">
-        <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div className="space-y-5">
-            <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold">
-              <Sparkles className="size-4" />
+      <div className="container relative z-10 mx-auto space-y-6 py-6 md:py-8">
+        <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="space-y-3">
+            <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+              <Sparkles className="size-3.5" />
               كورسات Quizy
             </div>
-            <div className="space-y-3">
-              <h1 className="max-w-2xl text-4xl font-black tracking-tight md:text-5xl">
+            <div className="space-y-2">
+              <h1 className="max-w-2xl text-2xl font-black tracking-tight md:text-4xl">
                 ادرس مع أستاذك، وتمرّن على Quizy
               </h1>
-              <p className="text-muted-foreground max-w-xl text-base md:text-lg">
+              <p className="text-muted-foreground max-w-xl text-sm md:text-base">
                 صفحة الكورسات بتجمع المواد المتاحة وتفتحلك دروس واختبارات كل مادة بنفس تجربة التطبيق: واضحة، سريعة، ومركّزة على المراجعة بعد الدرس.
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <Button asChild>
                 <Link href={getLocalizedHref(routesName.quizzes.href)}>
                   ابدأ الاختبارات
@@ -64,16 +64,16 @@ export default function CoursesSection() {
           </div>
 
           <Card className="p-2">
-            <CardContent className="space-y-4 p-5">
+            <CardContent className="space-y-3 p-3">
               {steps.map((step, index) => (
                 <div
                   key={step}
-                  className="flex items-center gap-3 rounded-3xl border border-border bg-muted/45 p-4"
+                  className="flex items-center gap-2.5 rounded-2xl border border-border bg-muted/45 p-3"
                 >
-                  <div className="bg-primary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-2xl font-black">
+                  <div className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-xl text-sm font-black">
                     {index + 1}
                   </div>
-                  <p className="font-bold">{step}</p>
+                  <p className="text-sm font-bold">{step}</p>
                 </div>
               ))}
             </CardContent>
@@ -88,51 +88,51 @@ export default function CoursesSection() {
         )}
 
         {isLoading && (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-16">
             <Loading size="lg" spinnerOnly />
           </div>
         )}
 
         {!isLoading && !subjectsError && (
-          <section className="space-y-5">
+          <section className="space-y-4">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-black">المواد والكورسات</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-xl font-black md:text-2xl">المواد والكورسات</h2>
+                <p className="text-muted-foreground text-sm">
                   اختر مادة لتشوف الدروس والاختبارات المرتبطة فيها.
                 </p>
               </div>
-              <div className="text-muted-foreground hidden items-center gap-2 text-sm md:flex">
-                <GraduationCap className="size-4" />
+              <div className="text-muted-foreground hidden items-center gap-1.5 text-xs md:flex">
+                <GraduationCap className="size-3.5" />
                 {teachers?.length || 0} أستاذ متاح
               </div>
             </div>
 
             {subjects?.length ? (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {subjects.map((subject, index) => (
                   <motion.div
                     key={subject.id}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, delay: index * 0.03 }}
+                    transition={{ duration: 0.25, delay: index * 0.025 }}
                     className="h-full"
                   >
-                    <Card className="group h-full justify-between p-3">
+                    <Card className="group h-full justify-between p-2.5">
                       <EntityCover
                         entity={subject}
                         title={subject.name}
                         label="كورس Quizy"
-                        className="mb-3"
+                        className="mb-2.5 aspect-[2/1] rounded-2xl"
                       />
-                      <CardHeader className="px-2 pb-2 pt-3">
-                        <CardTitle className="line-clamp-2 text-xl">
+                      <CardHeader className="px-1.5 pb-1 pt-2">
+                        <CardTitle className="line-clamp-2 text-lg">
                           {subject.name}
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-3 px-2 pb-2">
-                        <div className="text-muted-foreground flex items-center gap-2 rounded-2xl bg-muted/60 px-3 py-2 text-sm">
-                          <Layers3 className="size-4" />
+                      <CardContent className="space-y-2.5 px-1.5 pb-1.5">
+                        <div className="text-muted-foreground flex items-center gap-1.5 rounded-xl bg-muted/60 px-2.5 py-2 text-xs">
+                          <Layers3 className="size-3.5" />
                           دروس واختبارات حسب المادة
                         </div>
                         <div className="grid gap-2 sm:grid-cols-2">
@@ -161,7 +161,7 @@ export default function CoursesSection() {
                 ))}
               </div>
             ) : (
-              <Card className="flex min-h-[240px] items-center justify-center p-10 text-center">
+              <Card className="flex min-h-[220px] items-center justify-center p-8 text-center">
                 <p className="text-muted-foreground">لا يوجد كورسات متاحة حاليًا.</p>
               </Card>
             )}
