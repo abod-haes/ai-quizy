@@ -53,7 +53,7 @@ export default function HomeTeachersSection() {
           <Loading size="md" spinnerOnly />
         </div>
       ) : (
-        <div className="custom-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {previewTeachers.map((teacher, index) => (
             <motion.div
               key={teacher.id}
