@@ -86,46 +86,46 @@ function QuizzesPageContent() {
 
   return (
     <div className="relative flex min-h-screen flex-1 flex-col overflow-hidden bg-background">
-      <div className="container relative z-10 mx-auto flex h-full flex-1 flex-col gap-6 py-8 md:py-12">
-        <div className="space-y-5">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-3">
-              <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold">
-                <Sparkles className="size-4" />
+      <div className="container relative z-10 mx-auto flex h-full flex-1 flex-col gap-5 py-6 md:py-8">
+        <div className="space-y-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-2.5">
+              <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+                <Sparkles className="size-3.5" />
                 اختبارات Quizy
               </div>
-              <div className="space-y-2">
-                <h1 className="max-w-2xl text-3xl font-black tracking-tight md:text-5xl">
+              <div className="space-y-1.5">
+                <h1 className="max-w-2xl text-2xl font-black tracking-tight md:text-4xl">
                   {quizzesDict.title}
                 </h1>
-                <p className="text-muted-foreground max-w-xl text-base md:text-lg">
+                <p className="text-muted-foreground max-w-xl text-sm md:text-base">
                   اختر المادة أو الأستاذ وابدأ الاختبار بنفس أسلوب التطبيق: صورة واضحة، أستاذ الاختبار، عدد الأسئلة، وزر مباشر.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 rounded-[1.35rem] border border-border bg-card px-4 py-3 shadow-sm">
-              <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-2xl">
-                <FileQuestion className="size-5" />
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2.5 shadow-sm">
+              <div className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-xl">
+                <FileQuestion className="size-4" />
               </div>
               <div>
-                <p className="text-2xl font-black">{data?.totalCount ?? 0}</p>
-                <p className="text-muted-foreground text-xs">اختبار متاح</p>
+                <p className="text-xl font-black">{data?.totalCount ?? 0}</p>
+                <p className="text-muted-foreground text-[11px]">اختبار متاح</p>
               </div>
             </div>
           </div>
 
-          <Card className="p-4">
-            <div className="mb-4 flex items-center gap-2">
-              <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-2xl">
-                <Filter className="size-5" />
+          <Card className="p-3">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-xl">
+                <Filter className="size-4" />
               </div>
-              <h2 className="text-lg font-bold">{quizzesDict.filters.title}</h2>
+              <h2 className="text-base font-bold">{quizzesDict.filters.title}</h2>
             </div>
 
-            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-[1fr_1fr_auto]">
-              <div className="space-y-2">
-                <label className="text-sm font-bold">
+            <div className="grid grid-cols-1 items-end gap-3 md:grid-cols-[1fr_1fr_auto]">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold">
                   {quizzesDict.filters.subject}
                 </label>
                 <SelectWithOptions
@@ -147,12 +147,12 @@ function QuizzesPageContent() {
                   placeholder={quizzesDict.filters.selectSubject}
                   showAllOption
                   allOptionLabel={quizzesDict.filters.all}
-                  triggerClassName="w-full rounded-2xl min-h-11"
+                  triggerClassName="w-full rounded-xl min-h-10 text-sm"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold">
                   {quizzesDict.filters.teacher}
                 </label>
                 <SelectWithOptions
@@ -174,11 +174,11 @@ function QuizzesPageContent() {
                   placeholder={quizzesDict.filters.selectTeacher}
                   showAllOption
                   allOptionLabel={quizzesDict.filters.all}
-                  triggerClassName="w-full rounded-2xl min-h-11"
+                  triggerClassName="w-full rounded-xl min-h-10 text-sm"
                 />
               </div>
 
-              <div className="flex gap-2 md:min-w-[220px]">
+              <div className="flex gap-2 md:min-w-[190px]">
                 <Button className="flex-1" onClick={handleFilterChange}>
                   تطبيق
                 </Button>
@@ -198,7 +198,7 @@ function QuizzesPageContent() {
         )}
 
         {isLoading && (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-16">
             <Loading size="lg" spinnerOnly />
           </div>
         )}
@@ -206,14 +206,14 @@ function QuizzesPageContent() {
         {!isLoading && !error && (
           <>
             {quizzes.length === 0 ? (
-              <Card className="flex min-h-[260px] flex-1 flex-col justify-center p-12 text-center">
-                <p className="text-muted-foreground text-lg">
+              <Card className="flex min-h-[220px] flex-1 flex-col justify-center p-8 text-center">
+                <p className="text-muted-foreground text-base">
                   {quizzesDict.results.noQuizzesFound}
                 </p>
               </Card>
             ) : (
-              <div className="flex flex-1 flex-col justify-between gap-8">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-1 flex-col justify-between gap-6">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
                   {quizzes.map((quiz) => (
                     <QuizCard key={quiz.id} quiz={quiz} />
                   ))}
@@ -237,7 +237,7 @@ export default function QuizzesSection() {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto flex items-center justify-center px-4 py-20">
+        <div className="container mx-auto flex items-center justify-center px-4 py-16">
           <Loading size="lg" spinnerOnly />
         </div>
       }
