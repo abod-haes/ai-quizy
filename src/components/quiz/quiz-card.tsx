@@ -27,7 +27,6 @@ import {
   Circle,
   Timer,
   FileQuestion,
-  Clock3,
   ArrowLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -39,11 +38,6 @@ import { useAuthStore } from "@/store/auth.store";
 
 interface QuizCardProps {
   quiz: Quiz;
-}
-
-function formatDuration(timeExpiration: number) {
-  if (!timeExpiration || timeExpiration <= 0) return "بدون مدة";
-  return `${timeExpiration} دقيقة`;
 }
 
 export function QuizCard({ quiz }: QuizCardProps) {
@@ -109,26 +103,14 @@ export function QuizCard({ quiz }: QuizCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-4 px-5">
-          <div className="grid grid-cols-2 gap-2.5 text-sm">
-            <div className="rounded-[1.1rem] border border-border bg-muted/45 p-3">
-              <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                <FileQuestion className="size-3.5" />
-                الأسئلة
-              </span>
-              <span className="mt-1 block font-black">
-                {quiz.questionsCount || 0}
-              </span>
-            </div>
-
-            <div className="rounded-[1.1rem] border border-border bg-muted/45 p-3">
-              <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                <Clock3 className="size-3.5" />
-                المدة الزمنية
-              </span>
-              <span className="mt-1 block font-black">
-                {formatDuration(quiz.timeExpiration)}
-              </span>
-            </div>
+          <div className="rounded-[1.1rem] border border-border bg-muted/45 p-3 text-sm">
+            <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <FileQuestion className="size-3.5" />
+              الأسئلة
+            </span>
+            <span className="mt-1 block font-black">
+              {quiz.questionsCount || 0}
+            </span>
           </div>
 
           {quiz.isSolved ? (
