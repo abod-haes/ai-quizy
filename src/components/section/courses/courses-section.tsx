@@ -33,9 +33,7 @@ export default function CoursesSection() {
   const isLoading = subjectsLoading || teachersLoading;
 
   return (
-    <div className="from-primary/10 via-background to-background relative min-h-screen overflow-hidden bg-gradient-to-b">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_420px_at_75%_-5%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_65%)]" />
-
+    <div className="relative min-h-screen overflow-hidden bg-background">
       <div className="container relative z-10 mx-auto space-y-8 py-8 md:py-12">
         <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="space-y-5">
@@ -65,12 +63,12 @@ export default function CoursesSection() {
             </div>
           </div>
 
-          <Card className="bg-background/85 p-2 backdrop-blur-xl">
+          <Card className="p-2">
             <CardContent className="space-y-4 p-5">
               {steps.map((step, index) => (
                 <div
                   key={step}
-                  className="flex items-center gap-3 rounded-3xl border border-primary/10 bg-primary/5 p-4"
+                  className="flex items-center gap-3 rounded-3xl border border-border bg-muted/45 p-4"
                 >
                   <div className="bg-primary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-2xl font-black">
                     {index + 1}
@@ -120,7 +118,7 @@ export default function CoursesSection() {
                     transition={{ duration: 0.25, delay: index * 0.03 }}
                     className="h-full"
                   >
-                    <Card className="group h-full justify-between bg-gradient-to-b from-card to-primary/5 p-3">
+                    <Card className="group h-full justify-between p-3">
                       <EntityCover
                         entity={subject}
                         title={subject.name}
