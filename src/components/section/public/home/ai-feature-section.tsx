@@ -17,6 +17,12 @@ function AIFeatureSection() {
   const dict = useTranslation();
   const ai = dict.home?.aiFeature;
 
+  const fadeInUp = createFadeInUp(0.6, 16);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const controls = useRevealedControls(sectionRef, { amount: 0.25 });
+
+  if (!ai) return null;
+
   const features: { icon: React.ReactNode; title: string; desc: string }[] =
     ai.features.map((f: { title: string; desc: string }) => ({
       icon:
@@ -32,10 +38,6 @@ function AIFeatureSection() {
       desc: f.desc,
     }));
 
-  const fadeInUp = createFadeInUp(0.6, 16);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const controls = useRevealedControls(sectionRef, { amount: 0.25 });
-  if (!ai) return null;
   return (
     <section
       ref={sectionRef}
@@ -81,7 +83,7 @@ function AIFeatureSection() {
 
           <motion.div variants={fadeInUp} className="mt-8">
             <Button size="lg" asChild>
-              <Link href={`/${lang}/Dashboard`}>{ai.cta}</Link>
+              <Link href={`/${lang}/quizzes`}>{ai.cta}</Link>
             </Button>
           </motion.div>
         </motion.div>
