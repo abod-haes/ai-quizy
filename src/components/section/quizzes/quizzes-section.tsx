@@ -99,7 +99,7 @@ function QuizzesPageContent() {
                   {quizzesDict.title}
                 </h1>
                 <p className="text-muted-foreground max-w-xl text-base md:text-lg">
-                  اختر المادة أو الأستاذ وابدأ الاختبار بنفس أسلوب التطبيق: كروت واضحة، مدة الاختبار ظاهرة، وزر مباشر.
+                  اختر المادة أو الأستاذ وابدأ الاختبار بنفس أسلوب التطبيق: صورة واضحة، أستاذ الاختبار، عدد الأسئلة، وزر مباشر.
                 </p>
               </div>
             </div>
