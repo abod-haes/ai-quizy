@@ -40,7 +40,7 @@ export default function SubjectsSection() {
                 كل مواد Quizy بمكان واحد
               </h1>
               <p className="text-muted-foreground max-w-xl text-sm md:text-base">
-                المواد مربوطة بنفس API التطبيق. اختار المادة وشوف الاختبارات والدروس المرتبطة فيها مباشرة.
+                اختار المادة وشوف الاختبارات والدروس المرتبطة فيها مباشرة.
               </p>
             </div>
           </div>
@@ -54,8 +54,8 @@ export default function SubjectsSection() {
               </div>
               <div className="rounded-2xl border border-border bg-muted/45 p-3">
                 <SearchCheck className="text-primary mb-2 size-5" />
-                <p className="text-xl font-black">API</p>
-                <p className="text-muted-foreground text-xs">بيانات مباشرة</p>
+                <p className="text-xl font-black">جاهزة</p>
+                <p className="text-muted-foreground text-xs">اختيار سريع</p>
               </div>
               <div className="rounded-2xl border border-border bg-muted/45 p-3">
                 <Layers3 className="text-primary mb-2 size-5" />
