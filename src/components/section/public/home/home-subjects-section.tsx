@@ -63,7 +63,7 @@ export default function HomeSubjectsSection() {
               transition={{ duration: 0.35, delay: index * 0.05 }}
               className="h-full"
             >
-              <Card className="group h-full bg-gradient-to-b from-card to-primary/5 p-3">
+              <Card className="group h-full p-3">
                 <EntityCover
                   entity={subject}
                   title={subject.name}
