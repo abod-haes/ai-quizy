@@ -18,24 +18,24 @@ export default function HomeSubjectsSection() {
   const previewSubjects = subjects?.slice(0, 6) || [];
 
   return (
-    <section className="container relative z-10 mx-auto space-y-6 py-12 md:py-16">
+    <section className="container relative z-10 mx-auto space-y-5 py-8 md:py-10">
       <motion.div
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.25 }}
-        transition={{ duration: 0.45 }}
-        className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+        transition={{ duration: 0.35 }}
+        className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
       >
-        <div className="space-y-3">
-          <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold">
-            <Sparkles className="size-4" />
+        <div className="space-y-2.5">
+          <div className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold">
+            <Sparkles className="size-3.5" />
             مواد Quizy
           </div>
           <div>
-            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+            <h2 className="text-2xl font-black tracking-tight md:text-3xl">
               اختار المادة وابدأ مراجعتك
             </h2>
-            <p className="text-muted-foreground mt-2 max-w-2xl">
+            <p className="text-muted-foreground mt-1.5 max-w-2xl text-sm md:text-base">
               المواد مربوطة بنفس API التطبيق، وكل مادة بتاخدك مباشرة لاختباراتها وتمارينها.
             </p>
           </div>
@@ -49,33 +49,33 @@ export default function HomeSubjectsSection() {
       </motion.div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-10">
           <Loading size="md" spinnerOnly />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {previewSubjects.map((subject, index) => (
             <motion.div
               key={subject.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
+              transition={{ duration: 0.3, delay: index * 0.035 }}
               className="h-full"
             >
-              <Card className="group h-full p-3">
+              <Card className="group h-full p-2.5">
                 <EntityCover
                   entity={subject}
                   title={subject.name}
                   label="مادة Quizy"
-                  className="mb-3"
+                  className="mb-2.5 aspect-[2/1] rounded-2xl"
                 />
-                <CardHeader className="px-2 pb-2 pt-3">
-                  <CardTitle className="line-clamp-2 text-xl">
+                <CardHeader className="px-1.5 pb-1 pt-2">
+                  <CardTitle className="line-clamp-2 text-lg">
                     {subject.name}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="px-2 pb-2">
+                <CardContent className="px-1.5 pb-1.5">
                   <div className="grid gap-2 sm:grid-cols-2">
                     <Button className="w-full" asChild>
                       <Link
