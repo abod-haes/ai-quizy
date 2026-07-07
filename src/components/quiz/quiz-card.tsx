@@ -28,6 +28,7 @@ import {
   Timer,
   FileQuestion,
   ArrowLeft,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalizedHref } from "@/hooks/useLocalizedHref";
@@ -35,17 +36,41 @@ import { motion } from "framer-motion";
 import { TRouteName, routesName } from "@/utils/constant";
 import { useTranslation } from "@/providers/TranslationsProvider";
 import { useAuthStore } from "@/store/auth.store";
+import { EntityCover } from "@/components/custom/entity-cover";
 
 interface QuizCardProps {
   quiz: Quiz;
+  teacher?: object | null;
+  subject?: { name?: string } | object | null;
 }
 
-export function QuizCard({ quiz }: QuizCardProps) {
+function getTextValue(entity: object | null | undefined, keys: string[]) {
+  if (!entity) return undefined;
+  const record = entity as Record<string, unknown>;
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  return undefined;
+}
+
+function getSubjectName(quiz: Quiz, subject?: { name?: string } | object | null) {
+  const fromSubject = subject && "name" in subject ? subject.name : undefined;
+  return (
+    fromSubject ||
+    getTextValue(quiz, ["subjectName", "subject", "entityName", "courseName"]) ||
+    quiz.linkedQuiz?.find((item) => item.name)?.name ||
+    "مادة Quizy"
+  );
+}
+
+export function QuizCard({ quiz, teacher, subject }: QuizCardProps) {
   const router = useRouter();
   const getLocalizedHref = useLocalizedHref();
   const { quizzes: quizzesDict } = useTranslation();
   const isAuth = useAuthStore((state) => state.isAuth());
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const subjectName = getSubjectName(quiz, subject);
 
   const handleStartQuiz = (e: React.MouseEvent) => {
     if (!isAuth && !quiz.isSolved) {
@@ -66,43 +91,54 @@ export function QuizCard({ quiz }: QuizCardProps) {
       transition={{ duration: 0.25 }}
       className="h-full"
     >
-      <Card className="group h-full min-h-[250px] justify-between p-0">
-        <CardHeader className="px-5 pt-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex min-w-0 items-start gap-3">
-              <div className="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-[1.15rem]">
-                <FileQuestion className="size-5" />
-              </div>
-              <div className="min-w-0 space-y-1.5">
-                <CardTitle className="line-clamp-2 text-lg font-black">
-                  {quizzesDict.card.quiz}
-                </CardTitle>
-                <CardDescription className="flex items-center gap-2">
-                  <User className="size-4" />
-                  <span className="truncate">{quiz.teacherName}</span>
-                </CardDescription>
-              </div>
-            </div>
+      <Card className="group h-full min-h-[310px] justify-between p-3">
+        <div className="relative">
+          <EntityCover
+            entity={(subject as object) || quiz}
+            title={subjectName}
+            label="مادة Quizy"
+            className="aspect-[16/9] rounded-[1.35rem]"
+          />
+          <div
+            className={cn(
+              "absolute start-3 top-3 flex h-8 items-center gap-1.5 rounded-full border bg-card/90 px-2.5 text-xs font-bold shadow-sm backdrop-blur",
+              quiz.isSolved ? "text-success" : "text-muted-foreground",
+            )}
+          >
+            {quiz.isSolved ? (
+              <CheckCircle2 className="size-4" />
+            ) : (
+              <Circle className="size-4" />
+            )}
+            {quiz.isSolved ? "منتهي" : "جاهز"}
+          </div>
+        </div>
 
-            <div
-              className={cn(
-                "flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-xs font-bold",
-                quiz.isSolved
-                  ? "border-success/20 bg-success/10 text-success"
-                  : "border-border bg-muted text-muted-foreground",
-              )}
-            >
-              {quiz.isSolved ? (
-                <CheckCircle2 className="size-4" />
-              ) : (
-                <Circle className="size-4" />
-              )}
-              {quiz.isSolved ? "منتهي" : "جاهز"}
+        <CardHeader className="px-2 pb-2 pt-3">
+          <div className="flex items-start gap-3">
+            <EntityCover
+              entity={teacher || quiz}
+              title={quiz.teacherName || "أستاذ Quizy"}
+              label=""
+              className="aspect-square size-12 shrink-0 rounded-2xl"
+            />
+            <div className="min-w-0 space-y-1.5">
+              <CardTitle className="line-clamp-1 text-lg font-black">
+                {quizzesDict.card.quiz}
+              </CardTitle>
+              <CardDescription className="flex items-center gap-2">
+                <User className="size-4" />
+                <span className="truncate">{quiz.teacherName}</span>
+              </CardDescription>
+              <p className="text-muted-foreground flex items-center gap-2 text-sm">
+                <BookOpen className="size-4" />
+                <span className="truncate">{subjectName}</span>
+              </p>
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4 px-5">
+        <CardContent className="space-y-3 px-2">
           <div className="rounded-[1.1rem] border border-border bg-muted/45 p-3 text-sm">
             <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
               <FileQuestion className="size-3.5" />
@@ -163,7 +199,7 @@ export function QuizCard({ quiz }: QuizCardProps) {
           )}
         </CardContent>
 
-        <CardFooter className="px-5 pb-5">
+        <CardFooter className="px-2 pb-2">
           {quiz.isSolved ? (
             <Link
               href={getLocalizedHref(
