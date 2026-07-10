@@ -90,4 +90,8 @@ export const END_POINTS = {
   STATISTICS: {
     GET_STATISTICS: "/Statistics",
   },
+  POINTS_OF_SALE: {
+    GET_POINTS_OF_SALE: (params?: PartialQueryParams) =>
+      `/PointsOfSale?Page=${params?.page || 1}&PerPage=${params?.PerPage || 10}`,
+  },
 } as const;

@@ -3,30 +3,29 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-// export const buttonStyles = () =>
-//   tw`  transition-all duration-300 border-none  font-Raleway tracking-tight   rounded-[8px] font-[600] justify-center flex items-center   cursor-pointer ! tracking-wide capitalize font-bold   py-[12px]! sm:px-[32px] px-[20px]  text-[12px]!  whitespace-nowrap focus:outline-none`;
+
 const buttonVariants = cva(
-  "inline-flex cursor-pointer  hover:scale-100  outline-none items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive  active:translate-y-0 active:scale-[0.98]  tracking-wide",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-bold outline-none transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-white shadow-lg hover:bg-primary/90 hover:shadow-xl border-b-2 border-border-primary active:scale-[0.98]",
+          "border border-primary bg-primary text-primary-foreground shadow-[0_8px_18px_-15px_var(--primary)] hover:bg-primary/90",
         destructive:
-          "bg-destructive text-white shadow-lg hover:bg-destructive/90 hover:shadow-xl focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 border-b-2 border-destructive/60 active:scale-[0.98]",
+          "border border-destructive bg-destructive text-white shadow-sm hover:bg-destructive/90",
         outline:
-          "border bg-background shadow-lg  text-primary hover:shadow-xl dark:bg-input/30 dark:border-input dark:hover:bg-input/50   border-b-2 border-primary/60 active:scale-[0.98]",
+          "border border-primary/20 bg-card text-primary shadow-sm hover:border-primary/30 hover:bg-primary/10",
         secondary:
-          "bg-secondary text-primary shadow-lg hover:bg-secondary/80 hover:shadow-xl border-b-2 border-border-secondary active:scale-[0.98]",
+          "border border-border bg-muted text-foreground shadow-sm hover:bg-muted/80",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 active:scale-[0.98]   text-primary bg-transparent hover:bg-primary/10 hover:text-primary/90 px-4 py-2 rounded-full transition-all duration-300  hover:shadow-md relative overflow-hidden group before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/20 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100 active:scale-[0.98]",
-        link: " text-primary bg-transparent hover:text-primary/90  px-1.5! py-0! rounded-full transition-all duration-300 relative overflow-hidden group before:absolute before:bottom-2 before:left-0 before:h-0.5 before:w-0 before:bg-primary before:transition-all before:duration-300 hover:before:w-full active:scale-[0.98]",
+          "bg-transparent text-primary hover:bg-primary/10 hover:text-primary",
+        link: "rounded-md bg-transparent px-0 py-0 text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-6 py-2 has-[>svg]:px-6",
-        sm: "h-8 rounded-full gap-1.5 px-4 has-[>svg]:px-4",
-        lg: "h-12 rounded-full px-8 has-[>svg]:px-6 text-base",
-        icon: "size-12",
+        default: "h-10 px-5 py-2 has-[>svg]:px-4",
+        sm: "h-8 rounded-xl gap-1.5 px-3 text-xs has-[>svg]:px-2.5",
+        lg: "h-11 rounded-2xl px-6 text-sm has-[>svg]:px-5",
+        icon: "size-10 rounded-2xl",
       },
     },
     defaultVariants: {
@@ -53,7 +52,6 @@ function Button({
 }: ButtonProps) {
   const buttonClasses = cn(buttonVariants({ variant, size, className }));
 
-  // If asChild is true, use Slot
   if (asChild) {
     return (
       <Slot
@@ -65,7 +63,6 @@ function Button({
     );
   }
 
-  // If href is provided, render as Link
   if (href) {
     const { children, ...linkProps } = props as Omit<
       React.ComponentProps<typeof Link>,
@@ -83,7 +80,6 @@ function Button({
     );
   }
 
-  // Otherwise, render as button
   return (
     <button
       data-slot="button"

@@ -21,60 +21,50 @@ function AboutSection() {
 
   const isRtl = lang === "ar";
 
-  // Controls to re-trigger animations whenever the section enters the viewport
   const sectionRef = useRef<HTMLElement | null>(null);
   const textControls = useRevealedControls(sectionRef, { amount: 0.25 });
   const mediaControls = useRevealedControls(sectionRef, { amount: 0.25 });
 
-  // Custom variants
-  const fadeInUp = createFadeInUp(0.6, 20);
-  const slideIn = createSlideIn(isRtl, 48, 0.7);
+  const fadeInUp = createFadeInUp(0.5, 16);
+  const slideIn = createSlideIn(isRtl, 36, 0.55);
 
   if (!about) return null;
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-[var(--section-padding-y)]"
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_400px_at_50%_-10%,hsl(var(--primary)/0.06),transparent_60%)]" />
-
+    <section ref={sectionRef} className="relative py-8 md:py-10">
       <div className="relative container">
         <motion.div
           initial="hidden"
           animate={textControls}
-          className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12"
+          className="grid items-center gap-6 lg:grid-cols-2 lg:gap-8"
         >
-          <motion.div variants={slideIn} className="space-y-4">
-            <h2 className="from-foreground to-foreground/70 mb-0 bg-gradient-to-b bg-clip-text text-3xl leading-tight font-bold text-balance text-transparent sm:text-4xl">
+          <motion.div variants={slideIn} className="space-y-3">
+            <h2 className="mb-0 text-2xl leading-tight font-black text-balance sm:text-3xl">
               {about.title}
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg">
+            <p className="text-muted-foreground text-sm sm:text-base">
               {about.subtitle}
             </p>
 
             <motion.ul
               variants={staggerContainer}
-              className="mt-4 grid gap-3 sm:grid-cols-2"
+              className="mt-3 grid gap-2.5 sm:grid-cols-2"
             >
               {(about.points || []).map((point: string, idx: number) => (
                 <motion.li
                   key={idx}
                   variants={fadeInUp}
-                  className="border-border/60 bg-card/50 flex items-start gap-3 rounded-xl border p-3 backdrop-blur-sm"
+                  className="border-border bg-card flex items-start gap-2.5 rounded-xl border p-2.5"
                 >
-                  <span className="bg-primary/10 text-primary mt-0.5 inline-flex size-6 items-center justify-center rounded-full">
-                    <Check className="size-4" />
+                  <span className="bg-primary/10 text-primary mt-0.5 inline-flex size-5 items-center justify-center rounded-full">
+                    <Check className="size-3.5" />
                   </span>
-                  <span className="text-sm sm:text-base">{point}</span>
+                  <span className="text-xs sm:text-sm">{point}</span>
                 </motion.li>
               ))}
             </motion.ul>
 
-            <motion.div
-              variants={fadeInUp}
-              className="flex w-full justify-center pt-2"
-            >
+            <motion.div variants={fadeInUp} className="flex w-full justify-center pt-1">
               <Button size="lg">{about.cta}</Button>
             </motion.div>
           </motion.div>
@@ -83,19 +73,16 @@ function AboutSection() {
             initial="hidden"
             animate={mediaControls}
             variants={fadeInUp}
-            className="from-secondary/60 via-secondary/30 relative order-first aspect-[4/3] overflow-hidden rounded-2xl sm:order-none"
+            className="relative order-first aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-muted/50 sm:order-none"
           >
-            {/* bg-gradient-to-br to-transparent */}
-            <div className="absolute inset-0" />
-            {/* bg-[radial-gradient(500px_200px_at_20%_20%,hsl(var(--primary)/0.12),transparent_60%)] */}
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
               className="absolute inset-0"
             >
-              <div className="absolute inset-6 flex items-center justify-center">
+              <div className="absolute inset-5 flex items-center justify-center">
                 <Image
                   src="/svgs/about-section.svg"
                   width={1000}
@@ -105,31 +92,6 @@ function AboutSection() {
                   className="max-h-full w-auto object-contain opacity-95"
                 />
               </div>
-              {/* Decorative animated blobs */}
-              {/* <motion.span
-                aria-hidden
-                className="bg-primary/20 absolute -top-6 -left-6 size-28 rounded-full blur-xl"
-                animate={{
-                  y: [0, 10, 0],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              <motion.span
-                aria-hidden
-                className="bg-secondary/60 absolute -right-8 -bottom-8 size-36 rounded-full blur-2xl"
-                animate={{
-                  y: [0, -12, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              /> */}
             </motion.div>
           </motion.div>
         </motion.div>

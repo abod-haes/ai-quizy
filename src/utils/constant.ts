@@ -3,6 +3,22 @@ export const routesName = {
     keyName: "common.home",
     href: "/",
   },
+  courses: {
+    keyName: "common.courses",
+    href: "/courses",
+  },
+  subjects: {
+    keyName: "common.subjects",
+    href: "/subjects",
+  },
+  lessons: {
+    keyName: "common.lessons",
+    href: "/lessons",
+  },
+  teachers: {
+    keyName: "common.teachers",
+    href: "/teachers",
+  },
   aiAssistant: {
     keyName: "common.aiAssistant",
     href: "/ai-assistant",
@@ -104,21 +120,28 @@ export type TRouteName = TPublicRouteName | TDashboardRouteName | string;
 
 export const NavLinkHeader: { label: string; href: TRouteName }[] = [
   {
-    label: "رئيسية",
+    label: "الرئيسية",
     href: routesName.home.href,
+  },
+  {
+    label: "المواد",
+    href: routesName.subjects.href,
+  },
+  {
+    label: "الدروس",
+    href: routesName.lessons.href,
+  },
+  {
+    label: "الأساتذة",
+    href: routesName.teachers.href,
   },
   {
     label: "الاختبارات",
     href: routesName.quizzes.href,
   },
-
   {
     label: "تحميل التطبيق",
     href: routesName.download.href,
-  },
-  {
-    label: "من نحن",
-    href: routesName.about.href,
   },
 ];
 export const PER_PAGE = 12;
